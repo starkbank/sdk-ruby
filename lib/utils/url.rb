@@ -5,6 +5,8 @@ module StarkBank
     module URL
       # generates query string from hash
       def self.urlencode(params)
+        return '' if params.nil?
+
         clean_params = {}
         params.each do |key, value|
           next if value.nil?
