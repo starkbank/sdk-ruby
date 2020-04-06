@@ -1,4 +1,4 @@
-require('key')
+require('starkbank')
 
 RSpec.describe(StarkBank::Key, '#create') do
   context 'no requirements' do

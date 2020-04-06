@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require('starkbank-ecdsa')
 
 module StarkBank
-  # ECDSA Key helper
   module Key
     # # Generate a new key pair
     # Generates a secp256k1 ECDSA private/public key pair to be used in the API
