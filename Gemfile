@@ -8,3 +8,5 @@ git_source(:github) { |repo_name| 'https://github.com/starkbank/sdk-ruby' }
 gem('rspec', '~> 3')
 # StarkBank ECDSA lib
 gem('starkbank-ecdsa', '~> 0.0.2')
+# Linter
+gem('rubocop', require: false)
