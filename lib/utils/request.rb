@@ -3,9 +3,9 @@
 require('json')
 require('starkbank-ecdsa')
 require('net/http')
-require('utils/url')
-require('utils/checks')
-require('error')
+require_relative('url')
+require_relative('checks')
+require_relative('../error')
 
 module StarkBank
   module Utils

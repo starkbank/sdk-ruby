@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require('user/user')
+require_relative('user')
 
 module StarkBank
   class Project < StarkBank::User

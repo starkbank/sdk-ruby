@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require('starkbank-ecdsa')
-require('utils/environment')
 require_relative('../user/user')
+require_relative('environment')
 
 module StarkBank
   module Utils

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require('utils/resource')
-require('utils/checks')
 require('starkbank-ecdsa')
+require_relative('../utils/resource')
+require_relative('../utils/checks')
 
 module StarkBank
   class User < StarkBank::Utils::Resource

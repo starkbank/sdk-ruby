@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require('key')
-require('user/project')
+require_relative('key')
+require_relative('user/project')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
