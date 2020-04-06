@@ -4,6 +4,7 @@ require('json')
 require('starkbank-ecdsa')
 require('net/http')
 require('utils/url')
+require('utils/checks')
 require('error')
 
 module StarkBank
@@ -22,6 +23,8 @@ module StarkBank
       end
 
       def self.fetch(method, path, payload: nil, query: nil, user: nil)
+        user = Checks.check_user(user)
+
         base_url = {
           Environment::PRODUCTION => 'https://api.starkbank.com/',
           Environment::SANDBOX => 'https://sandbox.api.starkbank.com/'

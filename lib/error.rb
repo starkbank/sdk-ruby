@@ -22,7 +22,7 @@ module StarkBank
         end
         @errors = errors
 
-        super(error.to_json)
+        super(content.to_json)
       end
     end
 
