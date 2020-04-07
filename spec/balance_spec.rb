@@ -2,7 +2,7 @@ require('starkbank')
 require('user')
 
 RSpec.describe(StarkBank::Balance, '#get') do
-  context 'default user set' do
+  context 'no requirements' do
     it 'get balance' do
       balance = StarkBank::Balance.get
       expect(balance.id).not_to(be_nil)

@@ -3,6 +3,7 @@
 require_relative('key')
 require_relative('user/project')
 require_relative('ledger/balance')
+require_relative('boleto/boleto')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank

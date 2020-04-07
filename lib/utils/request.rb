@@ -45,13 +45,13 @@ module StarkBank
           req = Net::HTTP::Delete.new(uri)
         when 'POST'
           req = Net::HTTP::Post.new(uri)
-          req.set_form_data(payload)
+          req.body = body
         when 'PATCH'
           req = Net::HTTP::Patch.new(uri)
-          req.set_form_data(payload)
+          req.body = body
         when 'PUT'
           req = Net::HTTP::Put.new(uri)
-          req.set_form_data(payload)
+          req.body = body
         else
           raise(ArgumentError, 'unknown HTTP method ' + method)
         end

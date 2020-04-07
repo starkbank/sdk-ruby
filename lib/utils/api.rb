@@ -8,7 +8,7 @@ module StarkBank
       def self.api_json(entity)
         entity_hash = {}
         entity.instance_variables.each do |key|
-          entity_hash[key] = entity.instance_variable_get(key)
+          entity_hash[key[1..-1]] = entity.instance_variable_get(key)
         end
         cast_to_json_to_api_format(entity_hash)
       end
@@ -18,9 +18,10 @@ module StarkBank
         hash.each do |key, value|
           next if value.nil?
 
-          value = value.is_a?(Date) || value.is_a?(DateTime) ? value.strftime('%Y-%m-%d') : value
-          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = date_to_string(value)
+          value = value.is_a?(Date) || value.is_a?(DateTime) || value.is_a?(Time) ? value.strftime('%Y-%m-%d') : value
+          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = value
         end
+        entity_hash
       end
 
       def self.from_api_json(resource_maker, json)

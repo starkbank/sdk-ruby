@@ -45,7 +45,7 @@ module StarkBank
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
       end
 
-      def self.get_pdf(resource_name:, _resource_maker:, id:, user: nil)
+      def self.get_pdf(resource_name:, resource_maker:, id:, user: nil)
         StarkBank::Utils::Request.fetch(
           method: 'GET',
           path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/pdf",

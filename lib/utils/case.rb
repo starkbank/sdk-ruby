@@ -8,7 +8,7 @@ module StarkBank
       end
 
       def self.snake_to_camel(snake)
-        camel = snake.split('_').map(&:capitalize).join
+        camel = snake.to_s.split('_').map(&:capitalize).join
         camel[0] = camel[0].downcase
         camel
       end
