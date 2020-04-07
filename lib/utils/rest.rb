@@ -6,9 +6,9 @@ require_relative('api')
 module StarkBank
   module Utils
     module Rest
-      def get_list(resource_name:, resource_maker:, user: nil, **query)
+      def self.get_list(resource_name:, resource_maker:, user: nil, **query)
         limit = query['limit']
-        limit = limit.is_nil?(Integer) ? limit : [limit, 100].min
+        limit = limit.nil? ? limit : [limit, 100].min
 
         Enumerator.new do |enum|
           json = StarkBank::Utils::Request.fetch(
@@ -35,7 +35,7 @@ module StarkBank
         end
       end
 
-      def get_id(resource_name:, resource_maker:, id:, user: nil)
+      def self.get_id(resource_name:, resource_maker:, id:, user: nil)
         json = StarkBank::Utils::Request.fetch(
           method: 'GET',
           path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
@@ -45,7 +45,7 @@ module StarkBank
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
       end
 
-      def get_pdf(resource_name:, _resource_maker:, id:, user: nil)
+      def self.get_pdf(resource_name:, _resource_maker:, id:, user: nil)
         StarkBank::Utils::Request.fetch(
           method: 'GET',
           path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/pdf",
@@ -53,7 +53,7 @@ module StarkBank
         ).content
       end
 
-      def post(resource_name:, resource_maker:, entities:, user: nil)
+      def self.post(resource_name:, resource_maker:, entities:, user: nil)
         jsons = []
         entities.each do |entity|
           jsons << StarkBank::Utils::API.api_json(entity)
@@ -73,7 +73,7 @@ module StarkBank
         entities
       end
 
-      def post_single(resource_name:, resource_maker:, entity:, user: nil)
+      def self.post_single(resource_name:, resource_maker:, entity:, user: nil)
         json = StarkBank::Utils::Request.fetch(
           method: 'POST',
           path: StarkBank::Utils::API.endpoint(resource_name),
@@ -84,7 +84,7 @@ module StarkBank
         StarkBank::Utils::API.from_api_json(resource_maker, entity_json)
       end
 
-      def delete_id(resource_name:, resource_maker:, id:, user: nil)
+      def self.delete_id(resource_name:, resource_maker:, id:, user: nil)
         json = StarkBank::Utils::Request.fetch(
           method: 'DELETE',
           path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
@@ -94,7 +94,7 @@ module StarkBank
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
       end
 
-      def patch_id(resource_name:, resource_maker:, id:, user: nil, **payload)
+      def self.patch_id(resource_name:, resource_maker:, id:, user: nil, **payload)
         payload = StarkBank::Utils::API.cast_json_to_api_format(payload)
         json = StarkBank::Utils::Request.fetch(
           method: 'PATCH',

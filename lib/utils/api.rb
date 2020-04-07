@@ -5,7 +5,7 @@ require_relative('case')
 module StarkBank
   module Utils
     module API
-      def api_json(entity)
+      def self.api_json(entity)
         entity_hash = {}
         entity.instance_variables.each do |key|
           entity_hash[key] = entity.instance_variable_get(key)
@@ -13,7 +13,7 @@ module StarkBank
         cast_to_json_to_api_format(entity_hash)
       end
 
-      def cast_to_json_to_api_format(hash)
+      def self.cast_to_json_to_api_format(hash)
         entity_hash = {}
         hash.each do |key, value|
           next if value.nil?
@@ -23,7 +23,7 @@ module StarkBank
         end
       end
 
-      def from_api_json(resource_maker, json)
+      def self.from_api_json(resource_maker, json)
         snakes = {}
         json.each do |key, value|
           snakes[StarkBank::Utils::Case.camel_to_snake(key)] = value
@@ -31,16 +31,18 @@ module StarkBank
         resource_maker.call(snakes)
       end
 
-      def endpoint(resource_name)
-        camel_to_kebab(resource_name).sub!('-log', '/log')
+      def self.endpoint(resource_name)
+        kebab = StarkBank::Utils::Case.camel_to_kebab(resource_name)
+        kebab.sub!('-log', '/log')
+        kebab
       end
 
-      def last_name_plural(resource_name)
+      def self.last_name_plural(resource_name)
         "#{last_name(resource_name)}s"
       end
-      
-      def last_name(resource_name)
-        camel_to_kebab(resource_name).split('-').last
+
+      def self.last_name(resource_name)
+        StarkBank::Utils::Case.camel_to_kebab(resource_name).split('-').last
       end
     end
   end
