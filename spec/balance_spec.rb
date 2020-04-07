@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Balance, '#get') do
+RSpec.describe(StarkBank::Balance, '#balance') do
   context 'no requirements' do
     it 'get balance' do
       balance = StarkBank::Balance.get

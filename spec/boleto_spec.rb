@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Boleto, '#get') do
+RSpec.describe(StarkBank::Boleto, '#boleto') do
   context 'at least 10 paid boletos' do
-    it 'query boletos' do
+    it 'query' do
       boletos = StarkBank::Boleto.query(limit: 10, status: 'paid').to_a
       expect(boletos.length).to(eq(10))
       boletos.each do |boleto|

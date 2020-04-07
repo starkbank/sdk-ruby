@@ -19,7 +19,7 @@ module StarkBank
   # - updated [datetime.datetime, default None]: update datetime for the balance. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   class Balance < StarkBank::Utils::Resource
     attr_reader :amount, :currency, :updated
-    def initialize(amount: nil, currency: nil, updated: nil, id: nil)
+    def initialize(amount:, currency:, updated:, id:)
       super(id)
       @amount = amount
       @currency = currency

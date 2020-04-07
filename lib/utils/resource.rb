@@ -11,11 +11,11 @@ module StarkBank
       def to_s
         string_vars = []
         instance_variables.each do |key|
-          value = instance_variable_get(key).to_s.lines.map(&:chomp).join("\n\t")
-          string_vars << "#{key[1..-1]} = #{value}"
+          value = instance_variable_get(key).to_s.lines.map(&:chomp).join("\n  ")
+          string_vars << "#{key[1..-1]}: #{value}"
         end
-        fields = string_vars.join(",\n\t")
-        "#{class_name}(\n\t#{fields}\n)"
+        fields = string_vars.join(",\n  ")
+        "#{class_name}(\n  #{fields}\n)"
       end
 
       def inspect
