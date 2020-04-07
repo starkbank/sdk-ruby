@@ -60,7 +60,7 @@ module StarkBank
           data = data.to_s
 
           begin
-            return DateTime.strptime(data, 'Y-%m-%d')
+            return DateTime.strptime(data, '%Y-%m-%d')
           rescue ArgumentError
           end
 
