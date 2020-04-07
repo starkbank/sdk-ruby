@@ -10,6 +10,8 @@ require_relative('transfer/transfer')
 require_relative('transfer/log')
 require_relative('payment/boleto/boleto')
 require_relative('payment/boleto/log')
+require_relative('payment/utility/utility')
+require_relative('payment/utility/log')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
