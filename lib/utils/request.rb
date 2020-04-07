@@ -22,7 +22,7 @@ module StarkBank
         end
       end
 
-      def self.fetch(method, path, payload: nil, query: nil, user: nil)
+      def self.fetch(method:, path:, payload: nil, query: nil, user: nil)
         user = Checks.check_user(user)
 
         base_url = {

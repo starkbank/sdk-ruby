@@ -13,12 +13,22 @@ module StarkBank
         cast_to_json_to_api_format(entity_hash)
       end
 
+      def cast_to_json_to_api_format(hash)
+        entity_hash = {}
+        hash.each do |key, value|
+          next if value.nil?
+
+          value = value.is_a?(Date) || value.is_a?(DateTime) ? value.strftime('%Y-%m-%d') : value
+          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = date_to_string(value)
+        end
+      end
+
       def from_api_json(resource_maker, json)
         snakes = {}
-        json.each |key, value| do
+        json.each do |key, value|
           snakes[StarkBank::Utils::Case.camel_to_snake(key)] = value
         end
-        resource_maker(snakes)
+        resource_maker.call(snakes)
       end
 
       def endpoint(resource_name)
@@ -31,18 +41,6 @@ module StarkBank
       
       def last_name(resource_name)
         camel_to_kebab(resource_name).split('-').last
-      end
-
-      private
-
-      def cast_to_json_to_api_format(hash)
-        entity_hash = {}
-        hash.each do |key, value|
-          next if value.nil?
-
-          value = value.is_a?(Date) || value.is_a?(DateTime) ? value.strftime('%Y-%m-%d') : value
-          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = date_to_string(value)
-        end
       end
     end
   end
