@@ -21,7 +21,6 @@ RSpec.describe(StarkBank::BoletoLog, '#boletolog') do
       log = StarkBank::BoletoLog.query(limit: 1).to_a[0]
       get_log = StarkBank::BoletoLog.get(id: log.id)
       expect(log.id).to(eq(get_log.id))
-      puts log
     end
   end
 end

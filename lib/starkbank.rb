@@ -6,6 +6,8 @@ require_relative('ledger/balance')
 require_relative('ledger/transaction')
 require_relative('boleto/boleto')
 require_relative('boleto/log')
+require_relative('transfer/transfer')
+require_relative('transfer/log')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
