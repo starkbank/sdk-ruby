@@ -23,7 +23,7 @@ module StarkBank
   # - pem [string]: private key in pem format. ex: "-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----"
   class Project < StarkBank::User
     attr_reader :name, :allowed_ips
-    def initialize(environment, id, private_key, name: '', allowed_ips: nil)
+    def initialize(environment:, id:, private_key:, name: '', allowed_ips: nil)
       super(environment, id, private_key)
       @name = name
       @allowed_ips = allowed_ips
