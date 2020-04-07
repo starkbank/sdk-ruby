@@ -25,10 +25,10 @@ module StarkBank
   # - tags [list of strings]: list of strings for reference when searching transactions (may be empty). ex: ["abc", "test"]
   #
   # ## Attributes (return-only):
-  # - source [string, default None]: locator of the entity that generated the transaction. ex: "charge/1827351876292", "transfer/92873912873/chargeback"
-  # - id [string, default None]: unique id returned when Transaction is created. ex: "7656565656565656"
-  # - fee [integer, default None]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
-  # - created [datetime.datetime, default None]: creation datetime for the boleto. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - source [string, default nil]: locator of the entity that generated the transaction. ex: "charge/1827351876292", "transfer/92873912873/chargeback"
+  # - id [string, default nil]: unique id returned when Transaction is created. ex: "7656565656565656"
+  # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
+  # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transaction < StarkBank::Utils::Resource
     attr_reader :amount, :description, :external_id, :receiver_id, :tags, :id, :fee, :created, :source
     def initialize(amount:, description:, external_id:, receiver_id:, tags: nil, id: nil, fee: nil, created: nil, source: nil)
@@ -51,7 +51,7 @@ module StarkBank
     # - transactions [list of Transaction objects]: list of Transaction objects to be created in the API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of Transaction objects with updated attributes
@@ -67,7 +67,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Transaction object with updated attributes
@@ -80,11 +80,11 @@ module StarkBank
     # Receive a generator of Transaction objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - external_ids [list of strings, default None]: list of external ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-    # - after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-    # - before [datetime.date, default None] date filter for objects created only before specified date. ex: datetime.date(2020, 3, 10)
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - external_ids [list of strings, default nil]: list of external ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Transaction objects with updated attributes

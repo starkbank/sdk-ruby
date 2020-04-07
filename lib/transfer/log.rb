@@ -17,7 +17,7 @@ module StarkBank
   # - transfer [Transfer]: Transfer entity to which the log refers to.
   # - errors [list of strings]: list of errors linked to this BoletoPayment event.
   # - type [string]: type of the Transfer event which triggered the log creation. ex: "processing" or "success"
-  # - created [datetime.datetime]: creation datetime for the transfer. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class TransferLog < StarkBank::Utils::Resource
     attr_reader :id, :created, :type, :errors, :transfer
     def initialize(id:, created:, type:, errors:, transfer:)
@@ -36,7 +36,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - TransferLog object with updated attributes
@@ -49,12 +49,12 @@ module StarkBank
     # Receive a generator of TransferLog objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - transfer_ids [list of strings, default None]: list of Transfer ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-    # - types [list of strings, default None]: filter retrieved objects by types. ex: "success" or "failed"
-    # - after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-    # - before [datetime.date, default None] date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - transfer_ids [list of strings, default nil]: list of Transfer ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+    # - types [list of strings, default nil]: filter retrieved objects by types. ex: "success" or "failed"
+    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of TransferLog objects with updated attributes

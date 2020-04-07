@@ -13,10 +13,10 @@ module StarkBank
   # can be retrieved to see the available information.
   #
   # ## Attributes (return-only):
-  # - id [string, default None]: unique id returned when Boleto is created. ex: "5656565656565656"
-  # - amount [integer, default None]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
-  # - currency [string, default None]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"
-  # - updated [datetime.datetime, default None]: update datetime for the balance. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string, default nil]: unique id returned when Boleto is created. ex: "5656565656565656"
+  # - amount [integer, default nil]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
+  # - currency [string, default nil]: currency of the current workspace. Expect others to be added eventually. ex: "BRL"
+  # - updated [DateTime, default nil]: update datetime for the balance. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Balance < StarkBank::Utils::Resource
     attr_reader :amount, :currency, :updated
     def initialize(amount:, currency:, updated:, id:)
@@ -31,7 +31,7 @@ module StarkBank
     # Receive the Balance object linked to your workspace in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Balance object with updated attributes

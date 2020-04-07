@@ -18,7 +18,7 @@ module StarkBank
   # - boleto [Boleto]: Boleto entity to which the log refers to.
   # - errors [list of strings]: list of errors linked to this Boleto event
   # - type [string]: type of the Boleto event which triggered the log creation. ex: "registered" or "paid"
-  # - created [datetime.datetime]: creation datetime for the boleto. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - created [DateTime]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class BoletoLog < StarkBank::Utils::Resource
     attr_reader :id, :created, :type, :errors, :boleto
     def initialize(id:, created:, type:, errors:, boleto:)
@@ -37,7 +37,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - BoletoLog object with updated attributes
@@ -50,12 +50,12 @@ module StarkBank
     # Receive a generator of BoletoLog objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - boleto_ids [list of strings, default None]: list of Boleto ids to filter logs. ex: ["5656565656565656", "4545454545454545"]
-    # - types [list of strings, default None]: filter for log event types. ex: "paid" or "registered"
-    # - after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-    # - before [datetime.date, default None] date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - boleto_ids [list of strings, default nil]: list of Boleto ids to filter logs. ex: ["5656565656565656", "4545454545454545"]
+    # - types [list of strings, default nil]: filter for log event types. ex: "paid" or "registered"
+    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of BoletoLog objects with updated attributes

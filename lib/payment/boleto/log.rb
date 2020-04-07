@@ -18,7 +18,7 @@ module StarkBank
   # - payment [BoletoPayment]: BoletoPayment entity to which the log refers to.
   # - errors [list of strings]: list of errors linked to this BoletoPayment event.
   # - type [string]: type of the BoletoPayment event which triggered the log creation. ex: "registered" or "paid"
-  # - created [datetime.datetime]: creation datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - created [DateTime]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class BoletoPaymentLog < StarkBank::Utils::Resource
     attr_reader :id, :created, :type, :errors, :payment
     def initialize(id:, created:, type:, errors:, payment:)
@@ -37,7 +37,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - BoletoPaymentLog object with updated attributes
@@ -50,10 +50,10 @@ module StarkBank
     # Receive a generator of BoletoPaymentLog objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - payment_ids [list of strings, default None]: list of BoletoPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-    # - types [list of strings, default None]: filter retrieved objects by event types. ex: "paid" or "registered"
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - payment_ids [list of strings, default nil]: list of BoletoPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+    # - types [list of strings, default nil]: filter retrieved objects by event types. ex: "paid" or "registered"
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of BoletoPaymentLog objects with updated attributes

@@ -23,12 +23,12 @@ module StarkBank
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ["employees", "monthly"]
   #
   # ## Attributes (return-only):
-  # - id [string, default None]: unique id returned when Transfer is created. ex: "5656565656565656"
-  # - fee [integer, default None]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
-  # - status [string, default None]: current boleto status. ex: "registered" or "paid"
-  # - transaction_ids [list of strings, default None]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ["19827356981273"]
-  # - created [datetime.datetime, default None]: creation datetime for the transfer. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-  # - updated [datetime.datetime, default None]: latest update datetime for the transfer. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string, default nil]: unique id returned when Transfer is created. ex: "5656565656565656"
+  # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
+  # - status [string, default nil]: current boleto status. ex: "registered" or "paid"
+  # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ["19827356981273"]
+  # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkBank::Utils::Resource
     attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
     def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
@@ -55,7 +55,7 @@ module StarkBank
     # - transfers [list of Transfer objects]: list of Transfer objects to be created in the API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of Transfer objects with updated attributes
@@ -71,7 +71,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Transfer object with updated attributes
@@ -88,7 +88,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Transfer pdf file
@@ -101,13 +101,13 @@ module StarkBank
     # Receive a generator of Transfer objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - status [string, default None]: filter for status of retrieved objects. ex: "paid" or "registered"
-    # - tags [list of strings, default None]: tags to filter retrieved objects. ex: ["tony", "stark"]
-    # - ids [list of strings, default None]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-    # - after [datetime.date, default None] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-    # - before [datetime.date, default None] date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - status [string, default nil]: filter for status of retrieved objects. ex: "paid" or "registered"
+    # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ["tony", "stark"]
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Transfer objects with updated attributes

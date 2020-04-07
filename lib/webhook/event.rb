@@ -22,7 +22,7 @@ module StarkBank
   # ## Attributes:
   # - id [string]: unique id returned when the log is created. ex: "5656565656565656"
   # - log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)
-  # - created [datetime.datetime]: creation datetime for the notification event. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+  # - created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
   # - subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"
   class Event < StarkBank::Utils::Resource
@@ -51,7 +51,7 @@ module StarkBank
     # - id [string]: object unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Event object with updated attributes
@@ -64,11 +64,11 @@ module StarkBank
     # Receive a generator of notification Event objects previously created in the Stark Bank API
     #
     # ## Parameters (optional):
-    # - limit [integer, default None]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
-    # - is_delivered [bool, default None]: bool to filter successfully delivered events. ex: True or False
-    # - after [datetime.date, default None]: date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-    # - before [datetime.date, default None]: date filter for objects only before specified date. ex: datetime.date(2020, 3, 10)
-    # - user [Project object, default None]: Project object. Not necessary if starkbank.user was set before function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - is_delivered [bool, default nil]: bool to filter successfully delivered events. ex: True or False
+    # - after [Date, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, default nil]: date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Event objects with updated attributes
@@ -86,7 +86,7 @@ module StarkBank
     # - id [string]: Event unique id. ex: "5656565656565656"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - deleted Event with updated attributes
@@ -104,7 +104,7 @@ module StarkBank
     # - is_delivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: True
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - target Event with updated attributes
@@ -123,7 +123,7 @@ module StarkBank
     # - signature [string]: base-64 digital signature received at response header "Digital-Signature"
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Parsed Event object
