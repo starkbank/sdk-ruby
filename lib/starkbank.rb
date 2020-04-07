@@ -12,6 +12,7 @@ require_relative('payment/boleto/boleto')
 require_relative('payment/boleto/log')
 require_relative('payment/utility/utility')
 require_relative('payment/utility/log')
+require_relative('webhook/webhook')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
