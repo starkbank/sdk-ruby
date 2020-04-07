@@ -10,10 +10,10 @@ module StarkBank
         entity.instance_variables.each do |key|
           entity_hash[key[1..-1]] = entity.instance_variable_get(key)
         end
-        cast_to_json_to_api_format(entity_hash)
+        cast_json_to_api_format(entity_hash)
       end
 
-      def self.cast_to_json_to_api_format(hash)
+      def self.cast_json_to_api_format(hash)
         entity_hash = {}
         hash.each do |key, value|
           next if value.nil?

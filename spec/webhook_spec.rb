@@ -6,8 +6,7 @@ require('user')
 RSpec.describe(StarkBank::Webhook, '#webhook') do
   context 'at least 1 webhook' do
     it 'query' do
-      webhooks = StarkBank::Webhook.query(limit: 1).to_a
-      expect(webhooks.length).to(eq(1))
+      webhooks = StarkBank::Webhook.query.to_a
       webhooks.each do |webhook|
         expect(webhook.id).not_to(be_nil)
       end

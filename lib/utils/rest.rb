@@ -7,31 +7,33 @@ module StarkBank
   module Utils
     module Rest
       def self.get_list(resource_name:, resource_maker:, user: nil, **query)
-        limit = query['limit']
-        limit = limit.nil? ? limit : [limit, 100].min
+        limit = query[:limit]
+        query[:limit] = limit.nil? ? limit : [limit, 100].min
 
         Enumerator.new do |enum|
-          json = StarkBank::Utils::Request.fetch(
-            method: 'GET',
-            path: StarkBank::Utils::API.endpoint(resource_name),
-            query: query,
-            user: user
-          ).json
-          entities = json[StarkBank::Utils::API.last_name_plural(resource_name)]
+          loop do
+            json = StarkBank::Utils::Request.fetch(
+              method: 'GET',
+              path: StarkBank::Utils::API.endpoint(resource_name),
+              query: query,
+              user: user
+            ).json
+            entities = json[StarkBank::Utils::API.last_name_plural(resource_name)]
 
-          entities.each do |entity|
-            enum << StarkBank::Utils::API.from_api_json(resource_maker, entity)
+            entities.each do |entity|
+              enum << StarkBank::Utils::API.from_api_json(resource_maker, entity)
+            end
+
+            unless limit.nil?
+              limit -= 100
+              query[:limit] = [limit, 100].min
+            end
+
+            cursor = json['cursor']
+            query['cursor'] = cursor
+
+            break if cursor.nil? || (!limit.nil? && limit <= 0)
           end
-
-          unless limit.nil?
-            limit -= 100
-            query['limit'] = [limit, 100].min
-          end
-
-          cursor = json['cursor']
-          query['cursor'] = cursor
-
-          next if cursor.nil? || (!limit.nil? && limit <= 0)
         end
       end
 
