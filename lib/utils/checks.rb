@@ -46,7 +46,7 @@ module StarkBank
 
         return data if data.is_a?(Date)
 
-        return Date.new(data.year, data.month, data.day) if data.is_a?(DateTime, Time)
+        return Date.new(data.year, data.month, data.day) if data.is_a?(Time) || data.is_a?(DateTime)
 
         data = check_datetime_string(data)
 

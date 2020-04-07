@@ -20,7 +20,7 @@ module StarkBank
           entities = json[StarkBank::Utils::API.last_name_plural(resource_name)]
 
           entities.each do |entity|
-            enum.yield(StarkBank::Utils::API.from_api_json(resource_maker, entity))
+            enum << StarkBank::Utils::API.from_api_json(resource_maker, entity)
           end
 
           unless limit.nil?
@@ -31,7 +31,7 @@ module StarkBank
           cursor = json['cursor']
           query['cursor'] = cursor
 
-          break if cursor.nil? || (!limit.nil? && limit <= 0)
+          next if cursor.nil? || (!limit.nil? && limit <= 0)
         end
       end
 

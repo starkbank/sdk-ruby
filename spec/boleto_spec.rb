@@ -17,7 +17,7 @@ RSpec.describe(StarkBank::Boleto, '#boleto') do
 
   context 'no requirements' do
     it 'create, get, get_pdf and delete' do
-      boleto = StarkBank::Boleto.create(boletos: [example]).to_a[0]
+      boleto = StarkBank::Boleto.create(boletos: [example])[0]
       get_boleto = StarkBank::Boleto.get(id: boleto.id)
       expect(boleto.id).to(eq(get_boleto.id))
       pdf = StarkBank::Boleto.pdf(id: boleto.id)
