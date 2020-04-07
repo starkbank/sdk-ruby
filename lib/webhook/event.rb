@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require('json')
+require('starkbank-ecdsa')
 require_relative('../utils/resource')
 require_relative('../utils/rest')
 require_relative('../utils/checks')
+require_relative('../utils/cache')
+require_relative('../error')
 require_relative('../boleto/log')
 require_relative('../transfer/log')
 require_relative('../payment/boleto/log')
@@ -108,19 +112,63 @@ module StarkBank
       StarkBank::Utils::Rest.patch_id(id: id, user: user, is_delivered: is_delivered, **resource)
     end
 
-    def self.resource
-      {
-        resource_name: 'Event',
-        resource_maker: proc { |json|
-          Event.new(
-            id: json['id'],
-            log: json['log'],
-            created: json['created'],
-            is_delivered: json['is_delivered'],
-            subscription: json['subscription']
-          )
+    # # Create single notification Event from a content string
+    #
+    # Create a single Event object received from event listening at subscribed user endpoint.
+    # If the provided digital signature does not check out with the StarkBank public key, a
+    # starkbank.exception.InvalidSignatureException will be raised.
+    #
+    # ## Parameters (required):
+    # - content [string]: response content from request received at user endpoint (not parsed)
+    # - signature [string]: base-64 digital signature received at response header "Digital-Signature"
+    #
+    # ## Parameters (optional):
+    # - user [Project object]: Project object. Not necessary if starkbank.user was set before function call
+    #
+    # ## Return:
+    # - Parsed Event object
+    def self.parse(content:, signature:, user: nil)
+      event = StarkBank::Utils::API.from_api_json(resource[:resource_maker], JSON.parse(content)['event'])
+
+      return event if verify_signature(content: content, signature: signature, user: user)
+
+      return event if verify_signature(content: content, signature: signature, user: user, refresh: true)
+
+      raise(StarkBank::Error::InvalidSignatureError, 'The provided signature and content do not match the Stark Bank public key')
+    end
+
+    class << self
+      private
+
+      def verify_signature(content:, signature:, user:, refresh: false)
+        signature = EllipticCurve::Signature.fromBase64(signature)
+        public_key = StarkBank::Utils::Cache.starkbank_public_key
+        if public_key.nil? || refresh
+          pem = get_public_key_pem(user)
+          public_key = EllipticCurve::PublicKey.fromPem(pem)
+          StarkBank::Utils::Cache.starkbank_public_key = public_key
+        end
+        EllipticCurve::Ecdsa.verify(content, signature, public_key)
+      end
+
+      def get_public_key_pem(user)
+        StarkBank::Utils::Request.fetch(method: 'GET', path: 'public-key', query: {limit: 1}, user: user).json['publicKeys'][0]['content']
+      end
+
+      def resource
+        {
+          resource_name: 'Event',
+          resource_maker: proc { |json|
+            Event.new(
+              id: json['id'],
+              log: json['log'],
+              created: json['created'],
+              is_delivered: json['is_delivered'],
+              subscription: json['subscription']
+            )
+          }
         }
-      }
+      end
     end
   end
 end
