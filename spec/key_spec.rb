@@ -2,7 +2,7 @@
 
 require('starkbank')
 
-RSpec.describe(StarkBank::Key, '#key') do
+RSpec.describe(StarkBank::Key, '#key#') do
   context 'no requirements' do
     it 'generates new random ECDSA key pair' do
       private_key, public_key = StarkBank::Key.create

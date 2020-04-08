@@ -3,7 +3,7 @@
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Webhook, '#webhook') do
+RSpec.describe(StarkBank::Webhook, '#webhook#') do
   context 'at least 1 webhook' do
     it 'query' do
       webhooks = StarkBank::Webhook.query.to_a

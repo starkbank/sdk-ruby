@@ -34,10 +34,10 @@ module StarkBank
       @subscription = subscription
 
       maker = {
-        'transfer': StarkBank::TransferLog.resource,
-        'boleto': StarkBank::BoletoLog.resource,
-        'boleto-payment': StarkBank::BoletoPaymentLog.resource,
-        'utility-payment': StarkBank::UtilityPaymentLog.resource
+        'transfer': StarkBank::Transfer::Log.resource,
+        'boleto': StarkBank::Boleto::Log.resource,
+        'boleto-payment': StarkBank::BoletoPayment::Log.resource,
+        'utility-payment': StarkBank::UtilityPayment::Log.resource
       }[subscription.to_sym][:resource_maker]
 
       @log = StarkBank::Utils::API.from_api_json(maker, log)

@@ -217,7 +217,7 @@ Logs are pretty important to understand the life cycle of a boleto.
 ```ruby
 require('starkbank')
 
-logs = StarkBank::BoletoLog.query(limit: 150)
+logs = StarkBank::Boleto::Log.query(limit: 150)
 
 logs.each do |log|
   puts log
@@ -231,7 +231,7 @@ You can get a single log by its id.
 ```ruby
 require('starkbank')
 
-log = StarkBank::BoletoLog.get(id: '5155165527080960')
+log = StarkBank::Boleto::Log.get(id: '5155165527080960')
 
 puts log
 ```
@@ -322,7 +322,7 @@ You can query transfer logs to better understand transfer life cycles.
 ```ruby
 require('starkbank')
 
-logs = StarkBank::TransferLog.query(limit: 50)
+logs = StarkBank::Transfer::Log.query(limit: 50)
 
 logs.each do |log|
   puts log
@@ -336,7 +336,7 @@ You can also get a specific log by its id.
 ```ruby
 require('starkbank')
 
-log = StarkBank::TransferLog.get(id: '5155165527080960')
+log = StarkBank::Transfer::Log.get(id: '5155165527080960')
 
 puts log
 ```
@@ -434,7 +434,7 @@ Searches are also possible with boleto payment logs:
 ```ruby
 require('starkbank')
 
-logs = StarkBank::BoletoPaymentLog.query(
+logs = StarkBank::BoletoPayment::Log.query(
   payment_ids: %w[5155165527080960 76551659167801921],
 )
 
@@ -451,7 +451,7 @@ You can also get a boleto payment log by specifying its id.
 ```ruby
 require('starkbank')
 
-log = StarkBank::BoletoPaymentLog.get(id: '5155165527080960')
+log = StarkBank::BoletoPayment::Log.get(id: '5155165527080960')
 
 puts log
 ```
@@ -548,7 +548,7 @@ bills life cycles.
 ```ruby
 require('starkbank')
 
-logs = StarkBank::UtilityPaymentLog.query(
+logs = StarkBank::UtilityPayment::Log.query(
   payment_ds: %w[102893710982379182 92837912873981273],
 )
 
@@ -564,7 +564,7 @@ If you want to get a specific payment log by its id, just run:
 ```ruby
 require('starkbank')
 
-log = StarkBank::UtilityPaymentLog.get(id: '1902837198237992')
+log = StarkBank::UtilityPayment::Log.get(id: '1902837198237992')
 
 puts log
 ```

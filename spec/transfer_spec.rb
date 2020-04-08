@@ -3,7 +3,7 @@
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Transfer, '#transfer') do
+RSpec.describe(StarkBank::Transfer, '#transfer#') do
   context 'at least 10 successful transfers' do
     it 'query' do
       transfers = StarkBank::Transfer.query(limit: 10, status: 'success').to_a

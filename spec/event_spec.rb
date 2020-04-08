@@ -3,7 +3,7 @@
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Event, '#event') do
+RSpec.describe(StarkBank::Event, '#event#') do
   context 'at least 101 webhook events' do
     it 'query' do
       events = StarkBank::Event.query(limit: 101).to_a

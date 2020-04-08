@@ -4,7 +4,7 @@ require('date')
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::BoletoPayment, '#boletopayment') do
+RSpec.describe(StarkBank::BoletoPayment, '#boleto-payment#') do
   context 'at least 10 successful boleto payments' do
     it 'query' do
       payments = StarkBank::BoletoPayment.query(limit: 10, status: 'success').to_a

@@ -5,7 +5,7 @@ require('date')
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Transaction, '#transaction') do
+RSpec.describe(StarkBank::Transaction, '#transaction#') do
   context 'at least 10 transactions created on past 30 days' do
     it 'query' do
       after = Date.today - 30

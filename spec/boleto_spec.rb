@@ -3,7 +3,7 @@
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::Boleto, '#boleto') do
+RSpec.describe(StarkBank::Boleto, '#boleto#') do
   context 'at least 10 paid boletos' do
     it 'query' do
       boletos = StarkBank::Boleto.query(limit: 10, status: 'paid').to_a

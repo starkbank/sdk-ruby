@@ -4,7 +4,7 @@ require('date')
 require('starkbank')
 require('user')
 
-RSpec.describe(StarkBank::UtilityPayment, '#utilitypayment') do
+RSpec.describe(StarkBank::UtilityPayment, '#utility-payment#') do
   context 'at least 10 successful utility payments' do
     it 'query' do
       payments = StarkBank::UtilityPayment.query(limit: 10, status: 'success').to_a
