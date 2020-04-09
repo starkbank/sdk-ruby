@@ -97,12 +97,11 @@ module StarkBank
       end
 
       def self.patch_id(resource_name:, resource_maker:, id:, user: nil, **payload)
-        payload = StarkBank::Utils::API.cast_json_to_api_format(payload)
         json = StarkBank::Utils::Request.fetch(
           method: 'PATCH',
           path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
           user: user,
-          payload: payload
+          payload: StarkBank::Utils::API.cast_json_to_api_format(payload)
         ).json
         entity = json[StarkBank::Utils::API.last_name(resource_name)]
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
