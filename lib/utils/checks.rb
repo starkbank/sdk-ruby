@@ -44,9 +44,9 @@ module StarkBank
       def self.check_date(data)
         return if data.nil?
 
-        return data if data.is_a?(Date)
-
         return Date.new(data.year, data.month, data.day) if data.is_a?(Time) || data.is_a?(DateTime)
+
+        return data if data.is_a?(Date)
 
         data = check_datetime_string(data)
 

@@ -6,7 +6,7 @@ require('user')
 RSpec.describe(StarkBank::Boleto, '#boleto#') do
   context 'at least 10 paid boletos' do
     it 'query' do
-      boletos = StarkBank::Boleto.query(limit: 10, status: 'paid').to_a
+      boletos = StarkBank::Boleto.query(limit: 10, status: 'paid', before: DateTime.now).to_a
       expect(boletos.length).to(eq(10))
       boletos.each do |boleto|
         expect(boleto.id).not_to(be_nil)
