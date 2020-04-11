@@ -60,17 +60,17 @@ module StarkBank
           data = data.to_s
 
           begin
-            return DateTime.strptime(data, '%Y-%m-%d')
-          rescue ArgumentError
-          end
-
-          begin
             return DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S.%L+00:00')
           rescue ArgumentError
           end
 
           begin
-            DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S+00:00')
+            return DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S+00:00')
+          rescue ArgumentError
+          end
+
+          begin
+            return DateTime.strptime(data, '%Y-%m-%d')
           rescue ArgumentError
             raise(ArgumentError, 'invalid datetime string ' + data)
           end
