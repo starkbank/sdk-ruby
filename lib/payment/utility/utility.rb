@@ -68,6 +68,9 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - UtilityPayment object with updated attributes
     def self.get(id:, user: nil)
       StarkBank::Utils::Rest.get_id(id: id, user: user, **resource)
     end
