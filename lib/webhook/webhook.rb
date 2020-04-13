@@ -68,10 +68,8 @@ module StarkBank
     #
     # ## Return:
     # - generator of Webhook objects with updated attributes
-    def self.query(limit: nil, status: nil, tags: nil, ids: nil, after: nil, before: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(user: user, limit: limit, status: status, tags: tags, ids: ids, after: after, before: before, **resource)
+    def self.query(limit: nil, user: nil)
+      StarkBank::Utils::Rest.get_list(user: user, limit: limit, **resource)
     end
 
     # # Delete a Webhook entity
