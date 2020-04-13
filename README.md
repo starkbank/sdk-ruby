@@ -32,6 +32,16 @@ Or just add this to your Gemfile:
 gem('starkbank', '~> 2.0.0')
 ```
 
+## Versioning
+
+This project adheres to the following versioning pattern:
+
+Given a version number MAJOR.MINOR.PATCH, increment:
+
+- MAJOR version when the **API** version is incremented. This may include backwards incompatible changes;
+- MINOR version when **breaking changes** are introduced OR **new functionalities** are added in a backwards compatible manner;
+- PATCH version when backwards compatible bug **fixes** are implemented.
+
 ## Creating a Project
 
 To connect to the Stark Bank API, you need user credentials. We currently have 2
