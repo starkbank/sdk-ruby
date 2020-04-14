@@ -55,7 +55,7 @@ Once you've created your project, load it in the SDK:
 ```ruby
 require('starkbank')
 
-project = StarkBank::StarkBank.Project.new(
+project = StarkBank::Project.new(
     environment: 'sandbox',
     id: '129817512982',
     private_key: '
@@ -83,7 +83,7 @@ The first way is passing the user argument in all methods, such as:
 ```ruby
 require('starkbank')
 
-balance = StarkBank::StarkBank.Balance.get(user: project)
+balance = StarkBank::Balance.get(user: project)
 ```
 
 Or, alternatively, if you want to use the same project on all requests,
@@ -94,7 +94,7 @@ require('starkbank')
 
 StarkBank.user = project
 
-balance = StarkBank::StarkBank.Balance.get()
+balance = StarkBank::Balance.get()
 ```
 
 Just select the way of passing the project user that is more convenient to you.
@@ -138,22 +138,24 @@ you have in other banks.
 ```ruby
 require('starkbank')
 
-boletos = StarkBank::Boleto.create([
-  Boleto.new(
-    amount: 23571,  # R 235,71 
-    name: 'Buzz Aldrin',
-    tax_id: '012.345.678-90', 
-    street_line_1: 'Av. Paulista, 200', 
-    street_line_2: '10 andar',
-    district: 'Bela Vista', 
-    city: 'São Paulo',
-    state_code: 'SP',
-    zip_code: '01310-000',
-    due: '2020-3-20',
-    fine: 5,  # 5%
-    interest: 2.5  # 2.5% per month
-  )
-])
+boletos = StarkBank::Boleto.create(
+  boletos: [
+    StarkBank::Boleto.new(
+      amount: 23571,  # R 235,71 
+      name: 'Buzz Aldrin',
+      tax_id: '012.345.678-90', 
+      street_line_1: 'Av. Paulista, 200', 
+      street_line_2: '10 andar',
+      district: 'Bela Vista', 
+      city: 'São Paulo',
+      state_code: 'SP',
+      zip_code: '01310-000',
+      due: '2020-3-20',
+      fine: 5,  # 5%
+      interest: 2.5  # 2.5% per month
+    )
+  ]
+)
 
 boletos.each do |boleto|
   puts boleto
@@ -211,7 +213,7 @@ require('starkbank')
 require('date')
 
 boletos = StarkBank::Boleto.query(
-  after: '2020-1-1',
+  after: '2020-01-01',
   before: Date.today + 1
 )
 
@@ -253,26 +255,28 @@ You can also create transfers in the SDK (TED/DOC).
 ```ruby
 require('starkbank')
 
-transfers = StarkBank::Transfer.create([
-  Transfer.new(
-    amount: 100,
-    bank_code: '200',
-    branch_code: '0001',
-    account_number: '10000-0',
-    tax_id: '012.345.678-90',
-    name: 'Tony Stark',
-    tags: %w[iron suit]
-  ),
-  Transfer.new(
-    amount: 200,
-    bank_code: '341',
-    branch_code: '1234',
-    account_number: '123456-7',
-    tax_id: '012.345.678-90',
-    name: 'Jon Snow',
-    tags: []
-  )
-])
+transfers = StarkBank::Transfer.create(
+  transfers: [
+    StarkBank::Transfer.new(
+      amount: 100,
+      bank_code: '200',
+      branch_code: '0001',
+      account_number: '10000-0',
+      tax_id: '012.345.678-90',
+      name: 'Tony Stark',
+      tags: %w[iron suit]
+    ),
+    StarkBank::Transfer.new(
+      amount: 200,
+      bank_code: '341',
+      branch_code: '1234',
+      account_number: '123456-7',
+      tax_id: '012.345.678-90',
+      name: 'Jon Snow',
+      tags: []
+    )
+  ]
+)
 
 transfers.each do |transfer|
   puts transfer
@@ -287,8 +291,8 @@ You can query multiple transfers according to filters.
 require('starkbank')
 
 transfers = StarkBank::Transfer.query(
-  after: '2020-1-1',
-  before: '2020-4-1'
+  after: '2020-01-01',
+  before: '2020-04-01'
 )
 
 transfers.each do |transfer|
@@ -358,22 +362,24 @@ Paying a boleto is also simple.
 ```ruby
 require('starkbank')
 
-payments = StarkBank::BoletoPayment.create([
-  BoletoPayment.new(
-    line: '34191.09008 61207.727308 71444.640008 5 81310001234321',
-    tax_id: '012.345.678-90',
-    scheduled: '2020-03-13',
-    description: 'take my money',
-    tags: %w[take my money],
-  ),
-  BoletoPayment.new(
-    bar_code: '34197819200000000011090063609567307144464000',
-    tax_id: '012.345.678-90',
-    scheduled: '2020-03-14',
-    description: 'take my money one more time',
-    tags: %w[again],
-  )
-])
+payments = StarkBank::BoletoPayment.create(
+  payments: [
+    StarkBank::BoletoPayment.new(
+      line: '34191.09008 61207.727308 71444.640008 5 81310001234321',
+      tax_id: '012.345.678-90',
+      scheduled: '2020-03-13',
+      description: 'take my money',
+      tags: %w[take my money],
+    ),
+    StarkBank::BoletoPayment.new(
+      bar_code: '34197819200000000011090063609567307144464000',
+      tax_id: '012.345.678-90',
+      scheduled: '2020-03-14',
+      description: 'take my money one more time',
+      tags: %w[again],
+    )
+  ]
+)
 
 payments.each do |payment|
   puts payments
@@ -468,25 +474,27 @@ puts log
 
 ### Create utility payment
 
-Its also simple to pay utility bills (such as electricity and water bills) in the SDK.
+It's also simple to pay utility bills (such as electricity and water bills) in the SDK.
 
 ```ruby
 require('starkbank')
 
-payments = StarkBank::UtilityPayment.create([
-  UtilityPayment.new(
-    line: '34197819200000000011090063609567307144464000',
-    scheduled: '2020-03-13',
-    description: 'take my money',
-    tags: %w[take my money],
-  ),
-  UtilityPayment.new(
-    bar_code: '34191.09008 61207.727308 71444.640008 5 81310001234321',
-    scheduled: '2020-03-14',
-    description: 'take my money one more time',
-    tags: %w[again],
-  )
-])
+payments = StarkBank::UtilityPayment.create(
+  payments: [
+    StarkBank::UtilityPayment.new(
+      line: '34197819200000000011090063609567307144464000',
+      scheduled: '2020-03-13',
+      description: 'take my money',
+      tags: %w[take my money],
+    ),
+    StarkBank::UtilityPayment.new(
+      bar_code: '34191.09008 61207.727308 71444.640008 5 81310001234321',
+      scheduled: '2020-03-14',
+      description: 'take my money one more time',
+      tags: %w[again],
+    )
+  ]
+)
 
 payments.each do |payment|
   puts payment
@@ -586,22 +594,24 @@ To send money between Stark Bank accounts, you can create transactions:
 ```ruby
 require('starkbank')
 
-transactions = StarkBank::Transaction.create([
-  Transaction.new(
-    amount: 100,  # (R$ 1.00)
-    receiver_id: '1029378109327810',
-    description: 'Transaction to dear provider',
-    external_id: '12345',  # so we can block anything you send twice by mistake
-    tags: %w[provider]
-  ),
-  Transaction.new(
-    amount: 234,  # (R$ 2.34)
-    receiver_id: '2093029347820947',
-    description: 'Transaction to the other provider',
-    external_id: '12346',  # so we can block anything you send twice by mistake
-    tags: %w[provider]
-  )
-])
+transactions = StarkBank::Transaction.create(
+  transactions: [
+    StarkBank::Transaction.new(
+      amount: 100,  # (R$ 1.00)
+      receiver_id: '1029378109327810',
+      description: 'Transaction to dear provider',
+      external_id: '12345',  # so we can block anything you send twice by mistake
+      tags: %w[provider]
+    ),
+    StarkBank::Transaction.new(
+      amount: 234,  # (R$ 2.34)
+      receiver_id: '2093029347820947',
+      description: 'Transaction to the other provider',
+      external_id: '12346',  # so we can block anything you send twice by mistake
+      tags: %w[provider]
+    )
+  ]
+)
 
 transactions.each do |transaction|
   puts transaction
@@ -694,8 +704,8 @@ puts webhook
 
 ### Process webhook events
 
-Its easy to process events that arrived in your webhook. Remember to pass the
-signature header so the SDK can make sure its really StarkBank that sent you
+It's easy to process events that arrived in your webhook. Remember to pass the
+signature header so the SDK can make sure it's really StarkBank that sent you
 the event.
 
 ```ruby
@@ -718,7 +728,7 @@ end
 
 ### Query webhook events
 
-To search for webhooks events, run:
+To search for webhook events, run:
 
 ```ruby
 require('starkbank')
@@ -763,7 +773,7 @@ With this function, you can manually set events retrieved from the API as
 ```ruby
 require('starkbank')
 
-event = StarkBank::Event.update(id: "129837198237192", is_delivered: true)
+event = StarkBank::Event.update(id: '129837198237192', is_delivered: true)
 
 puts event
 ```
@@ -781,15 +791,17 @@ For example:
 require('starkbank')
 
 begin
-  transactions = StarkBank::Transaction.create([
-    Transaction.new(
-      amount: 99999999999999,  # (R$ 999,999,999,999.99)
-      receiver_d: "1029378109327810",
-      description: ".",
-      external_id: "12345",  # so we can block anything you send twice by mistake
-      tags: %w[provider]
-    ),
-  ])
+  transactions = StarkBank::Transaction.create(
+    transactions: [
+      StarkBank::Transaction.new(
+        amount: 99999999999999,  # (R$ 999,999,999,999.99)
+        receiver_id: "1029378109327810",
+        description: ".",
+        external_id: "12345",  # so we can block anything you send twice by mistake
+        tags: %w[provider]
+      )
+    ]
+  )
 rescue StarkBank::Error:InputErrors => e
   e.errors.each do |error|
     puts error.code
@@ -805,7 +817,7 @@ is already rushing in to fix the mistake and get you back up to speed.
 __UnknownError__ will be raised if a request encounters an error that is
 neither __InputErrors__ nor an __InternalServerError__, such as connectivity problems.
 
-__InvalidSignatureError__ will be raised specifically by starkbank.webhook.event.parse()
+__InvalidSignatureError__ will be raised specifically by StarkBank::Event.parse()
 when the provided content and signature do not check out with the Stark Bank public
 key.
 
@@ -823,10 +835,10 @@ private_key, public_key = StarkBank::Key.create()
 private_key, public_key = StarkBank::Key.create('file/keys')
 ```
 
-NOTE: When you are creating a Project.new, it is recommended that you create the
+NOTE: When you are creating a new Project, it is recommended that you create the
 keys inside the infrastructure that will use it, in order to avoid risky internet
 transmissions of your **private-key**. Then you can export the **public-key** alone to the
-computer where it will be used in the Project.new creation.
+computer where it will be used in the new Project creation.
 
 
 [API docs]: (https://starkbank.com/docs/api/v2)
