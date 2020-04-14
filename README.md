@@ -434,9 +434,9 @@ You can search for boleto payments using filters.
 ```ruby
 require('starkbank')
 
-payments = StarkBank::BoletoPayment.query([
+payments = StarkBank::BoletoPayment.query(
   tags: %w[company_1 company_2]
-])
+)
 
 payments.each do |payment|
   puts payments
@@ -567,7 +567,7 @@ bills life cycles.
 require('starkbank')
 
 logs = StarkBank::UtilityPayment::Log.query(
-  payment_ds: %w[102893710982379182 92837912873981273],
+  payment_ids: %w[102893710982379182 92837912873981273],
 )
 
 logs.each do |log|
