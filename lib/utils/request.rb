@@ -60,7 +60,7 @@ module StarkBank
         req['Access-Time'] = access_time
         req['Access-Signature'] = signature
         req['Content-Type'] = 'application/json'
-        req['User-Agent'] = "Ruby-#{RUBY_VERSION}-SDK-2.0.0"
+        req['User-Agent'] = "Ruby-#{RUBY_VERSION}-SDK-0.0.1"
 
         request = Net::HTTP.start(uri.hostname, use_ssl: true) { |http| http.request(req) }
 

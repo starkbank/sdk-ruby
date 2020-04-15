@@ -29,7 +29,7 @@ gem install starkbank
 Or just add this to your Gemfile:
 
 ```sh
-gem('starkbank', '~> 2.0.0')
+gem('starkbank', '~> 0.0.1')
 ```
 
 ## Versioning
