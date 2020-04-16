@@ -65,6 +65,11 @@ private_key, public_key = StarkBank::Key.create()
 private_key, public_key = StarkBank::Key.create('file/keys')
 ```
 
+**NOTE**: When you are creating a new Project, it is recommended that you create the
+keys inside the infrastructure that will use it, in order to avoid risky internet
+transmissions of your **private-key**. Then you can export the **public-key** alone to the
+computer where it will be used in the new Project creation.
+
 ### 3. Create a Project
 
 You need a project for direct API integrations. To create one in Sandbox:
@@ -298,7 +303,7 @@ transfers = StarkBank::Transfer.create(
   transfers: [
     StarkBank::Transfer.new(
       amount: 100,
-      bank_code: '200',
+      bank_code: '033',
       branch_code: '0001',
       account_number: '10000-0',
       tax_id: '012.345.678-90',
@@ -859,25 +864,6 @@ neither __InputErrors__ nor an __InternalServerError__, such as connectivity pro
 __InvalidSignatureError__ will be raised specifically by StarkBank::Event.parse()
 when the provided content and signature do not check out with the Stark Bank public
 key.
-
-## Key pair generation
-
-The SDK provides a helper to allow you to easily create ECDSA secp256k1 keys to use
-within our API. If you ever need a pair.new of keys, just run:
-
-```ruby
-require('starkbank')
-
-private_key, public_key = StarkBank::Key.create()
-
-# or, to also save .pem files in a specific path
-private_key, public_key = StarkBank::Key.create('file/keys')
-```
-
-NOTE: When you are creating a new Project, it is recommended that you create the
-keys inside the infrastructure that will use it, in order to avoid risky internet
-transmissions of your **private-key**. Then you can export the **public-key** alone to the
-computer where it will be used in the new Project creation.
 
 
 [API docs]: (https://starkbank.com/docs/api/v2)
