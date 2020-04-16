@@ -51,14 +51,18 @@ module StarkBank
       #
       # ## Parameters (optional):
       # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+      # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+      # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
       # - payment_ids [list of strings, default nil]: list of UtilityPayment ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
       # - types [list of strings, default nil]: filter retrieved objects by event types. ex: "paid" or "registered"
       # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
       #
       # ## Return:
       # - list of Log objects with updated attributes
-      def self.query(limit: nil, payment_ids: nil, types: nil, user: nil)
-        StarkBank::Utils::Rest.get_list(user: user, limit: limit, payment_ids: payment_ids, types: types, **resource)
+      def self.query(limit: nil, after: nil, before: nil, payment_ids: nil, types: nil, user: nil)
+        after = StarkBank::Utils::Checks.check_date(after)
+        before = StarkBank::Utils::Checks.check_date(before)
+        StarkBank::Utils::Rest.get_list(user: user, limit: limit, after: after, before: before, payment_ids: payment_ids, types: types, **resource)
       end
 
       def self.resource
