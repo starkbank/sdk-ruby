@@ -16,7 +16,7 @@ This library supports the following Ruby versions:
 
 ## Stark Bank API documentation
 
-If you want to take a look at our API, follow [this link](https://starkbank.com/docs/api/v2).
+Feel free to take a look at our [API docs].
 
 ## Versioning
 
@@ -59,7 +59,7 @@ You can use one of following methods:
 ```ruby
 require('starkbank')
 
-private_key, public_key = StarkBank::Key.create()
+private_key, public_key = StarkBank::Key.create
 
 # or, to also save .pem files in a specific path
 private_key, public_key = StarkBank::Key.create('file/keys')
@@ -87,8 +87,8 @@ You need a project for direct API integrations. To create one in Sandbox:
 ```ruby
 require('starkbank')
 
-// Get your private key from an environment variable or an encrypted database.
-// This is only an example of a private key content. You should use your own key.
+# Get your private key from an environment variable or an encrypted database.
+# This is only an example of a private key content. You should use your own key.
 private_key_content = '
 -----BEGIN EC PARAMETERS-----
 BgUrgQQACg==
@@ -101,9 +101,9 @@ IF16ZoTVt1FzZ8WkYQ3XomRD4HS13A==
 '
 
 project = StarkBank::Project.new(
-    environment: 'sandbox',
-    id: '5656565656565656',
-    private_key: private_key_content
+  environment: 'sandbox',
+  id: '5656565656565656',
+  private_key: private_key_content
 )
 ```
 
@@ -194,7 +194,7 @@ boletos = StarkBank::Boleto.create(
       city: 'São Paulo',
       state_code: 'SP',
       zip_code: '01310-000',
-      due: '2020-3-20',
+      due: Time.now + 24 * 3600,
       fine: 5,  # 5%
       interest: 2.5  # 2.5% per month
     )
@@ -214,7 +214,7 @@ Its status indicates whether it's been paid.
 ```ruby
 require('starkbank')
 
-boleto = StarkBank::Boleto.get(id: '5155165527080960')
+boleto = StarkBank::Boleto.get(id: '6365512502083584')
 
 puts boleto
 ```
@@ -226,7 +226,7 @@ After its creation, a boleto PDF may be retrieved by passing its id.
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::Boleto.pdf(id: '5155165527080960')
+pdf = StarkBank::Boleto.pdf(id: '6365512502083584')
 
 File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
 ```
@@ -258,7 +258,7 @@ require('date')
 
 boletos = StarkBank::Boleto.query(
   after: '2020-01-01',
-  before: Date.today + 1
+  before: Date.today - 1
 )
 
 boletos.each do |boleto|
@@ -351,7 +351,7 @@ To get a single transfer by its id, run:
 ```ruby
 require('starkbank')
 
-transfer = StarkBank::Transfer.get(id: '5155165527080960')
+transfer = StarkBank::Transfer.get(id: '4804196796727296')
 
 puts transfer
 ```
@@ -364,7 +364,7 @@ This operation is only valid if the transfer status is "processing" or "success"
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::Transfer.pdf(id: '5155165527080960')
+pdf = StarkBank::Transfer.pdf(id: '4832343898456064')
 
 File.open('transfer.pdf', 'w') { |file| file.write(pdf) }
 ```
@@ -394,7 +394,7 @@ You can also get a specific log by its id.
 ```ruby
 require('starkbank')
 
-log = StarkBank::Transfer::Log.get(id: '5155165527080960')
+log = StarkBank::Transfer::Log.get(id: '5554732936462336')
 
 puts log
 ```
@@ -409,24 +409,24 @@ require('starkbank')
 payments = StarkBank::BoletoPayment.create(
   payments: [
     StarkBank::BoletoPayment.new(
-      line: '34191.09008 61207.727308 71444.640008 5 81310001234321',
+      line: '34191.09008 64694.197308 71444.640008 1 97230000028900',
       tax_id: '012.345.678-90',
-      scheduled: '2020-03-13',
+      scheduled: Time.now,
       description: 'take my money',
-      tags: %w[take my money],
+      tags: %w[take my money]
     ),
     StarkBank::BoletoPayment.new(
-      bar_code: '34197819200000000011090063609567307144464000',
+      bar_code: '34191966100000145001090064694017307144464000',
       tax_id: '012.345.678-90',
-      scheduled: '2020-03-14',
+      scheduled: Time.now + 24 * 3600,
       description: 'take my money one more time',
-      tags: %w[again],
+      tags: %w[again]
     )
   ]
 )
 
 payments.each do |payment|
-  puts payments
+  puts payment
 end
 ```
 
@@ -437,7 +437,7 @@ To get a single boleto payment by its id, run:
 ```ruby
 require('starkbank')
 
-payment = StarkBank::BoletoPayment.get(id: '19278361897236187236')
+payment = StarkBank::BoletoPayment.get(id: '6591161082839040')
 
 puts payment
 ```
@@ -449,7 +449,7 @@ After its creation, a boleto payment PDF may be retrieved by passing its id.
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::BoletoPayment.pdf(id: '5155165527080960')
+pdf = StarkBank::BoletoPayment.pdf(id: '6591161082839040')
 
 File.open('boleto_payment.pdf', 'w') { |file| file.write(pdf) }
 ```
@@ -483,7 +483,7 @@ payments = StarkBank::BoletoPayment.query(
 )
 
 payments.each do |payment|
-  puts payments
+  puts payment
 end
 ```
 
@@ -495,7 +495,7 @@ Searches are also possible with boleto payment logs:
 require('starkbank')
 
 logs = StarkBank::BoletoPayment::Log.query(
-  payment_ids: %w[5155165527080960 76551659167801921],
+  payment_ids: %w[5391730421530624 6324396973096960]
 )
 
 logs.each do |log|
@@ -526,14 +526,14 @@ require('starkbank')
 payments = StarkBank::UtilityPayment.create(
   payments: [
     StarkBank::UtilityPayment.new(
-      line: '34197819200000000011090063609567307144464000',
-      scheduled: '2020-03-13',
+      line: '83680000001 7 08430138003 0 71070987611 8 00041351685 7',
+      scheduled: Time.now,
       description: 'take my money',
       tags: %w[take my money],
     ),
     StarkBank::UtilityPayment.new(
-      bar_code: '34191.09008 61207.727308 71444.640008 5 81310001234321',
-      scheduled: '2020-03-14',
+      bar_code: '83600000001522801380037107172881100021296561',
+      scheduled: Time.now + 3 * 24 * 3600,
       description: 'take my money one more time',
       tags: %w[again],
     )
@@ -568,7 +568,7 @@ You can get a specific bill by its id:
 ```ruby
 require('starkbank')
 
-payment = StarkBank::UtilityPayment.get(id: '5155165527080960')
+payment = StarkBank::UtilityPayment.get(id: '6258964706623488')
 
 puts payment
 ```
@@ -597,12 +597,12 @@ Note that this is not possible if it has been processed already.
 ```ruby
 require('starkbank')
 
-payment = StarkBank::UtilityPayment.delete(id: '5155165527080960')
+payment = StarkBank::UtilityPayment.delete(id: '6258964706623489')
 
 puts payment
 ```
 
-### Query utility bill payment logs
+### Query utility payment logs
 
 You can search for payments by specifying filters. Use this to understand the
 bills life cycles.
@@ -611,7 +611,7 @@ bills life cycles.
 require('starkbank')
 
 logs = StarkBank::UtilityPayment::Log.query(
-  payment_ids: %w[102893710982379182 92837912873981273],
+  payment_ids: %w[102893710982379182 92837912873981273]
 )
 
 logs.each do |log|
@@ -626,7 +626,7 @@ If you want to get a specific payment log by its id, just run:
 ```ruby
 require('starkbank')
 
-log = StarkBank::UtilityPayment::Log.get(id: '1902837198237992')
+log = StarkBank::UtilityPayment::Log.get(id: '4922041111150592')
 
 puts log
 ```
@@ -641,17 +641,17 @@ require('starkbank')
 transactions = StarkBank::Transaction.create(
   transactions: [
     StarkBank::Transaction.new(
-      amount: 100,  # (R$ 1.00)
-      receiver_id: '1029378109327810',
+      amount: 100, # (R$ 1.00)
+      receiver_id: '5083989094170624',
       description: 'Transaction to dear provider',
-      external_id: '12345',  # so we can block anything you send twice by mistake
+      external_id: '123456', # so we can block anything you send twice by mistake
       tags: %w[provider]
     ),
     StarkBank::Transaction.new(
-      amount: 234,  # (R$ 2.34)
-      receiver_id: '2093029347820947',
+      amount: 234, # (R$ 2.34)
+      receiver_id: '5083989094170624',
       description: 'Transaction to the other provider',
-      external_id: '12346',  # so we can block anything you send twice by mistake
+      external_id: '123457', # so we can block anything you send twice by mistake
       tags: %w[provider]
     )
   ]
@@ -688,7 +688,7 @@ You can get a specific transaction by its id:
 ```ruby
 require('starkbank')
 
-transaction = StarkBank::Transaction.get(id: '5155165527080960')
+transaction = StarkBank::Transaction.get(id: '5764045667827712')
 
 puts transaction
 ```
@@ -791,7 +791,7 @@ You can get a specific webhook event by its id.
 ```ruby
 require('starkbank')
 
-event = StarkBank::Event.get(id: '10827361982368179')
+event = StarkBank::Event.get(id: '4828869076975616')
 
 puts event
 ```
@@ -803,7 +803,7 @@ You can also delete a specific webhook event by its id.
 ```ruby
 require('starkbank')
 
-event = StarkBank::Event.delete(id: '10827361982368179')
+event = StarkBank::Event.delete(id: '4828869076975616')
 
 puts event
 ```
@@ -817,7 +817,7 @@ With this function, you can manually set events retrieved from the API as
 ```ruby
 require('starkbank')
 
-event = StarkBank::Event.update(id: '129837198237192', is_delivered: true)
+event = StarkBank::Event.update(id: '5892075044208640', is_delivered: true)
 
 puts event
 ```
@@ -838,15 +838,15 @@ begin
   transactions = StarkBank::Transaction.create(
     transactions: [
       StarkBank::Transaction.new(
-        amount: 99999999999999,  # (R$ 999,999,999,999.99)
-        receiver_id: "1029378109327810",
-        description: ".",
-        external_id: "12345",  # so we can block anything you send twice by mistake
+        amount: 99999999999999,
+        receiver_id: '1029378109327810',
+        description: '.',
+        external_id: '12345',
         tags: %w[provider]
       )
     ]
   )
-rescue StarkBank::Error:InputErrors => e
+rescue StarkBank::Error::InputErrors => e
   e.errors.each do |error|
     puts error.code
     puts error.message
@@ -866,4 +866,4 @@ when the provided content and signature do not check out with the Stark Bank pub
 key.
 
 
-[API docs]: (https://starkbank.com/docs/api/v2)
+[API docs]: (https://www.starkbank.com/docs/api)
