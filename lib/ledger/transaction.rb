@@ -25,18 +25,20 @@ module StarkBank
   # - tags [list of strings]: list of strings for reference when searching transactions (may be empty). ex: ["abc", "test"]
   #
   # ## Attributes (return-only):
+  # - sender_id [string]: unique id of the sending workspace. ex: "5656565656565656"
   # - source [string, default nil]: locator of the entity that generated the transaction. ex: "charge/1827351876292", "transfer/92873912873/chargeback"
   # - id [string, default nil]: unique id returned when Transaction is created. ex: "7656565656565656"
   # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
   # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transaction < StarkBank::Utils::Resource
-    attr_reader :amount, :description, :external_id, :receiver_id, :tags, :id, :fee, :created, :source
-    def initialize(amount:, description:, external_id:, receiver_id:, tags: nil, id: nil, fee: nil, created: nil, source: nil)
+    attr_reader :amount, :description, :external_id, :receiver_id, :sender_id, :tags, :id, :fee, :created, :source
+    def initialize(amount:, description:, external_id:, receiver_id:, sender_id: nil, tags: nil, id: nil, fee: nil, created: nil, source: nil)
       super(id)
       @amount = amount
       @description = description
       @external_id = external_id
       @receiver_id = receiver_id
+      @sender_id = sender_id
       @tags = tags
       @fee = fee
       @source = source
@@ -103,6 +105,7 @@ module StarkBank
             description: json['description'],
             external_id: json['external_id'],
             receiver_id: json['receiver_id'],
+            sender_id: json['sender_id'],
             tags: json['tags'],
             id: json['id'],
             fee: json['fee'],
