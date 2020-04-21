@@ -19,6 +19,15 @@ module StarkBank
           next if value.nil?
 
           value = value.is_a?(Date) || value.is_a?(DateTime) || value.is_a?(Time) ? value.strftime('%Y-%m-%d') : value
+
+          if value.is_a?(Array)
+            list = []
+            value.each do |v|
+              list << (v.is_a?(Hash) ? cast_json_to_api_format(v) : v)
+            end
+            value = list
+          end
+
           entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = value
         end
         entity_hash
