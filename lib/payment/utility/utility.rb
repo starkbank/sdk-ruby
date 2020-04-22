@@ -19,7 +19,7 @@ module StarkBank
   # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"
   #
   # ## Parameters (optional):
-  # - scheduled [Date, default today]: payment scheduled date. ex: Date.new(2020, 3, 10)
+  # - scheduled [Date, DateTime, Time or string, default today]: payment scheduled date. ex: Date.new(2020, 3, 10)
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
@@ -98,8 +98,8 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-    # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - after [Date, DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid'

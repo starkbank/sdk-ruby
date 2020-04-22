@@ -23,7 +23,7 @@ module StarkBank
   # - zip_code [string]: payer address zip code. ex: 01311-200
   #
   # ## Parameters (optional):
-  # - due [Date or string, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30
+  # - due [Date, DateTime, Time or string, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30
   # - fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
   # - overdue_limit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)
@@ -123,8 +123,8 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-    # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+    # - after [Date , DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid' or 'registered'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
