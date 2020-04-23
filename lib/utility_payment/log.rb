@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative('../../utils/resource')
-require_relative('../../utils/rest')
-require_relative('../../utils/checks')
-require_relative('utility')
+require_relative('../utils/resource')
+require_relative('../utils/rest')
+require_relative('../utils/checks')
+require_relative('utility_payment')
 
 module StarkBank
   class UtilityPayment

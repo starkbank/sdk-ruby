@@ -9,8 +9,8 @@ require_relative('../utils/cache')
 require_relative('../error')
 require_relative('../boleto/log')
 require_relative('../transfer/log')
-require_relative('../payment/boleto/log')
-require_relative('../payment/utility/log')
+require_relative('../boleto_payment/log')
+require_relative('../utility_payment/log')
 
 module StarkBank
   # # Webhook Event object

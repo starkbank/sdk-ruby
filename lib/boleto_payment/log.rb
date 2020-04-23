@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative('../../utils/resource')
-require_relative('../../utils/rest')
-require_relative('../../utils/checks')
-require_relative('boleto')
+require_relative('../utils/resource')
+require_relative('../utils/rest')
+require_relative('../utils/checks')
+require_relative('boleto_payment')
 
 module StarkBank
   class BoletoPayment
