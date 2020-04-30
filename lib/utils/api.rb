@@ -6,9 +6,13 @@ module StarkBank
   module Utils
     module API
       def self.api_json(entity)
-        entity_hash = {}
-        entity.instance_variables.each do |key|
-          entity_hash[key[1..-1]] = entity.instance_variable_get(key)
+        if entity.is_a?(Hash)
+          entity_hash = entity
+        else
+          entity_hash = {}
+          entity.instance_variables.each do |key|
+            entity_hash[key[1..-1]] = entity.instance_variable_get(key)
+          end
         end
         cast_json_to_api_format(entity_hash)
       end

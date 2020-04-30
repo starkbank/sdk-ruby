@@ -206,6 +206,8 @@ boletos.each do |boleto|
 end
 ```
 
+**Note**: Instead of using Boleto objects, you can also pass each boleto element in hash format
+
 ### Get boleto
 
 After its creation, information on a boleto may be retrieved by passing its id. 
@@ -327,6 +329,8 @@ transfers.each do |transfer|
 end
 ```
 
+**Note**: Instead of using Transfer objects, you can also pass each transfer element in hash format
+
 ### Query transfers
 
 You can query multiple transfers according to filters.
@@ -429,6 +433,8 @@ payments.each do |payment|
   puts payment
 end
 ```
+
+**Note**: Instead of using BoletoPayment objects, you can also pass each payment element in hash format
 
 ### Get boleto payment
 
@@ -544,6 +550,8 @@ payments.each do |payment|
   puts payment
 end
 ```
+
+**Note**: Instead of using UtilityPayment objects, you can also pass each payment element in hash format
 
 ### Query utility payments
 
@@ -661,6 +669,8 @@ transactions.each do |transaction|
   puts transaction
 end
 ```
+
+**Note**: Instead of using Transaction objects, you can also pass each transaction element in hash format
 
 ### Query transactions
 
