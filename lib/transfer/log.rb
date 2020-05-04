@@ -51,8 +51,8 @@ module StarkBank
       #
       # ## Parameters (optional):
       # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-      # - after [Date, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-      # - before [Date, default nil] date filter for objects only before specified date. ex: Date.new(2020, 3, 10)
+      # - after [Date, DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+      # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
       # - types [list of strings, default nil]: filter retrieved objects by types. ex: 'success' or 'failed'
       # - transfer_ids [list of strings, default nil]: list of Transfer ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
       # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call

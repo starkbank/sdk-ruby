@@ -6,9 +6,13 @@ module StarkBank
   module Utils
     module API
       def self.api_json(entity)
-        entity_hash = {}
-        entity.instance_variables.each do |key|
-          entity_hash[key[1..-1]] = entity.instance_variable_get(key)
+        if entity.is_a?(Hash)
+          entity_hash = entity
+        else
+          entity_hash = {}
+          entity.instance_variables.each do |key|
+            entity_hash[key[1..-1]] = entity.instance_variable_get(key)
+          end
         end
         cast_json_to_api_format(entity_hash)
       end
@@ -19,6 +23,15 @@ module StarkBank
           next if value.nil?
 
           value = value.is_a?(Date) || value.is_a?(DateTime) || value.is_a?(Time) ? value.strftime('%Y-%m-%d') : value
+
+          if value.is_a?(Array)
+            list = []
+            value.each do |v|
+              list << (v.is_a?(Hash) ? cast_json_to_api_format(v) : v)
+            end
+            value = list
+          end
+
           entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = value
         end
         entity_hash

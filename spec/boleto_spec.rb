@@ -30,7 +30,7 @@ RSpec.describe(StarkBank::Boleto, '#boleto#') do
   def example
     StarkBank::Boleto.new(
       amount: 100_000,
-      due: Time.now + 24 * 3600,
+      due: Time.now + 5 * 24 * 3600,
       name: 'Random Company',
       street_line_1: 'Rua ABC',
       street_line_2: 'Ap 123',
@@ -54,6 +54,16 @@ RSpec.describe(StarkBank::Boleto, '#boleto#') do
         {
           text: 'product C',
           amount: 789
+        }
+      ],
+      discounts: [
+        {
+          percentage: 5,
+          date: Time.now + 24 * 3600
+        },
+        {
+          percentage: 2.5,
+          date: Time.now + 2 * 24 * 3600
         }
       ]
     )
