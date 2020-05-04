@@ -29,10 +29,11 @@ module StarkBank
   # - source [string, default nil]: locator of the entity that generated the transaction. ex: 'charge/1827351876292', 'transfer/92873912873/chargeback'
   # - id [string, default nil]: unique id returned when Transaction is created. ex: '7656565656565656'
   # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
+  # - balance [integer, default nil]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)
   # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transaction < StarkBank::Utils::Resource
     attr_reader :amount, :description, :external_id, :receiver_id, :sender_id, :tags, :id, :fee, :created, :source
-    def initialize(amount:, description:, external_id:, receiver_id:, sender_id: nil, tags: nil, id: nil, fee: nil, created: nil, source: nil)
+    def initialize(amount:, description:, external_id:, receiver_id:, sender_id: nil, tags: nil, id: nil, fee: nil, source: nil, balance: nil, created: nil)
       super(id)
       @amount = amount
       @description = description
@@ -42,6 +43,7 @@ module StarkBank
       @tags = tags
       @fee = fee
       @source = source
+      @balance = balance
       @created = StarkBank::Utils::Checks.check_datetime(created)
     end
 
@@ -109,8 +111,9 @@ module StarkBank
             tags: json['tags'],
             id: json['id'],
             fee: json['fee'],
-            created: json['created'],
-            source: json['source']
+            source: json['source'],
+            balance: json['balance'],
+            created: json['created']
           )
         }
       }
