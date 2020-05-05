@@ -13,8 +13,8 @@ module StarkBank
   #
   # ## Parameters (required):
   # - amount [integer]: Boleto value in cents. Minimum = 200 (R$2,00). ex: 1234 (= R$ 12.34)
-  # - name [string]: payer full name. ex: "Anthony Edward Stark"
-  # - tax_id [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
+  # - name [string]: payer full name. ex: 'Anthony Edward Stark'
+  # - tax_id [string]: payer tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
   # - street_line_1 [string]: payer main address. ex: Av. Paulista, 200
   # - street_line_2 [string]: payer address complement. ex: Apto. 123
   # - district [string]: payer address district / neighbourhood. ex: Bela Vista
@@ -23,20 +23,20 @@ module StarkBank
   # - zip_code [string]: payer address zip code. ex: 01311-200
   #
   # ## Parameters (optional):
-  # - due [Date, DateTime, Time or string, default today + 2 days]: Boleto due date in ISO format. ex: 2020-04-30
+  # - due [Date, DateTime, Time or string, default today + 2 days]: Boleto due date in ISO format. ex: '2020-04-30'
   # - fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
-  # - overdue_limit [integer, default 59]: limit in days for automatic Boleto cancellation after due date. ex: 7 (max: 59)
-  # - descriptions [list of dictionaries, default nil]: list of dictionaries with "text":string and (optional) "amount":int pairs
-  # - discounts [list of dictionaries, default nil]: list of dictionaries with "percentage":float and "date":Date or string pairs
+  # - overdue_limit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)
+  # - descriptions [list of dictionaries, default nil]: list of dictionaries with 'text':string and (optional) 'amount':int pairs
+  # - discounts [list of dictionaries, default nil]: list of dictionaries with 'percentage':float and 'date':Date or string pairs
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when Boleto is created. ex: "5656565656565656"
+  # - id [string, default nil]: unique id returned when Boleto is created. ex: '5656565656565656'
   # - fee [integer, default nil]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)
-  # - line [string, default nil]: generated Boleto line for payment. ex: "34191.09008 63571.277308 71444.640008 5 81960000000062"
-  # - bar_code [string, default nil]: generated Boleto bar-code for payment. ex: "34195819600000000621090063571277307144464000"
-  # - status [string, default nil]: current Boleto status. ex: "registered" or "paid"
+  # - line [string, default nil]: generated Boleto line for payment. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062'
+  # - bar_code [string, default nil]: generated Boleto bar-code for payment. ex: '34195819600000000621090063571277307144464000'
+  # - status [string, default nil]: current Boleto status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Boleto < StarkBank::Utils::Resource
     attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :created
@@ -90,7 +90,7 @@ module StarkBank
     # Receive a single Boleto object previously created in the Stark Bank API by passing its id
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -106,7 +106,7 @@ module StarkBank
     # Receive a single Boleto pdf file generated in the Stark Bank API by passing its id.
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -152,7 +152,7 @@ module StarkBank
     # Delete a Boleto entity previously created in the Stark Bank API
     #
     # ## Parameters (required):
-    # - id [string]: Boleto unique id. ex: "5656565656565656"
+    # - id [string]: Boleto unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
