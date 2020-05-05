@@ -20,11 +20,11 @@ module StarkBank
   # list all generated updates on entities.
   #
   # ## Attributes:
-  # - id [string]: unique id returned when the log is created. ex: "5656565656565656"
+  # - id [string]: unique id returned when the event is created. ex: '5656565656565656'
   # - log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)
   # - created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
-  # - subscription [string]: service that triggered this event. ex: "transfer", "utility-payment"
+  # - subscription [string]: service that triggered this event. ex: 'transfer', 'utility-payment'
   class Event < StarkBank::Utils::Resource
     attr_reader :id, :log, :created, :is_delivered, :subscription
     def initialize(id:, log:, created:, is_delivered:, subscription:)
@@ -48,7 +48,7 @@ module StarkBank
     # Receive a single notification Event object previously created in the Stark Bank API by passing its id
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -90,7 +90,7 @@ module StarkBank
     # Delete a of notification Event entity previously created in the Stark Bank API by its ID
     #
     # ## Parameters (required):
-    # - id [string]: Event unique id. ex: "5656565656565656"
+    # - id [string]: Event unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -107,7 +107,7 @@ module StarkBank
     # If is_delivered is True, the event will no longer be returned on queries with is_delivered=False.
     #
     # ## Parameters (required):
-    # - id [list of strings]: Event unique ids. ex: "5656565656565656"
+    # - id [list of strings]: Event unique ids. ex: '5656565656565656'
     # - is_delivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: True
     #
     # ## Parameters (optional):
@@ -127,7 +127,7 @@ module StarkBank
     #
     # ## Parameters (required):
     # - content [string]: response content from request received at user endpoint (not parsed)
-    # - signature [string]: base-64 digital signature received at response header "Digital-Signature"
+    # - signature [string]: base-64 digital signature received at response header 'Digital-Signature'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call

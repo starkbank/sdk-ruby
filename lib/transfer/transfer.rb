@@ -15,7 +15,7 @@ module StarkBank
   # - amount [integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)
   # - name [string]: receiver full name. ex: 'Anthony Edward Stark'
   # - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
-  # - bank_code [string]: receiver 1 to 3 digits of the bank institution in Brazil. ex: '200' or '341'
+  # - bank_code [string]: 1 to 3 digits of the receiver bank institution in Brazil. ex: '200' or '341'
   # - branch_code [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: '1357-9'
   # - account_number [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: '876543-2'
   #
@@ -25,7 +25,7 @@ module StarkBank
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when Transfer is created. ex: '5656565656565656'
   # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
-  # - status [string, default nil]: current boleto status. ex: 'registered' or 'paid'
+  # - status [string, default nil]: current transfer status. ex: 'success' or 'failed'
   # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ['19827356981273']
   # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
@@ -68,7 +68,7 @@ module StarkBank
     # Receive a single Transfer object previously created in the Stark Bank API by passing its id
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -82,10 +82,10 @@ module StarkBank
     # # Retrieve a specific Transfer pdf file
     #
     # Receive a single Transfer pdf receipt file generated in the Stark Bank API by passing its id.
-    # Only valid for transfers with "processing" and "success" status.
+    # Only valid for transfers with 'processing' and 'success' status.
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
@@ -105,7 +105,7 @@ module StarkBank
     # - after [Date, DateTime, Time or string, default nil] date filter for objects created or updated only after specified date. ex: Date.new(2020, 3, 10)
     # - before [Date, DateTime, Time or string, default nil] date filter for objects created or updated only before specified date. ex: Date.new(2020, 3, 10)
     # - transactionIds [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+    # - status [string, default nil]: filter for status of retrieved objects. ex: 'success' or 'failed'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #

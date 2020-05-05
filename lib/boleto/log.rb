@@ -15,11 +15,11 @@ module StarkBank
     # on the Boleto.
     #
     # ## Attributes:
-    # - id [string]: unique id returned when the log is created. ex: "5656565656565656"
+    # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - boleto [Boleto]: Boleto entity to which the log refers to.
     # - errors [list of strings]: list of errors linked to this Boleto event
-    # - type [string]: type of the Boleto event which triggered the log creation. ex: "registered" or "paid"
-    # - created [DateTime]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+    # - type [string]: type of the Boleto event which triggered the log creation. ex: 'registered' or 'paid'
+    # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     class Log < StarkBank::Utils::Resource
       attr_reader :id, :created, :type, :errors, :boleto
       def initialize(id:, created:, type:, errors:, boleto:)
@@ -35,7 +35,7 @@ module StarkBank
       # Receive a single Log object previously created by the Stark Bank API by passing its id
       #
       # ## Parameters (required):
-      # - id [string]: object unique id. ex: "5656565656565656"
+      # - id [string]: object unique id. ex: '5656565656565656'
       #
       # ## Parameters (optional):
       # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call

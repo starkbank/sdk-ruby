@@ -28,7 +28,7 @@ module StarkBank
   # - sender_id [string]: unique id of the sending workspace. ex: '5656565656565656'
   # - source [string, default nil]: locator of the entity that generated the transaction. ex: 'charge/1827351876292', 'transfer/92873912873/chargeback'
   # - id [string, default nil]: unique id returned when Transaction is created. ex: '7656565656565656'
-  # - fee [integer, default nil]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
+  # - fee [integer, default nil]: fee charged when transaction is created. ex: 200 (= R$ 2.00)
   # - balance [integer, default nil]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)
   # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transaction < StarkBank::Utils::Resource
@@ -68,7 +68,7 @@ module StarkBank
     # Receive a single Transaction object previously created in the Stark Bank API by passing its id
     #
     # ## Parameters (required):
-    # - id [string]: object unique id. ex: "5656565656565656"
+    # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
