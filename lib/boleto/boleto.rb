@@ -27,6 +27,8 @@ module StarkBank
   # - fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
   # - overdue_limit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)
+  # - receiver_name [string]: receiver (Sacador Avalista) full name. ex: 'Anthony Edward Stark'
+  # - receiver_tax_id [string]: receiver (Sacador Avalista) tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
   # - descriptions [list of dictionaries, default nil]: list of dictionaries with 'text':string and (optional) 'amount':int pairs
   # - discounts [list of dictionaries, default nil]: list of dictionaries with 'percentage':float and 'date':Date or string pairs
   # - tags [list of strings]: list of strings for tagging
@@ -39,11 +41,12 @@ module StarkBank
   # - status [string, default nil]: current Boleto status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Boleto < StarkBank::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :created
+    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :created
     def initialize(
       amount:, name:, tax_id:, street_line_1:, street_line_2:, district:, city:, state_code:, zip_code:,
-      due: nil, fine: nil, interest: nil, overdue_limit: nil, tags: nil, descriptions: nil, discounts: nil,
-      id: nil, fee: nil, line: nil, bar_code: nil, status: nil, created: nil
+      due: nil, fine: nil, interest: nil, overdue_limit: nil, receiver_name: nil, receiver_tax_id: nil,
+      tags: nil, descriptions: nil, discounts: nil, id: nil, fee: nil, line: nil, bar_code: nil,
+      status: nil, created: nil
     )
       super(id)
       @amount = amount
@@ -59,6 +62,8 @@ module StarkBank
       @fine = fine
       @interest = interest
       @overdue_limit = overdue_limit
+      @receiver_name = receiver_name
+      @receiver_tax_id = receiver_tax_id
       @tags = tags
       @descriptions = descriptions
       @discounts = discounts
@@ -181,6 +186,8 @@ module StarkBank
             fine: json['fine'],
             interest: json['interest'],
             overdue_limit: json['overdue_limit'],
+            receiver_name: json['receiver_name'],
+            receiver_tax_id: json['receiver_tax_id'],
             tags: json['tags'],
             descriptions: json['descriptions'],
             discounts: json['discounts'],
