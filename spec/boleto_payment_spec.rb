@@ -30,7 +30,7 @@ RSpec.describe(StarkBank::BoletoPayment, '#boleto-payment#') do
 
   def example
     StarkBank::BoletoPayment.new(
-      line: '34191.09008 61713.957308 71444.640008 2 834300' + rand(1e8 - 1).to_s.rjust(8, "0"),
+      line: '34191.09008 61713.957308 71444.640008 2 834300' + rand(1e8 - 1).to_s.rjust(8, '0'),
       scheduled: Date.today + 2,
       description: 'loading a random account',
       tax_id: '20.018.183/0001-80'

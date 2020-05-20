@@ -17,7 +17,7 @@ RSpec.describe(StarkBank::Event, '#event#') do
 
   context 'at least one undelivered event' do
     it 'query, get, update and delete' do
-      event = StarkBank::Event.query(limit: 1, is_delivered: false).to_a[0]
+      event = StarkBank::Event.query(limit: 100, is_delivered: false).to_a.sample
       expect(event.is_delivered).to(be(false))
       get_event = StarkBank::Event.get(event.id)
       expect(event.id).to(eq(get_event.id))

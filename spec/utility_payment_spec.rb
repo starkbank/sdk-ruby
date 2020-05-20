@@ -30,7 +30,7 @@ RSpec.describe(StarkBank::UtilityPayment, '#utility-payment#') do
 
   def example
     StarkBank::UtilityPayment.new(
-      bar_code: '83660000001084301380074119002551100010601813',
+      bar_code: '8366000' + rand(1e5).to_s.rjust(8, '0') + '01380074119002551100010601813',
       scheduled: Date.today + 2,
       description: 'pagando a conta'
     )
