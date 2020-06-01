@@ -114,12 +114,13 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
+    # - layout [string]: Layout specification. Available options are "default" and "booklet"
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Boleto pdf file
-    def self.pdf(id, user: nil)
-      StarkBank::Utils::Rest.get_pdf(id: id, user: user, **resource)
+    def self.pdf(id, layout: nil, user: nil)
+      StarkBank::Utils::Rest.get_pdf(id: id, layout: layout, user: user, **resource)
     end
 
     # # Retrieve Boletos
