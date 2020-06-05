@@ -20,7 +20,7 @@ RSpec.describe(StarkBank::Boleto, '#boleto#') do
       boleto = StarkBank::Boleto.create([example])[0]
       get_boleto = StarkBank::Boleto.get(boleto.id)
       expect(boleto.id).to(eq(get_boleto.id))
-      pdf = StarkBank::Boleto.pdf(boleto.id)
+      pdf = StarkBank::Boleto.pdf(boleto.id, layout: 'booklet')
       File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
       delete_boleto = StarkBank::Boleto.delete(boleto.id)
       expect(boleto.id).to(eq(delete_boleto.id))

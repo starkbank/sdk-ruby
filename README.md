@@ -228,7 +228,7 @@ After its creation, a boleto PDF may be retrieved by passing its id.
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::Boleto.pdf('6365512502083584')
+pdf = StarkBank::Boleto.pdf('6365512502083584', layout: 'default')
 
 File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
 ```
