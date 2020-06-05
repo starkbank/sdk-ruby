@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Travis CI integration
+### Change
+- Test user credentials to environment variable instead of hard-code
 
 ## [0.3.0] - 2020-05-12
 ### Added

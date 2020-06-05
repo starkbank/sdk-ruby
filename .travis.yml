@@ -1,0 +1,18 @@
+language: ruby
+
+matrix:
+  include:
+    - ruby: "2.3"
+    - ruby: "2.4"
+    - ruby: "2.5"
+    - ruby: "2.6"
+    - ruby: "2.7"
+
+install:
+  - gem install bundler -v 1.17.3
+  - bundle install
+  - gem build starkbank.gemspec
+  - gem install starkbank-0.3.0.gem
+
+script:
+  - rspec --format doc
