@@ -24,6 +24,7 @@ module StarkBank
 
       def self.fetch(method:, path:, payload: nil, query: nil, user: nil)
         user = Checks.check_user(user)
+        language = Checks.check_language
 
         base_url = {
           Environment::PRODUCTION => 'https://api.starkbank.com/',
@@ -61,6 +62,7 @@ module StarkBank
         req['Access-Signature'] = signature
         req['Content-Type'] = 'application/json'
         req['User-Agent'] = "Ruby-#{RUBY_VERSION}-SDK-0.3.0"
+        req['Accept-Language'] = language
 
         request = Net::HTTP.start(uri.hostname, use_ssl: true) { |http| http.request(req) }
 

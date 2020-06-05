@@ -17,6 +17,14 @@ module StarkBank
         user
       end
 
+      def self.check_language
+        language = StarkBank.language
+        accepted_languages = %w[en-US pt-BR]
+        raise(ArgumentError, "Select a valid language: #{accepted_languages.join(', ')}") unless accepted_languages.include?(language)
+
+        language
+      end
+
       def self.check_environment(environment)
         environments = StarkBank::Utils::Environment.constants(false).map { |c| StarkBank::Utils::Environment.const_get(c) }
         raise(ArgumentError, "Select a valid environment: #{environments.join(', ')}") unless environments.include?(environment)
