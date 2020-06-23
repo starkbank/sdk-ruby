@@ -31,7 +31,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     ruby-progressbar (1.10.1)
-    starkbank-ecdsa (0.0.2)
+    starkbank-ecdsa (0.0.3)
     unicode-display_width (1.7.0)
 
 PLATFORMS
@@ -40,7 +40,7 @@ PLATFORMS
 DEPENDENCIES
   rspec (~> 3)
   rubocop
-  starkbank-ecdsa (~> 0.0.2)
+  starkbank-ecdsa (~> 0.0.3)
 
 BUNDLED WITH
    1.17.3
