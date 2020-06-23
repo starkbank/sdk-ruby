@@ -15,7 +15,7 @@ module StarkBank
     # ## Return:
     # - private and public key pems
     def self.create(path = nil)
-      private_key = PrivateKey.new
+      private_key = EllipticCurve::PrivateKey.new
       public_key = private_key.publicKey
 
       private_key_pem = private_key.toPem

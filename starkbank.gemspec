@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*.rb']
   s.licenses = 'MIT'
   s.required_ruby_version = '>= 2.3'
-  s.add_dependency('starkbank-ecdsa', '~> 0.0.2')
+  s.add_dependency('starkbank-ecdsa', '~> 0.0.3')
   s.add_development_dependency('rspec', '~> 3.0')
 end
