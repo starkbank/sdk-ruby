@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+## [0.4.1] - 2020-06-22
+### Fixed
+- starkbank-ecdsa dependency
 
 ## [0.4.0] - 2020-06-05
 ### Added
