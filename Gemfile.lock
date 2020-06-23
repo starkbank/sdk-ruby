@@ -1,27 +1,21 @@
+PATH
+  remote: .
+  specs:
+    starkbank (0.4.1)
+      starkbank-ecdsa (~> 0.0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    diff-lcs (1.3)
     jaro_winkler (1.5.4)
+    minitest (5.14.1)
     parallel (1.19.1)
     parser (2.7.1.0)
       ast (~> 2.4.0)
     rainbow (3.0.0)
+    rake (13.0.1)
     rexml (3.2.4)
-    rspec (3.9.0)
-      rspec-core (~> 3.9.0)
-      rspec-expectations (~> 3.9.0)
-      rspec-mocks (~> 3.9.0)
-    rspec-core (3.9.1)
-      rspec-support (~> 3.9.1)
-    rspec-expectations (3.9.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.9.0)
-    rspec-mocks (3.9.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.9.0)
-    rspec-support (3.9.2)
     rubocop (0.81.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -31,16 +25,17 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     ruby-progressbar (1.10.1)
-    starkbank-ecdsa (0.0.3)
+    starkbank-ecdsa (0.0.5)
     unicode-display_width (1.7.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec (~> 3)
-  rubocop
-  starkbank-ecdsa (~> 0.0.3)
+  minitest (~> 5.14.1)
+  rake (~> 13.0)
+  rubocop (~> 0.81)
+  starkbank!
 
 BUNDLED WITH
-   1.17.3
+   2.1.4

@@ -33,14 +33,15 @@ module StarkBank
       @is_delivered = is_delivered
       @subscription = subscription
 
-      maker = {
+      resource = {
         'transfer': StarkBank::Transfer::Log.resource,
         'boleto': StarkBank::Boleto::Log.resource,
         'boleto-payment': StarkBank::BoletoPayment::Log.resource,
         'utility-payment': StarkBank::UtilityPayment::Log.resource
-      }[subscription.to_sym][:resource_maker]
+      }[subscription.to_sym]
 
-      @log = StarkBank::Utils::API.from_api_json(maker, log)
+      @log = log
+      @log = StarkBank::Utils::API.from_api_json(resource[:resource_maker], log) unless resource.nil?
     end
 
     # # Retrieve a specific notification Event

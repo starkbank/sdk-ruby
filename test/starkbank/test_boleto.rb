@@ -1,30 +1,25 @@
 # frozen_string_literal: true
 
-require('starkbank')
-require('user')
+require_relative('../test_helper.rb')
 
-RSpec.describe(StarkBank::Boleto, '#boleto#') do
-  context 'at least 10 paid boletos' do
-    it 'query' do
-      boletos = StarkBank::Boleto.query(limit: 10, status: 'paid', before: DateTime.now).to_a
-      expect(boletos.length).to(eq(10))
-      boletos.each do |boleto|
-        expect(boleto.id).not_to(be_nil)
-        expect(boleto.status).to(eq('paid'))
-      end
+describe(StarkBank::Boleto, '#boleto#') do
+  it 'query' do
+    boletos = StarkBank::Boleto.query(limit: 10, status: 'paid', before: DateTime.now).to_a
+    expect(boletos.length).must_equal(10)
+    boletos.each do |boleto|
+      expect(boleto.id).wont_be_nil
+      expect(boleto.status).must_equal('paid')
     end
   end
 
-  context 'no requirements' do
-    it 'create, get, get_pdf and delete' do
-      boleto = StarkBank::Boleto.create([example])[0]
-      get_boleto = StarkBank::Boleto.get(boleto.id)
-      expect(boleto.id).to(eq(get_boleto.id))
-      pdf = StarkBank::Boleto.pdf(boleto.id, layout: 'booklet')
-      File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
-      delete_boleto = StarkBank::Boleto.delete(boleto.id)
-      expect(boleto.id).to(eq(delete_boleto.id))
-    end
+  it 'create, get, get_pdf and delete' do
+    boleto = StarkBank::Boleto.create([example])[0]
+    get_boleto = StarkBank::Boleto.get(boleto.id)
+    expect(boleto.id).must_equal(get_boleto.id)
+    pdf = StarkBank::Boleto.pdf(boleto.id, layout: 'booklet')
+    File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
+    delete_boleto = StarkBank::Boleto.delete(boleto.id)
+    expect(boleto.id).must_equal(delete_boleto.id)
   end
 
   def example

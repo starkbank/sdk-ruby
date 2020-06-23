@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require('starkbank')
-
 StarkBank.user = StarkBank::Project.new(
   environment: 'sandbox',
   id: ENV['SANDBOX_ID'], # '9999999999999999',
