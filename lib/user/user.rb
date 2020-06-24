@@ -2,12 +2,12 @@
 
 require('starkbank-ecdsa')
 require_relative('../utils/resource')
-require_relative('../utils/checks')
 
 module StarkBank
   class User < StarkBank::Utils::Resource
     attr_reader :pem, :environment
     def initialize(environment, id, private_key)
+      require_relative('../utils/checks')
       super(id)
       @pem = StarkBank::Utils::Checks.check_private_key(private_key)
       @environment = StarkBank::Utils::Checks.check_environment(environment)

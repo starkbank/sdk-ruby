@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require('starkbank-ecdsa')
 require('date')
-require_relative('../user/user')
+require('starkbank-ecdsa')
 require_relative('environment')
+require_relative('../user/user')
 
 module StarkBank
   module Utils

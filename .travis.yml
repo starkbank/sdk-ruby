@@ -8,11 +8,9 @@ matrix:
     - ruby: "2.6"
     - ruby: "2.7"
 
-install:
-  - gem install bundler -v 1.17.3
-  - bundle install
-  - gem build starkbank.gemspec
-  - gem install starkbank-0.4.1.gem
+before_install:
+  - yes | gem update --system --force
+  - gem install bundler
 
 script:
-  - rspec --format doc
+  - bundle exec rake test

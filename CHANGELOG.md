@@ -13,6 +13,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Changed
+- Gem structure, now using Rake and minitest
+### FIxed
+- Non-implemented webhook subscription bug
+- Circular require
+
 ## [0.4.1] - 2020-06-22
 ### Fixed
 - starkbank-ecdsa dependency
