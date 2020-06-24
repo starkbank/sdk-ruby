@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.4.2] - 2020-06-24
 ### Changed
 - Gem structure, now using Rake and minitest
 ### FIxed
