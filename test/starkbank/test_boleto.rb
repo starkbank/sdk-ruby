@@ -17,7 +17,7 @@ describe(StarkBank::Boleto, '#boleto#') do
     get_boleto = StarkBank::Boleto.get(boleto.id)
     expect(boleto.id).must_equal(get_boleto.id)
     pdf = StarkBank::Boleto.pdf(boleto.id, layout: 'booklet')
-    File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
+    File.binwrite('boleto.pdf', pdf)
     delete_boleto = StarkBank::Boleto.delete(boleto.id)
     expect(boleto.id).must_equal(delete_boleto.id)
   end

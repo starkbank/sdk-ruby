@@ -244,7 +244,7 @@ require('starkbank')
 
 pdf = StarkBank::Boleto.pdf('6365512502083584', layout: 'default')
 
-File.open('boleto.pdf', 'w') { |file| file.write(pdf) }
+File.binwrite('boleto.pdf', pdf)
 ```
 
 Be careful not to accidentally enforce any encoding on the raw pdf content,
@@ -384,7 +384,7 @@ require('starkbank')
 
 pdf = StarkBank::Transfer.pdf('4832343898456064')
 
-File.open('transfer.pdf', 'w') { |file| file.write(pdf) }
+File.binwrite('transfer.pdf', pdf)
 ```
 
 Be careful not to accidentally enforce any encoding on the raw pdf content,
@@ -471,7 +471,7 @@ require('starkbank')
 
 pdf = StarkBank::BoletoPayment.pdf('6591161082839040')
 
-File.open('boleto_payment.pdf', 'w') { |file| file.write(pdf) }
+File.binwrite('boleto_payment.pdf', pdf)
 ```
 
 Be careful not to accidentally enforce any encoding on the raw pdf content,
@@ -604,7 +604,7 @@ require('starkbank')
 
 pdf = StarkBank::UtilityPayment.pdf('5155165527080960')
 
-File.open('electricity_payment.pdf', 'w') { |file| file.write(pdf) }
+File.binwrite('electricity_payment.pdf', pdf)
 ```
 
 Be careful not to accidentally enforce any encoding on the raw pdf content,

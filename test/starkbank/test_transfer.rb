@@ -17,7 +17,7 @@ describe(StarkBank::Transfer, '#transfer#') do
     get_transfer = StarkBank::Transfer.get(transfer.id)
     expect(transfer.id).must_equal(get_transfer.id)
     pdf = StarkBank::Transfer.pdf(transfer.id)
-    File.open('transfer.pdf', 'w') { |file| file.write(pdf) }
+    File.binwrite('transfer.pdf', pdf)
   end
 
   def example

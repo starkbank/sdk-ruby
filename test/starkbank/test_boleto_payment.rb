@@ -17,7 +17,7 @@ describe(StarkBank::BoletoPayment, '#boleto-payment#') do
     get_payment = StarkBank::BoletoPayment.get(payment.id)
     expect(payment.id).must_equal(get_payment.id)
     pdf = StarkBank::BoletoPayment.pdf(payment.id)
-    File.open('boleto_payment.pdf', 'w') { |file| file.write(pdf) }
+    File.binwrite('boleto_payment.pdf', pdf)
     delete_payment = StarkBank::BoletoPayment.delete(payment.id)
     expect(payment.id).must_equal(delete_payment.id)
   end

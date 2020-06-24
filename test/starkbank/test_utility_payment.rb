@@ -18,7 +18,7 @@ describe(StarkBank::UtilityPayment, '#utility-payment#') do
     get_payment = StarkBank::UtilityPayment.get(payment.id)
     expect(payment.id).must_equal(get_payment.id)
     pdf = StarkBank::UtilityPayment.pdf(payment.id)
-    File.open('utility_payment.pdf', 'w') { |file| file.write(pdf) }
+    File.binwrite('utility_payment.pdf', pdf)
     delete_payment = StarkBank::UtilityPayment.delete(payment.id)
     expect(payment.id).must_equal(delete_payment.id)
   end
