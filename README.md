@@ -653,6 +653,240 @@ log = StarkBank::UtilityPayment::Log.get('4922041111150592')
 puts log
 ```
 
+### Create DAS payment
+
+It's also simple to pay DAS taxes in the SDK.
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::DasPayment.create(
+  [
+    StarkBank::DasPayment.new(
+      line: '83680000001 7 08430138003 0 71070987611 8 00041351685 7',
+      scheduled: Time.now,
+      description: 'take my money',
+      tags: %w[take my money],
+    ),
+    StarkBank::DasPayment.new(
+      bar_code: '83600000001522801380037107172881100021296561',
+      scheduled: Time.now + 3 * 24 * 3600,
+      description: 'take my money one more time',
+      tags: %w[again],
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using DasPayment objects, you can also pass each payment element in hash format
+
+### Query DAS payments
+
+To search for DAS payments using filters, run:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::DasPayment.query(
+  tags: %w[electricity gas]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+### Get DAS payment
+
+You can get a specific tax by its id:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::DasPayment.get('6258964706623488')
+
+puts payment
+```
+
+### Get DAS payment PDF
+
+After its creation, a DAS payment PDF may also be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::DasPayment.pdf('5155165527080960')
+
+File.binwrite('electricity_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete DAS payment
+
+You can also cancel a DAS payment by its id.
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::DasPayment.delete('6258964706623489')
+
+puts payment
+```
+
+### Query DAS payment logs
+
+You can search for payments by specifying filters. Use this to understand the
+taxes life cycles.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::DasPayment::Log.query(
+  payment_ids: %w[102893710982379182 92837912873981273]
+)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get DAS tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```ruby
+require('starkbank')
+
+log = StarkBank::DasPayment::Log.get('4922041111150592')
+
+puts log
+```
+
+### Create ISS payment
+
+It's also simple to pay ISS taxes in the SDK.
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::IssPayment.create(
+  [
+    StarkBank::IssPayment.new(
+      line: '83680000001 7 08430138003 0 71070987611 8 00041351685 7',
+      scheduled: Time.now,
+      description: 'take my money',
+      tags: %w[take my money],
+    ),
+    StarkBank::IssPayment.new(
+      bar_code: '83600000001522801380037107172881100021296561',
+      scheduled: Time.now + 3 * 24 * 3600,
+      description: 'take my money one more time',
+      tags: %w[again],
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using IssPayment objects, you can also pass each payment element in hash format
+
+### Query ISS payments
+
+To search for ISS payments using filters, run:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::IssPayment.query(
+  tags: %w[electricity gas]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+### Get ISS payment
+
+You can get a specific tax by its id:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::IssPayment.get('6258964706623488')
+
+puts payment
+```
+
+### Get ISS payment PDF
+
+After its creation, a ISS payment PDF may also be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::IssPayment.pdf('5155165527080960')
+
+File.binwrite('electricity_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete ISS payment
+
+You can also cancel a ISS payment by its id.
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::IssPayment.delete('6258964706623489')
+
+puts payment
+```
+
+### Query ISS payment logs
+
+You can search for payments by specifying filters. Use this to understand the
+taxes life cycles.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::IssPayment::Log.query(
+  payment_ids: %w[102893710982379182 92837912873981273]
+)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get ISS tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```ruby
+require('starkbank')
+
+log = StarkBank::IssPayment::Log.get('4922041111150592')
+
+puts log
+```
+
 ### Create transactions
 
 To send money between Stark Bank accounts, you can create transactions:
