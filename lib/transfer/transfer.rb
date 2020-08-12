@@ -21,6 +21,7 @@ module StarkBank
   #
   # ## Parameters (optional):
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
+  # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)
   #
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when Transfer is created. ex: '5656565656565656'
@@ -30,8 +31,8 @@ module StarkBank
   # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkBank::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
-    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
+    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :scheduled, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
+    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, scheduled: nil, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
       @amount = amount
       @name = name
@@ -39,6 +40,7 @@ module StarkBank
       @bank_code = bank_code
       @branch_code = branch_code
       @account_number = account_number
+      @scheduled = scheduled
       @transaction_ids = transaction_ids
       @fee = fee
       @tags = tags
@@ -77,6 +79,22 @@ module StarkBank
     # - Transfer object with updated attributes
     def self.get(id, user: nil)
       StarkBank::Utils::Rest.get_id(id: id, user: user, **resource)
+    end
+
+    # # Delete a Transfer entity
+    #
+    # Delete a Transfer entity previously created in the Stark Bank API
+    #
+    # ## Parameters (required):
+    # - id [string]: Transfer unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - deleted Transfer object
+    def self.delete(id, user: nil)
+      StarkBank::Utils::Rest.delete_id(id: id, user: user, **resource)
     end
 
     # # Retrieve a specific Transfer pdf file
@@ -141,6 +159,7 @@ module StarkBank
             bank_code: json['bank_code'],
             branch_code: json['branch_code'],
             account_number: json['account_number'],
+            scheduled: json['scheduled'],
             transaction_ids: json['transaction_ids'],
             fee: json['fee'],
             tags: json['tags'],
