@@ -333,6 +333,7 @@ transfers = StarkBank::Transfer.create(
       account_number: '123456-7',
       tax_id: '012.345.678-90',
       name: 'Jon Snow',
+      scheduled: Time.now + 24 * 3600,
       tags: []
     )
   ]
@@ -370,6 +371,18 @@ To get a single transfer by its id, run:
 require('starkbank')
 
 transfer = StarkBank::Transfer.get('4804196796727296')
+
+puts transfer
+```
+
+### Cancel a scheduled transfer
+
+To cancel a single scheduled transfer by its id, run:
+
+```ruby
+require('starkbank')
+
+transfer = StarkBank::Transfer.delete('4804196796727296')
 
 puts transfer
 ```

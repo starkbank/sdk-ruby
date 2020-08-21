@@ -133,7 +133,7 @@ module StarkBank
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
-    # - deleted UtilityPayment with updated attributes
+    # - deleted UtilityPayment object
     def self.delete(id, user: nil)
       StarkBank::Utils::Rest.delete_id(id: id, user: user, **resource)
     end

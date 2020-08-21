@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- transfer.scheduled parameter to allow Transfer scheduling
+- StarkBank::Transfer.delete to cancel scheduled Transfers
+- Transaction query by tags
 
 ## [0.4.2] - 2020-06-24
 ### Changed
