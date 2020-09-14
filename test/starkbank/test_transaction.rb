@@ -15,6 +15,24 @@ describe(StarkBank::Transaction, '#transaction#') do
     end
   end
 
+  it 'query' do
+    transactions = StarkBank::Transaction.query(limit: 10).to_a
+    expect(transactions.length).must_equal(10)
+    transactions_ids_expected = []
+    transactions.each do |transaction|
+      transactions_ids_expected.push(transaction.id)
+    end
+
+    transactions_ids_result = []
+    StarkBank::Transaction.query(limit: 10, ids: transactions_ids_expected).each do |transaction|
+      transactions_ids_result.push(transaction.id)
+    end
+
+    transactions_ids_expected = transactions_ids_expected.sort()
+    transactions_ids_result = transactions_ids_result.sort()
+    expect(transactions_ids_expected).must_equal(transactions_ids_result)
+  end
+
   it 'create and get' do
     transaction = example
     create_transaction = StarkBank::Transaction.create([transaction])[0]
