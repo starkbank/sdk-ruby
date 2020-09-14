@@ -126,11 +126,12 @@ module StarkBank
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'success' or 'failed'
     # - tax_id [string, default nil]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Transfer objects with updated attributes
-    def self.query(limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, user: nil)
+    def self.query(limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, ids: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_list(
@@ -142,6 +143,7 @@ module StarkBank
         tax_id: tax_id,
         sort: sort,
         tags: tags,
+        ids: ids,
         user: user,
         **resource
       )
