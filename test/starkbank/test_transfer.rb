@@ -12,6 +12,24 @@ describe(StarkBank::Transfer, '#transfer#') do
     end
   end
 
+  it 'query' do
+    transfers = StarkBank::Transfer.query(limit: 10).to_a
+    expect(transfers.length).must_equal(10)
+    transfers_ids_expected = []
+    transfers.each do |transfer|
+      transfers_ids_expected.push(transfer.id)
+    end
+
+    transfers_ids_result = []
+    StarkBank::Transfer.query(limit: 10, ids: transfers_ids_expected).each do |transfer|
+      transfers_ids_result.push(transfer.id)
+    end
+
+    transfers_ids_expected = transfers_ids_expected.sort()
+    transfers_ids_result = transfers_ids_result.sort()
+    expect(transfers_ids_expected).must_equal(transfers_ids_result)
+  end
+
   it 'create, get and get_pdf' do
     transfer = StarkBank::Transfer.create([example])[0]
     get_transfer = StarkBank::Transfer.get(transfer.id)

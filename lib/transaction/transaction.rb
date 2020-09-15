@@ -89,14 +89,24 @@ module StarkBank
     # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - external_ids [list of strings, default nil]: list of external ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Transaction objects with updated attributes
-    def self.query(limit: nil, after: nil, before: nil, tags: nil, external_ids: nil, user: nil)
+    def self.query(limit: nil, after: nil, before: nil, tags: nil, external_ids: nil, ids: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(user: user, limit: limit, after: after, before: before, tags: tags, external_ids: external_ids, **resource)
+      StarkBank::Utils::Rest.get_list(
+        limit: limit, 
+        after: after,
+        before: before,
+        tags: tags,
+        external_ids: external_ids,
+        ids: ids,
+        user: user,
+        **resource
+      )
     end
 
     def self.resource
