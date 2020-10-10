@@ -3,6 +3,7 @@
 require_relative('key')
 require_relative('user/project')
 require_relative('user/organization')
+require_relative('workspace/workspace')
 require_relative('balance/balance')
 require_relative('transaction/transaction')
 require_relative('invoice/invoice')
