@@ -55,7 +55,7 @@ module StarkBank
     # - payments [list of BrcodePayment objects]: list of BrcodePayment objects to be created in the API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of BrcodePayment objects with updated attributes
@@ -71,7 +71,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - BrcodePayment object with updated attributes
@@ -87,7 +87,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - BrcodePayment pdf file
@@ -104,7 +104,7 @@ module StarkBank
     # - status [string, nil]: You may cancel the payment by passing 'canceled' in the status
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - updated BrcodePayment object

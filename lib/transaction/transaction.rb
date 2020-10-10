@@ -55,7 +55,7 @@ module StarkBank
     # - transactions [list of Transaction objects]: list of Transaction objects to be created in the API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of Transaction objects with updated attributes
@@ -71,7 +71,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Transaction object with updated attributes

@@ -5,11 +5,12 @@ require_relative('user')
 module StarkBank
   # # Project object
   #
-  # The Project object is the main authentication entity for the SDK.
-  # All requests to the Stark Bank API must be authenticated via a project,
+  # The Project object is an authentication entity for the SDK that is permanently
+  # linked to a specific Workspace.
+  # All requests to the Stark Bank API must be authenticated via an SDK user,
   # which must have been previously created at the Stark Bank website
   # [https://sandbox.web.starkbank.com] or [https://web.starkbank.com]
-  # before you can use it in this SDK. Projects may be passed as a parameter on
+  # before you can use it in this SDK. Projects may be passed as the user parameter on
   # each request or may be defined as the default user at the start (See README).
   #
   # ## Parameters (required):
@@ -18,7 +19,7 @@ module StarkBank
   # - environment [string]: environment where the project is being used. ex: 'sandbox' or 'production'
   #
   # ## Attributes (return-only):
-  # - name [string, default ']: project name. ex: 'MyProject'
+  # - name [string, default '']: project name. ex: 'MyProject'
   # - allowed_ips [list of strings]: list containing the strings of the ips allowed to make requests on behalf of this project. ex: ['190.190.0.50']
   # - pem [string]: private key in pem format. ex: '-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----'
   class Project < StarkBank::User
@@ -27,6 +28,10 @@ module StarkBank
       super(environment, id, private_key)
       @name = name
       @allowed_ips = allowed_ips
+    end
+
+    def access_id
+      "project/#{@id}"
     end
   end
 end

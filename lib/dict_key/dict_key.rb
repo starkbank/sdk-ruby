@@ -54,7 +54,7 @@ module StarkBank
     # - id [string]: DictKey object unique id and PIX key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - DictKey object with updated attributes

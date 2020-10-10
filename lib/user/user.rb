@@ -13,10 +13,6 @@ module StarkBank
       @environment = StarkBank::Utils::Checks.check_environment(environment)
     end
 
-    def access_id
-      "#{self.class.name.split('::').last.downcase}/#{@id}"
-    end
-
     def private_key
       EllipticCurve::PrivateKey.fromPem(@pem)
     end

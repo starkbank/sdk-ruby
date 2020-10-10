@@ -60,7 +60,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Event object with updated attributes
@@ -102,7 +102,7 @@ module StarkBank
     # - id [string]: Event unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - deleted Event object
@@ -120,7 +120,7 @@ module StarkBank
     # - is_delivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: True
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - target Event with updated attributes
@@ -139,7 +139,7 @@ module StarkBank
     # - signature [string]: base-64 digital signature received at response header 'Digital-Signature'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Parsed Event object

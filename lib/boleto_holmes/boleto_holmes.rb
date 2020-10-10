@@ -45,7 +45,7 @@ module StarkBank
     # - holmes [list of BoletoHolmes objects]: list of BoletoHolmes objects to be created in the API
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - list of BoletoHolmes objects with updated attributes
@@ -61,7 +61,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - BoletoHolmes object with updated attributes
