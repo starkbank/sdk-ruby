@@ -5,16 +5,22 @@ require_relative('case')
 module StarkBank
   module Utils
     module API
-      def self.api_json(entity)
+      def self.build_entity_hash(entity)
         if entity.is_a?(Hash)
           entity_hash = entity
         else
           entity_hash = {}
           entity.instance_variables.each do |key|
-            entity_hash[key[1..-1]] = entity.instance_variable_get(key)
+            variable = entity.instance_variable_get(key)
+            entity_hash[key[1..-1]] = variable.is_a?(StarkBank::Utils::Resource) ? build_entity_hash(variable) : entity.instance_variable_get(key)
           end
         end
-        cast_json_to_api_format(entity_hash)
+        entity_hash
+      end
+
+      def self.api_json(entity)
+        built_hash = build_entity_hash(entity)
+        cast_json_to_api_format(built_hash)
       end
 
       def self.cast_json_to_api_format(hash)
@@ -30,6 +36,8 @@ module StarkBank
               list << (v.is_a?(Hash) ? cast_json_to_api_format(v) : v)
             end
             value = list
+          elsif value.is_a?(Hash)
+            value = cast_json_to_api_format(value)
           end
 
           entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = value

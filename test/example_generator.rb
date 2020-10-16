@@ -41,4 +41,30 @@ class ExampleGenerator
       description: 'pagando a conta'
     )
   end
+
+  def self.payment_request_example
+    payment = create_payment
+    due = nil
+    unless payment.is_a?(StarkBank::Transaction)
+      days = rand(1..10)
+      due = Date.today + days
+    end
+    StarkBank::PaymentRequest.new(payment: payment, center_id: ENV['SANDBOX_CENTER_ID'], due: due)
+  end
+
+  def self.create_payment
+    option = rand(4)
+    case option
+    when 0
+      transfer_example(schedule: false)
+    when 1
+      transaction_example
+    when 2
+      boleto_payment_example(schedule: false)
+    when 3
+      utility_payment_example(schedule: false)
+    else
+      raise(ArgumentError, 'Bad random number')
+    end
+  end
 end
