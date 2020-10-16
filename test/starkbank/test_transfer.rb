@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative('../test_helper.rb')
+require_relative('../example_generator.rb')
 
 describe(StarkBank::Transfer, '#transfer#') do
   it 'query' do
@@ -31,7 +32,7 @@ describe(StarkBank::Transfer, '#transfer#') do
   end
 
   it 'create, get and get_pdf' do
-    transfer = StarkBank::Transfer.create([example])[0]
+    transfer = StarkBank::Transfer.create([ExampleGenerator.transfer_example])[0]
     get_transfer = StarkBank::Transfer.get(transfer.id)
     expect(transfer.id).must_equal(get_transfer.id)
     pdf = StarkBank::Transfer.pdf(transfer.id)
@@ -39,22 +40,11 @@ describe(StarkBank::Transfer, '#transfer#') do
   end
 
   it 'create and delete' do
-    transfer = example(schedule: true)
+    transfer = ExampleGenerator.transfer_example(schedule: true)
     transfer = StarkBank::Transfer.create([transfer])[0]
     delete_transfer = StarkBank::Transfer.delete(transfer.id)
     expect(transfer.id).must_equal(delete_transfer.id)
     expect(delete_transfer.status).must_equal('canceled')
   end
 
-  def example(schedule: false)
-    StarkBank::Transfer.new(
-      amount: rand(1000),
-      name: 'João',
-      tax_id: '01234567890',
-      bank_code: '01',
-      branch_code: '0001',
-      account_number: '10000-0',
-      scheduled: schedule ? Time.now + 24 * 3600 : nil
-    )
-  end
 end
