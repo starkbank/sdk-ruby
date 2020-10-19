@@ -98,7 +98,7 @@ module StarkBank
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_list(
-        limit: limit, 
+        limit: limit,
         after: after,
         before: before,
         tags: tags,
