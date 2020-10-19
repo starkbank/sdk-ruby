@@ -4,6 +4,57 @@ require_relative('./test_helper.rb')
 require('securerandom')
 
 class ExampleGenerator
+  def self.boleto_example
+    StarkBank::Boleto.new(
+      amount: 100_000,
+      due: Time.now + 5 * 24 * 3600,
+      name: 'Random Company',
+      street_line_1: 'Rua ABC',
+      street_line_2: 'Ap 123',
+      district: 'Jardim Paulista',
+      city: 'São Paulo',
+      state_code: 'SP',
+      zip_code: '01234-567',
+      tax_id: '012.345.678-90',
+      overdue_limit: 10,
+      receiver_name: 'Random Receiver',
+      receiver_tax_id: '123.456.789-09',
+      fine: 0.00,
+      interest: 0.00,
+      descriptions: [
+        {
+          text: 'product A',
+          amount: 123
+        },
+        {
+          text: 'product B',
+          amount: 456
+        },
+        {
+          text: 'product C',
+          amount: 789
+        }
+      ],
+      discounts: [
+        {
+          percentage: 5,
+          date: Time.now + 24 * 3600
+        },
+        {
+          percentage: 2.5,
+          date: Time.now + 2 * 24 * 3600
+        }
+      ]
+    )
+  end
+
+  def self.webhook_example
+    StarkBank::Webhook.new(
+      url: 'https://webhook.site/60e9c18e-4b5c-4369-bda1-ab5fcd8e1b29',
+      subscriptions: %w[transfer boleto boleto-payment utility-payment boleto-holmes]
+    )
+  end
+
   def self.boleto_payment_example(schedule: true)
     StarkBank::BoletoPayment.new(
       line: '34191.09008 61713.957308 71444.640008 2 934300' + rand(1e8 - 1).to_s.rjust(8, '0'),
