@@ -1,4 +1,4 @@
-# Stark Bank Ruby SDK Beta
+# Stark Bank Ruby SDK
 
 Welcome to the Stark Bank Ruby SDK! This tool is made for Ruby 
 developers who want to easily integrate with our API.
