@@ -50,7 +50,7 @@ class ExampleGenerator
 
   def self.webhook_example
     StarkBank::Webhook.new(
-      url: 'https://webhook.site/60e9c18e-4b5c-4369-bda1-ab5fcd8e1b29',
+      url: "https://webhook.site/#{SecureRandom.uuid}",
       subscriptions: %w[transfer boleto boleto-payment utility-payment boleto-holmes]
     )
   end
