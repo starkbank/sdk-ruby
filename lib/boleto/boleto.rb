@@ -58,7 +58,7 @@ module StarkBank
       @city = city
       @state_code = state_code
       @zip_code = zip_code
-      @due = due
+      @due = StarkBank::Utils::Checks.check_date(due)
       @fine = fine
       @interest = interest
       @overdue_limit = overdue_limit

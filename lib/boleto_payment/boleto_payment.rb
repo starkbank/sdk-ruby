@@ -37,7 +37,7 @@ module StarkBank
       @description = description
       @line = line
       @bar_code = bar_code
-      @scheduled = StarkBank::Utils::Checks.check_datetime(scheduled)
+      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
       @tags = tags
       @status = status
       @amount = amount

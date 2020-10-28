@@ -9,6 +9,7 @@ require_relative('../utils/cache')
 require_relative('../error')
 require_relative('../boleto/log')
 require_relative('../boleto_holmes/log')
+require_relative('../invoice/log')
 require_relative('../transfer/log')
 require_relative('../boleto_payment/log')
 require_relative('../utility_payment/log')
@@ -22,7 +23,7 @@ module StarkBank
   #
   # ## Attributes:
   # - id [string]: unique id returned when the event is created. ex: '5656565656565656'
-  # - log [Log]: a Log object from one the subscription services (TransferLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)
+  # - log [Log]: a Log object from one the subscription services (TransferLog, InvoiceLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)
   # - created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
   # - subscription [string]: service that triggered this event. ex: 'transfer', 'utility-payment'
@@ -36,6 +37,7 @@ module StarkBank
 
       resource = {
         'transfer': StarkBank::Transfer::Log.resource,
+        'invoice': StarkBank::Invoice::Log.resource,
         'boleto': StarkBank::Boleto::Log.resource,
         'boleto-payment': StarkBank::BoletoPayment::Log.resource,
         'utility-payment': StarkBank::UtilityPayment::Log.resource,

@@ -28,21 +28,22 @@ module StarkBank
         hash.each do |key, value|
           next if value.nil?
 
-          value = value.is_a?(Date) || value.is_a?(DateTime) || value.is_a?(Time) ? value.strftime('%Y-%m-%d') : value
-
-          if value.is_a?(Array)
-            list = []
-            value.each do |v|
-              list << (v.is_a?(Hash) ? cast_json_to_api_format(v) : v)
-            end
-            value = list
-          elsif value.is_a?(Hash)
-            value = cast_json_to_api_format(value)
-          end
-
-          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = value
+          entity_hash[StarkBank::Utils::Case.snake_to_camel(key)] = parse_value(value)
         end
         entity_hash
+      end
+
+      def self.parse_value(value)
+        return value.strftime('%Y-%m-%d') if value.is_a?(Date)
+        return value.strftime('%Y-%m-%dT%H:%M:%S+00:00') if value.is_a?(DateTime) || value.is_a?(Time)
+        return cast_json_to_api_format(value) if value.is_a?(Hash)
+        return value unless value.is_a?(Array)
+
+        list = []
+        value.each do |v|
+          list << (v.is_a?(Hash) ? cast_json_to_api_format(v) : v)
+        end
+        list
       end
 
       def self.from_api_json(resource_maker, json)

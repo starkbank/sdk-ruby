@@ -188,6 +188,139 @@ balance = StarkBank::Balance.get()
 puts balance
 ```
 
+### Create invoices
+
+You can create invoices to charge customers or to receive money from accounts
+you have in other banks.
+
+```ruby
+require('starkbank')
+
+invoices = StarkBank::Invoice.create(
+  [
+    StarkBank::Invoice.new(
+      amount: 23571,  # R$ 235,71 
+      name: 'Buzz Aldrin',
+      tax_id: '012.345.678-90', 
+      due: Time.now + 24 * 3600,
+      fine: 5,  # 5%
+      interest: 2.5  # 2.5% per month
+    )
+  ]
+)
+
+invoices.each do |invoice|
+  puts invoice
+end
+```
+
+**Note**: Instead of using Invoice objects, you can also pass each invoice element in hash format
+
+### Get an invoice
+
+After its creation, information on an invoice may be retrieved by passing its id. 
+Its status indicates whether it's been paid.
+
+```ruby
+require('starkbank')
+
+invoice = StarkBank::Invoice.get('6365512502083584')
+
+puts invoice
+```
+
+### Get an invoice PDF (COMING SOON)
+
+After its creation, an invoice PDF may be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Invoice.pdf('6365512502083584', layout: 'default')
+
+File.binwrite('invoice.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel an invoice
+
+You can also cancel an invoice by its id.
+Note that this is not possible if it has been paid already.
+
+```ruby
+require('starkbank')
+
+invoice = StarkBank::Invoice.update('5155165527080960', status: 'canceled')
+
+puts invoice
+```
+
+### Update an invoice
+
+You can update an invoice's amount, due date and expiration by its id.
+Note that this is not possible if it has been paid already.
+
+```ruby
+require('starkbank')
+require('date')
+
+invoice = StarkBank::Invoice.update(
+  '5155165527080960',
+  amount: 100,
+  expiration: 7200,  # 2 hours
+  due: Time.now + 3600
+)
+
+puts invoice
+```
+
+### Query invoices
+
+You can get a list of created invoices given some filters.
+
+```ruby
+require('starkbank')
+require('date')
+
+invoices = StarkBank::Invoice.query(
+  after: '2020-01-01',
+  before: Date.today - 1
+)
+
+invoices.each do |invoice|
+  puts invoice
+end
+```
+
+### Query invoice logs
+
+Logs are pretty important to understand the life cycle of an invoice.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::Invoice::Log.query(limit: 150)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get an invoice log
+
+You can get a single log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::Invoice::Log.get('5155165527080960')
+
+puts log
+```
+
 ### Create boletos
 
 You can create boletos to charge customers or to receive money from accounts

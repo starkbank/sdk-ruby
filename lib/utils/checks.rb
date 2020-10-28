@@ -46,7 +46,8 @@ module StarkBank
 
         return Time.new(data.year, data.month, data.day) if data.is_a?(Date)
 
-        check_datetime_string(data)
+        data, _type = check_datetime_string(data)
+        data
       end
 
       def self.check_date(data)
@@ -56,9 +57,9 @@ module StarkBank
 
         return data if data.is_a?(Date)
 
-        data = check_datetime_string(data)
+        data, type = check_datetime_string(data)
 
-        Date.new(data.year, data.month, data.day)
+        type == 'date' ? Date.new(data.year, data.month, data.day) : data
       end
 
       class << self
@@ -68,17 +69,17 @@ module StarkBank
           data = data.to_s
 
           begin
-            return DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S.%L+00:00')
+            return [DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S.%L+00:00'), 'datetime']
           rescue ArgumentError
           end
 
           begin
-            return DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S+00:00')
+            return [DateTime.strptime(data, '%Y-%m-%dT%H:%M:%S+00:00'), 'datetime']
           rescue ArgumentError
           end
 
           begin
-            return DateTime.strptime(data, '%Y-%m-%d')
+            return [DateTime.strptime(data, '%Y-%m-%d'), 'date']
           rescue ArgumentError
             raise(ArgumentError, 'invalid datetime string ' + data)
           end

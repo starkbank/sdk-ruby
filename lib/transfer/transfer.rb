@@ -40,7 +40,7 @@ module StarkBank
       @bank_code = bank_code
       @branch_code = branch_code
       @account_number = account_number
-      @scheduled = StarkBank::Utils::Checks.check_datetime(scheduled)
+      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
       @transaction_ids = transaction_ids
       @fee = fee
       @tags = tags
