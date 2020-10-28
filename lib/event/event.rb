@@ -8,6 +8,7 @@ require_relative('../utils/checks')
 require_relative('../utils/cache')
 require_relative('../error')
 require_relative('../boleto/log')
+require_relative('../boleto_holmes/log')
 require_relative('../transfer/log')
 require_relative('../boleto_payment/log')
 require_relative('../utility_payment/log')
@@ -37,7 +38,8 @@ module StarkBank
         'transfer': StarkBank::Transfer::Log.resource,
         'boleto': StarkBank::Boleto::Log.resource,
         'boleto-payment': StarkBank::BoletoPayment::Log.resource,
-        'utility-payment': StarkBank::UtilityPayment::Log.resource
+        'utility-payment': StarkBank::UtilityPayment::Log.resource,
+        'boleto-holmes': StarkBank::BoletoHolmes::Log.resource
       }[subscription.to_sym]
 
       @log = log
