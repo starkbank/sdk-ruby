@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative('../test_helper.rb')
+require_relative('../example_generator.rb')
 
 describe(StarkBank::Webhook, '#webhook#') do
   it 'query' do
@@ -11,18 +12,11 @@ describe(StarkBank::Webhook, '#webhook#') do
   end
 
   it 'create, get and delete' do
-    webhook = example
+    webhook = ExampleGenerator.webhook_example
     webhook = StarkBank::Webhook.create(url: webhook.url, subscriptions: webhook.subscriptions)
     get_webhook = StarkBank::Webhook.get(webhook.id)
     expect(webhook.id).must_equal(get_webhook.id)
     delete_webhook = StarkBank::Webhook.delete(webhook.id)
     expect(webhook.id).must_equal(delete_webhook.id)
-  end
-
-  def example
-    StarkBank::Webhook.new(
-      url: 'https://webhook.site/60e9c18e-4b5c-4369-bda1-ab5fcd8e1b29',
-      subscriptions: %w[transfer boleto boleto-payment utility-payment]
-    )
   end
 end

@@ -549,6 +549,80 @@ log = StarkBank::BoletoPayment::Log.get('5155165527080960')
 puts log
 ```
 
+### Investigate a boleto
+
+You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
+This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
+Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
+happens asynchronously and the most common way to retrieve the results is to register a 'boleto-holmes' webhook
+subscription, although polling is also possible. 
+
+```ruby
+require('starkbank')
+holmes = StarkBank::BoletoHolmes.create([
+  StarkBank::BoletoHolmes.new(
+    boleto_id: '5656565656565656'
+  ),
+  StarkBank::BoletoHolmes.new(
+    boleto_id: '4848484848484848'
+  )
+])
+
+holmes.each do |sherlock|
+  puts sherlock
+end
+```
+
+**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in hash format
+
+### Get boleto holmes
+
+To get a single Holmes by its id, run:
+
+```ruby
+require('starkbank')
+sherlock = StarkBank::BoletoHolmes.get('19278361897236187236')
+
+puts sherlock
+```
+
+### Query boleto holmes
+
+You can search for boleto Holmes using filters. 
+
+```ruby
+require('starkbank')
+holmes = StarkBank::BoletoHolmes.query(limit: 10, status: 'solved', before: DateTime.now).to_a
+
+holmes.each do |sherlock|
+  puts sherlock
+end
+```
+
+### Query boleto holmes logs
+
+Searches are also possible with boleto holmes logs:
+
+```ruby
+require('starkbank')
+logs = StarkBank::BoletoHolmes::Log.query(limit: 10, types: 'solved').to_a
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get boleto holmes log
+
+You can also get a boleto holmes log by specifying its id.
+
+```ruby
+require('starkbank')
+log = StarkBank::BoletoHolmes::Log.get('5155165527080960')
+
+puts log
+```
+
 ### Create utility payment
 
 It's also simple to pay utility bills (such as electricity and water bills) in the SDK.
