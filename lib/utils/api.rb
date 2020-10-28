@@ -60,7 +60,12 @@ module StarkBank
       end
 
       def self.last_name_plural(resource_name)
-        "#{last_name(resource_name)}s"
+        base = last_name(resource_name)
+
+        return base if base[-1].eql?('s')
+        return "#{base[0...-1]}ies" if base[-1].eql?('y')
+
+        "#{base}s"
       end
 
       def self.last_name(resource_name)
