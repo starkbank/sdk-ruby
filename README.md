@@ -188,6 +188,18 @@ balance = StarkBank::Balance.get()
 puts balance
 ```
 
+### Get dict key
+
+You can get the PIX key's parameters by its id.
+
+```ruby
+require('starkbank')
+
+dict_key = StarkBank::DictKey.get('tony@starkbank.com')
+
+puts dict_key
+```
+
 ### Create invoices
 
 You can create invoices to charge customers or to receive money from accounts
