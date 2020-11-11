@@ -333,6 +333,62 @@ log = StarkBank::Invoice::Log.get('5155165527080960')
 puts log
 ```
 
+### Query deposits
+
+You can get a list of created deposits given some filters.
+
+```ruby
+require('starkbank')
+require('date')
+
+deposits = StarkBank::Deposit.query(
+  after: '2020-01-01',
+  before: Date.today - 1
+)
+
+deposits.each do |deposit|
+  puts deposit
+end
+```
+
+### Get a deposit
+
+After its creation, information on a deposit may be retrieved by its id. 
+
+```ruby
+require('starkbank')
+
+deposit = StarkBank::Deposit.get('6365512502083584')
+
+puts deposit
+```
+
+### Query deposit logs
+
+Logs are pretty important to understand the life cycle of a deposit.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::Deposit::Log.query(limit: 150)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get a deposit log
+
+You can get a single log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::Invoice::Log.get('5155165527080960')
+
+puts log
+```
+
 ### Create boletos
 
 You can create boletos to charge customers or to receive money from accounts
