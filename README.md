@@ -511,7 +511,7 @@ puts log
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/DOC).
+You can also create transfers in the SDK (TED/PIX).
 
 ```ruby
 require('starkbank')
@@ -520,7 +520,7 @@ transfers = StarkBank::Transfer.create(
   [
     StarkBank::Transfer.new(
       amount: 100,
-      bank_code: '033',
+      bank_code: '033', # TED
       branch_code: '0001',
       account_number: '10000-0',
       tax_id: '012.345.678-90',
@@ -529,7 +529,7 @@ transfers = StarkBank::Transfer.create(
     ),
     StarkBank::Transfer.new(
       amount: 200,
-      bank_code: '341',
+      bank_code: '20018183', # PIX
       branch_code: '1234',
       account_number: '123456-7',
       tax_id: '012.345.678-90',

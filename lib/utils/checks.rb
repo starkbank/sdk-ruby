@@ -39,6 +39,17 @@ module StarkBank
         raise(ArgumentError, 'Private-key must be a valid secp256k1 ECDSA string in pem format')
       end
 
+      def self.check_date_or_datetime(data)
+        return if data.nil?
+
+        return data if data.is_a?(Time) || data.is_a?(DateTime)
+
+        return data if data.is_a?(Date)
+
+        data, type = check_datetime_string(data)
+        type == 'date' ? Date.new(data.year, data.month, data.day) : data
+      end
+
       def self.check_datetime(data)
         return if data.nil?
 
