@@ -13,10 +13,11 @@ describe(StarkBank::Invoice, '#invoice#') do
     end
   end
 
-  it 'create, get and cancel' do
+  it 'create, get, get qrcode and cancel' do
     invoice = StarkBank::Invoice.create([ExampleGenerator.invoice_example])[0]
     get_invoice = StarkBank::Invoice.get(invoice.id)
     expect(invoice.id).must_equal(get_invoice.id)
+    _invoice_qrcode = StarkBank::Invoice.qrcode(invoice.id)
     canceled_invoice = StarkBank::Invoice.update(invoice.id, status: 'canceled')
     expect(invoice.id).must_equal(canceled_invoice.id)
   end

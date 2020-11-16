@@ -11,6 +11,7 @@ require_relative('../boleto/log')
 require_relative('../boleto_holmes/log')
 require_relative('../invoice/log')
 require_relative('../deposit/log')
+require_relative('../brcode_payment/log')
 require_relative('../transfer/log')
 require_relative('../boleto_payment/log')
 require_relative('../utility_payment/log')
@@ -40,6 +41,7 @@ module StarkBank
         'transfer': StarkBank::Transfer::Log.resource,
         'invoice': StarkBank::Invoice::Log.resource,
         'deposit': StarkBank::Deposit::Log.resource,
+        'brcode-payment': StarkBank::BrcodePayment::Log.resource,
         'boleto': StarkBank::Boleto::Log.resource,
         'boleto-payment': StarkBank::BoletoPayment::Log.resource,
         'utility-payment': StarkBank::UtilityPayment::Log.resource,

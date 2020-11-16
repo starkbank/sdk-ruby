@@ -56,6 +56,15 @@ module StarkBank
         ).content
       end
 
+      def self.get_qrcode(resource_name:, resource_maker:, id:, user: nil, **query)
+        StarkBank::Utils::Request.fetch(
+          method: 'GET',
+          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/qrcode",
+          query: StarkBank::Utils::API.cast_json_to_api_format(query),
+          user: user
+        ).content
+      end
+
       def self.post(resource_name:, resource_maker:, entities:, user: nil)
         jsons = []
         entities.each do |entity|

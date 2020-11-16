@@ -32,15 +32,16 @@ module StarkBank
   # - interest_amount [integer, default nil]: Invoice interest value calculated over nominal_amount. ex: 10000
   # - discount_amount [integer, default nil]: Invoice discount value calculated over nominal_amount. ex: 3000
   # - brcode [string, default nil]: BR Code for the Invoice payment. ex: '00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0'
+  # - fee [integer, default nil]: fee charged by the Invoice. ex: 65 (= R$ 0.65)
   # - status [string, default nil]: current Invoice status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Invoice < StarkBank::Utils::Resource
-    attr_reader :amount, :due, :tax_id, :name, :expiration, :fine, :interest, :discounts, :tags, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :status, :created, :updated
+    attr_reader :amount, :due, :tax_id, :name, :expiration, :fine, :interest, :discounts, :tags, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :created, :updated
     def initialize(
       amount:, due:, tax_id:, name:, expiration: nil, fine: nil, interest: nil, discounts: nil,
       tags: nil, descriptions: nil, nominal_amount: nil, fine_amount: nil, interest_amount: nil,
-      discount_amount: nil, id: nil, brcode: nil, status: nil, created: nil, updated: nil
+      discount_amount: nil, id: nil, brcode: nil, fee: nil, status: nil, created: nil, updated: nil
     )
       super(id)
       @amount = amount
@@ -58,6 +59,7 @@ module StarkBank
       @interest_amount = interest_amount
       @discount_amount = discount_amount
       @brcode = brcode
+      @fee = fee
       @status = status
       @updated = StarkBank::Utils::Checks.check_datetime(updated)
       @created = StarkBank::Utils::Checks.check_datetime(created)
@@ -93,6 +95,38 @@ module StarkBank
     # - Invoice object with updated attributes
     def self.get(id, user: nil)
       StarkBank::Utils::Rest.get_id(id: id, user: user, **resource)
+    end
+
+    # # Retrieve a specific Invoice pdf file
+    #
+    # Receive a single Invoice pdf file generated in the Stark Bank API by passing its id.
+    #
+    # ## Parameters (required):
+    # - id [string]: object unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - Invoice pdf file
+    def self.pdf(id, user: nil)
+      StarkBank::Utils::Rest.get_pdf(id: id, user: user, **resource)
+    end
+
+    # # Retrieve a specific Invoice QR Code file
+    #
+    # Receive a single Invoice QR Code png file generated in the Stark Bank API by passing its id.
+    #
+    # ## Parameters (required):
+    # - id [string]: object unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - Invoice QR Code png blob
+    def self.qrcode(id, user: nil)
+      StarkBank::Utils::Rest.get_qrcode(id: id, user: user, **resource)
     end
 
     # # Retrieve Invoices
@@ -133,10 +167,13 @@ module StarkBank
     # - id [string]: Invoice unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
+    # - status [string, nil]: You may cancel the invoice by passing 'canceled' in the status
+    # - amount [string, nil]: Nominal amount charged by the invoice. ex: 100 (R$1.00)
+    # - due [datetime.date or string, default nil]: Invoice due date in UTC ISO format. ex: DateTime.new(2020, 3, 10, 10, 30, 12, 21)
+    # - expiration [number, default nil]: time interval in seconds between the due date and the expiration date. ex 123456789
     #
     # ## Return:
-    # - deleted Invoice object
+    # - updated Invoice object
     def self.update(id, status: nil, amount: nil, due: nil, expiration: nil, user: nil)
       StarkBank::Utils::Rest.patch_id(id: id, status: status, amount: amount, due: due, expiration: expiration, user: user, **resource)
     end
@@ -162,6 +199,7 @@ module StarkBank
             interest_amount: json['interest_amount'],
             discount_amount: json['discount_amount'],
             brcode: json['brcode'],
+            fee: json['fee'],
             status: json['status'],
             updated: json['updated'],
             created: json['created'],

@@ -115,12 +115,13 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - layout [string]: Layout specification. Available options are "default" and "booklet"
+    # - hidden_fields [list of strings, default nil]: List of string fields to be hidden in Boleto pdf. ex: ["customerAddress"]
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Boleto pdf file
-    def self.pdf(id, layout: nil, user: nil)
-      StarkBank::Utils::Rest.get_pdf(id: id, layout: layout, user: user, **resource)
+    def self.pdf(id, layout: nil, hidden_fields: nil, user: nil)
+      StarkBank::Utils::Rest.get_pdf(id: id, layout: layout, hidden_fields: hidden_fields, user: user, **resource)
     end
 
     # # Retrieve Boletos

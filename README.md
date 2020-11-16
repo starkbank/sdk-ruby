@@ -241,7 +241,23 @@ invoice = StarkBank::Invoice.get('6365512502083584')
 puts invoice
 ```
 
-### Get an invoice PDF (COMING SOON)
+### Get an invoice QR Code
+
+After its creation, an invoice QR Code png may be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Invoice.qrcode('6365512502083584')
+
+File.binwrite('qrcode.png', png)
+```
+
+Be careful not to accidentally enforce any encoding on the raw png content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Get an invoice PDF
 
 After its creation, an invoice PDF may be retrieved by passing its id. 
 
@@ -627,6 +643,105 @@ You can also get a specific log by its id.
 require('starkbank')
 
 log = StarkBank::Transfer::Log.get('5554732936462336')
+
+puts log
+```
+
+### Pay a BR Code
+
+Paying a BRCode is also simple. After extracting the BRCode encoded in the PIX QRCode, you can do the following:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::BrcodePayment.create(
+  [
+    StarkBank::BrcodePayment.new(
+      line: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
+      tax_id: '012.345.678-90',
+      scheduled: Time.now,
+      description: 'take my money',
+      tags: %w[take my money]
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using BrcodePayment objects, you can also pass each payment element in hash format
+
+### Get brcode payment
+
+To get a single BR Code payment by its id, run:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::BrcodePayment.get('6591161082839040')
+
+puts payment
+```
+
+### Get BR Code payment PDF
+
+After its creation, a BR Code payment PDF may be retrieved by its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::BrcodePayment.pdf('6591161082839040')
+
+File.binwrite('brcode_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Query BR Code payments
+
+You can search for brcode payments using filters. 
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::BrcodePayment.query(
+  tags: %w[company_1 company_2]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+### Query BR Code payment logs
+
+Searches are also possible with BR Code payment logs:
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::BrcodePayment::Log.query(
+  payment_ids: %w[5391730421530624 6324396973096960]
+)
+
+logs.each do |log|
+  puts log
+end
+```
+
+
+### Get a BR Code payment log
+
+You can also get a BR Code payment log by specifying its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::BrcodePayment::Log.get('5155165527080960')
 
 puts log
 ```

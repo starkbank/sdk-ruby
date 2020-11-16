@@ -100,6 +100,15 @@ class ExampleGenerator
     )
   end
 
+  def self.brcode_payment_example(invoice, schedule: true)
+    StarkBank::BrcodePayment.new(
+      brcode: invoice.brcode,
+      scheduled: schedule ? Date.now + 60 : nil,
+      description: 'paying a PIX',
+      tax_id: invoice.tax_id
+    )
+  end
+
   def self.transaction_example
     StarkBank::Transaction.new(
       amount: 50,
