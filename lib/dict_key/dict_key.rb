@@ -38,10 +38,10 @@ module StarkBank
       @owner_type = owner_type
       @ispb = ispb
       @branch_code = branch_code
-			@account_number = account_number
-			@account_type = account_type
-			@status = status
-			@account_created = StarkBank::Utils::Checks.check_datetime(account_created)
+      @account_number = account_number
+      @account_type = account_type
+      @status = status
+      @account_created = StarkBank::Utils::Checks.check_datetime(account_created)
       @owned = StarkBank::Utils::Checks.check_datetime(owned)
       @created = StarkBank::Utils::Checks.check_datetime(created)
     end
@@ -62,6 +62,36 @@ module StarkBank
       StarkBank::Utils::Rest.get_id(id: id, user: user, **resource)
     end
 
+    # # Retrieve DitcKeys
+    #
+    # Receive a generator of DitcKey objects previously created in the Stark Bank API
+    #
+    # ## Parameters (optional):
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - type [string, default nil]: DictKey type. ex: 'cpf', 'cnpj', 'phone', 'email' or 'evp'
+    # - after [Date , DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - status [string, default nil]: filter for status of retrieved objects. ex: 'canceled', 'registered'
+    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - generator of DitcKey objects with updated attributes
+    def self.query(limit: nil, type: nil, after: nil, before: nil, ids: nil, status: nil, user: nil)
+      after = StarkBank::Utils::Checks.check_date(after)
+      before = StarkBank::Utils::Checks.check_date(before)
+      StarkBank::Utils::Rest.get_list(
+        limit: limit,
+        type: type,
+        after: after,
+        before: before,
+        ids: ids,
+        status: status,
+        user: user,
+        **resource
+      )
+    end
+
     def self.resource
       {
         resource_name: 'DictKey',
@@ -74,10 +104,10 @@ module StarkBank
             owner_type: json['owner_type'],
             ispb: json['ispb'],
             branch_code: json['branch_code'],
-						account_number: json['account_number'],
-						type: json['type'],
-						status: json['status'],
-						account_created: json['account_created'],
+            account_number: json['account_number'],
+            type: json['type'],
+            status: json['status'],
+            account_created: json['account_created'],
             owned: json['owned'],
             created: json['created']
           )
