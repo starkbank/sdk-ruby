@@ -95,20 +95,21 @@ module StarkBank
       StarkBank::Utils::Rest.get_pdf(id: id, user: user, **resource)
     end
 
-    # # Update an BrcodePayment entity
+    # # Update a BrcodePayment entity
     #
-    # Update an BrcodePayment entity previously created in the Stark Bank API
+    # Update a BrcodePayment entity previously created in the Stark Bank API
     #
     # ## Parameters (required):
     # - id [string]: BrcodePayment unique id. ex: '5656565656565656'
+    # - status [string, nil]: You may cancel the payment by passing 'canceled' in the status
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
-    # - deleted BrcodePayment object
-    def self.update(id, status: nil, amount: nil, due: nil, expiration: nil, user: nil)
-      StarkBank::Utils::Rest.patch_id(id: id, status: status, amount: amount, due: due, expiration: expiration, user: user, **resource)
+    # - updated BrcodePayment object
+    def self.update(id, status: nil, user: nil)
+      StarkBank::Utils::Rest.patch_id(id: id, status: status, user: user, **resource)
     end
 
     # # Retrieve BrcodePayments

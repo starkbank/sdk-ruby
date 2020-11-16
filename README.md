@@ -673,7 +673,7 @@ end
 
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in hash format
 
-### Get brcode payment
+### Get a BR Code payment
 
 To get a single BR Code payment by its id, run:
 
@@ -685,7 +685,7 @@ payment = StarkBank::BrcodePayment.get('6591161082839040')
 puts payment
 ```
 
-### Get BR Code payment PDF
+### Get a BR Code payment PDF
 
 After its creation, a BR Code payment PDF may be retrieved by its id. 
 
@@ -700,6 +700,22 @@ File.binwrite('brcode_payment.pdf', pdf)
 Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
+
+### Cancel a BR Code payment
+
+You can cancel a BR Code payment by changing its status to "canceled".
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::BrcodePayment.update(
+  '5155165527080960',
+  status: 'canceled'
+)
+
+puts payment
+```
 
 ### Query BR Code payments
 

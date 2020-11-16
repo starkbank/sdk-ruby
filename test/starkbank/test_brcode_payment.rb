@@ -13,9 +13,12 @@ describe(StarkBank::BrcodePayment, '#brcode-payment#') do
     end
   end
 
-  it 'create and get' do
+  it 'create, get and cancel' do
     payment = StarkBank::BrcodePayment.create([ExampleGenerator.brcode_payment_example])[0]
     get_payment = StarkBank::BrcodePayment.get(payment.id)
     expect(payment.id).must_equal(get_payment.id)
+    cancel_payment = StarkBank::BrcodePayment.update(payment.id, status: 'canceled')
+    expect(payment.id).must_equal(cancel_payment.id)
+    expect(cancel_payment.status).must_equal('canceled')
   end
 end
