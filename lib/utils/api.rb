@@ -64,6 +64,7 @@ module StarkBank
         base = last_name(resource_name)
 
         return base if base[-1].eql?('s')
+        return "#{base[0...-1]}s" if base[-1].eql?('ey')
         return "#{base[0...-1]}ies" if base[-1].eql?('y')
 
         "#{base}s"
