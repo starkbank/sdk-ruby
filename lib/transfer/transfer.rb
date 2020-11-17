@@ -15,13 +15,13 @@ module StarkBank
   # - amount [integer]: amount in cents to be transferred. ex: 1234 (= R$ 12.34)
   # - name [string]: receiver full name. ex: 'Anthony Edward Stark'
   # - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
-  # - bank_code [string]: 1 to 3 digits of the receiver bank institution in Brazil. ex: '200' or '341'
+  # - bank_code [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a PIX transfer will be created, else a TED will be issued. ex: '20018183' or '260'
   # - branch_code [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: '1357-9'
   # - account_number [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: '876543-2'
   #
   # ## Parameters (optional):
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
-  # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 0, 0, 0)
+  # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 13, 12, 11)
   #
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when Transfer is created. ex: '5656565656565656'
@@ -40,7 +40,7 @@ module StarkBank
       @bank_code = bank_code
       @branch_code = branch_code
       @account_number = account_number
-      @scheduled = StarkBank::Utils::Checks.check_datetime(scheduled)
+      @scheduled = StarkBank::Utils::Checks.check_date_or_datetime(scheduled)
       @transaction_ids = transaction_ids
       @fee = fee
       @tags = tags

@@ -4,6 +4,42 @@ require_relative('./test_helper.rb')
 require('securerandom')
 
 class ExampleGenerator
+  def self.invoice_example
+    StarkBank::Invoice.new(
+      amount: 100_000,
+      due: Time.now + 5 * 24 * 3600,
+      name: 'Random Company',
+      tax_id: '012.345.678-90',
+      expiration: 3600 * 2,
+      fine: 0.00,
+      interest: 0.00,
+      descriptions: [
+        {
+          key: 'product A',
+          value: 'R$ 123,00'
+        },
+        {
+          key: 'product B',
+          value: 'R$ 223,00'
+        },
+        {
+          key: 'taxes',
+          value: 'R$ 122,00'
+        }
+      ],
+      discounts: [
+        {
+          percentage: 5,
+          due: Time.now + 24 * 3600
+        },
+        {
+          percentage: 2.5,
+          due: Time.now + 2 * 24 * 3600
+        }
+      ]
+    )
+  end
+
   def self.boleto_example
     StarkBank::Boleto.new(
       amount: 100_000,
@@ -38,11 +74,11 @@ class ExampleGenerator
       discounts: [
         {
           percentage: 5,
-          date: Time.now + 24 * 3600
+          date: (Time.now + 24 * 3600).to_date
         },
         {
           percentage: 2.5,
-          date: Time.now + 2 * 24 * 3600
+          date: (Time.now + 2 * 24 * 3600).to_date
         }
       ]
     )
@@ -61,6 +97,15 @@ class ExampleGenerator
       scheduled: schedule ? Date.today + 2 : nil,
       description: 'loading a random account',
       tax_id: '20.018.183/0001-80'
+    )
+  end
+
+  def self.brcode_payment_example(invoice, schedule: true)
+    StarkBank::BrcodePayment.new(
+      brcode: invoice.brcode,
+      scheduled: schedule ? DateTime.now + 60 : nil,
+      description: 'paying a PIX',
+      tax_id: invoice.tax_id
     )
   end
 

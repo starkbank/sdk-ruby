@@ -188,6 +188,223 @@ balance = StarkBank::Balance.get()
 puts balance
 ```
 
+### Get dict key
+
+You can get the PIX key's parameters by its id.
+
+```ruby
+require('starkbank')
+
+dict_key = StarkBank::DictKey.get('tony@starkbank.com')
+
+puts dict_key
+```
+
+### Create invoices
+
+You can create invoices to charge customers or to receive money from accounts
+you have in other banks.
+
+```ruby
+require('starkbank')
+
+invoices = StarkBank::Invoice.create(
+  [
+    StarkBank::Invoice.new(
+      amount: 23571,  # R$ 235,71 
+      name: 'Buzz Aldrin',
+      tax_id: '012.345.678-90', 
+      due: Time.now + 24 * 3600,
+      fine: 5,  # 5%
+      interest: 2.5  # 2.5% per month
+    )
+  ]
+)
+
+invoices.each do |invoice|
+  puts invoice
+end
+```
+
+**Note**: Instead of using Invoice objects, you can also pass each invoice element in hash format
+
+### Get an invoice
+
+After its creation, information on an invoice may be retrieved by passing its id. 
+Its status indicates whether it's been paid.
+
+```ruby
+require('starkbank')
+
+invoice = StarkBank::Invoice.get('6365512502083584')
+
+puts invoice
+```
+
+### Get an invoice QR Code
+
+After its creation, an invoice QR Code png may be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Invoice.qrcode('6365512502083584')
+
+File.binwrite('qrcode.png', png)
+```
+
+Be careful not to accidentally enforce any encoding on the raw png content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Get an invoice PDF
+
+After its creation, an invoice PDF may be retrieved by passing its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Invoice.pdf('6365512502083584', layout: 'default')
+
+File.binwrite('invoice.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel an invoice
+
+You can also cancel an invoice by its id.
+Note that this is not possible if it has been paid already.
+
+```ruby
+require('starkbank')
+
+invoice = StarkBank::Invoice.update('5155165527080960', status: 'canceled')
+
+puts invoice
+```
+
+### Update an invoice
+
+You can update an invoice's amount, due date and expiration by its id.
+Note that this is not possible if it has been paid already.
+
+```ruby
+require('starkbank')
+require('date')
+
+invoice = StarkBank::Invoice.update(
+  '5155165527080960',
+  amount: 100,
+  expiration: 7200,  # 2 hours
+  due: Time.now + 3600
+)
+
+puts invoice
+```
+
+### Query invoices
+
+You can get a list of created invoices given some filters.
+
+```ruby
+require('starkbank')
+require('date')
+
+invoices = StarkBank::Invoice.query(
+  after: '2020-01-01',
+  before: Date.today - 1
+)
+
+invoices.each do |invoice|
+  puts invoice
+end
+```
+
+### Query invoice logs
+
+Logs are pretty important to understand the life cycle of an invoice.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::Invoice::Log.query(limit: 150)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get an invoice log
+
+You can get a single log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::Invoice::Log.get('5155165527080960')
+
+puts log
+```
+
+### Query deposits
+
+You can get a list of created deposits given some filters.
+
+```ruby
+require('starkbank')
+require('date')
+
+deposits = StarkBank::Deposit.query(
+  after: '2020-01-01',
+  before: Date.today - 1
+)
+
+deposits.each do |deposit|
+  puts deposit
+end
+```
+
+### Get a deposit
+
+After its creation, information on a deposit may be retrieved by its id. 
+
+```ruby
+require('starkbank')
+
+deposit = StarkBank::Deposit.get('6365512502083584')
+
+puts deposit
+```
+
+### Query deposit logs
+
+Logs are pretty important to understand the life cycle of a deposit.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::Deposit::Log.query(limit: 150)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get a deposit log
+
+You can get a single log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::Invoice::Log.get('5155165527080960')
+
+puts log
+```
+
 ### Create boletos
 
 You can create boletos to charge customers or to receive money from accounts
@@ -310,7 +527,7 @@ puts log
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/DOC).
+You can also create transfers in the SDK (TED/PIX).
 
 ```ruby
 require('starkbank')
@@ -319,7 +536,7 @@ transfers = StarkBank::Transfer.create(
   [
     StarkBank::Transfer.new(
       amount: 100,
-      bank_code: '033',
+      bank_code: '033', # TED
       branch_code: '0001',
       account_number: '10000-0',
       tax_id: '012.345.678-90',
@@ -328,7 +545,7 @@ transfers = StarkBank::Transfer.create(
     ),
     StarkBank::Transfer.new(
       amount: 200,
-      bank_code: '341',
+      bank_code: '20018183', # PIX
       branch_code: '1234',
       account_number: '123456-7',
       tax_id: '012.345.678-90',
@@ -428,6 +645,137 @@ require('starkbank')
 log = StarkBank::Transfer::Log.get('5554732936462336')
 
 puts log
+```
+
+### Pay a BR Code
+
+Paying a BRCode is also simple. After extracting the BRCode encoded in the PIX QRCode, you can do the following:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::BrcodePayment.create(
+  [
+    StarkBank::BrcodePayment.new(
+      line: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
+      tax_id: '012.345.678-90',
+      scheduled: Time.now,
+      description: 'take my money',
+      tags: %w[take my money]
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using BrcodePayment objects, you can also pass each payment element in hash format
+
+### Get a BR Code payment
+
+To get a single BR Code payment by its id, run:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::BrcodePayment.get('6591161082839040')
+
+puts payment
+```
+
+### Get a BR Code payment PDF
+
+After its creation, a BR Code payment PDF may be retrieved by its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::BrcodePayment.pdf('6591161082839040')
+
+File.binwrite('brcode_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Cancel a BR Code payment
+
+You can cancel a BR Code payment by changing its status to "canceled".
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::BrcodePayment.update(
+  '5155165527080960',
+  status: 'canceled'
+)
+
+puts payment
+```
+
+### Query BR Code payments
+
+You can search for brcode payments using filters. 
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::BrcodePayment.query(
+  tags: %w[company_1 company_2]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+### Query BR Code payment logs
+
+Searches are also possible with BR Code payment logs:
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::BrcodePayment::Log.query(
+  payment_ids: %w[5391730421530624 6324396973096960]
+)
+
+logs.each do |log|
+  puts log
+end
+```
+
+
+### Get a BR Code payment log
+
+You can also get a BR Code payment log by specifying its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::BrcodePayment::Log.get('5155165527080960')
+
+puts log
+```
+
+### Preview a BR Code payment
+
+You can confirm the information on the BR Code payment before creating it with this preview method:
+
+```ruby
+require('starkbank')
+
+previews = StarkBank::BrcodePayment.query(
+  brcodes: %w[00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A]
+)
+
+previews.each do |preview|
+  puts preview
+end
 ```
 
 ### Pay a boleto
