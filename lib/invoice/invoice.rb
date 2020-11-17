@@ -17,7 +17,7 @@ module StarkBank
   # - name [string]: payer name. ex: 'Iron Bank S.A.'
   #
   # ## Parameters (optional):
-  # - due [DateTime or string, default today + 2 days]: Invoice due date in UTC ISO format. ex: '2020-10-28T17:59:26.249976+00:00'
+  # - due [DateTime or string, default now + 2 days]: Invoice due date in UTC ISO format. ex: '2020-10-28T17:59:26.249976+00:00'
   # - expiration [integer, default 5097600 (59 days)]: time interval in seconds between due date and expiration date. ex 123456789
   # - fine [float, default 0.0]: Invoice fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
@@ -37,9 +37,9 @@ module StarkBank
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Invoice < StarkBank::Utils::Resource
-    attr_reader :amount, :due, :tax_id, :name, :expiration, :fine, :interest, :discounts, :tags, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :created, :updated
+    attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :tags, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :created, :updated
     def initialize(
-      amount:, due:, tax_id:, name:, expiration: nil, fine: nil, interest: nil, discounts: nil,
+      amount:, tax_id:, name:, due: nil, expiration: nil, fine: nil, interest: nil, discounts: nil,
       tags: nil, descriptions: nil, nominal_amount: nil, fine_amount: nil, interest_amount: nil,
       discount_amount: nil, id: nil, brcode: nil, fee: nil, status: nil, created: nil, updated: nil
     )

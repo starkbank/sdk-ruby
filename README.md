@@ -769,8 +769,8 @@ You can confirm the information on the BR Code payment before creating it with t
 ```ruby
 require('starkbank')
 
-previews = StarkBank::BrcodePayment.query(
-  brcodes: %w[00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A]
+previews = StarkBank::BrcodePreview.query(
+  brcodes: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]
 )
 
 previews.each do |preview|

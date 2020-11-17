@@ -14,8 +14,8 @@ describe(StarkBank::BrcodePayment, '#brcode-payment#') do
   end
 
   it 'create and get' do
-    invoice = StarkBank::Invoice.create([ExampleGenerator.invoice_example])[0]
-    payment = StarkBank::BrcodePayment.create([ExampleGenerator.brcode_payment_example(invoice)])[0]
+    invoices = StarkBank::Invoice.create([ExampleGenerator.invoice_example, ExampleGenerator.invoice_example])
+    payment = StarkBank::BrcodePayment.create([ExampleGenerator.brcode_payment_example(invoices[0]), ExampleGenerator.brcode_payment_example(invoices[1])])[0]
     get_payment = StarkBank::BrcodePayment.get(payment.id)
     expect(payment.id).must_equal(get_payment.id)
   end
