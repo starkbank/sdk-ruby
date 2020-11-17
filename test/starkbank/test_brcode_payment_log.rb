@@ -4,12 +4,12 @@ require_relative('../test_helper.rb')
 
 describe(StarkBank::BrcodePayment::Log, '#brcode-payment/log#') do
   it 'query logs' do
-    logs = StarkBank::BrcodePayment::Log.query(limit: 10, types: 'success').to_a
+    logs = StarkBank::BrcodePayment::Log.query(limit: 10, types: 'failed').to_a
     expect(logs.length).must_equal(10)
     logs.each do |log|
       expect(log.id).wont_be_nil
-      expect(log.type).must_equal('success')
-      expect(log.payment.status).must_equal('success')
+      expect(log.type).must_equal('failed')
+      expect(log.payment.status).must_equal('failed')
     end
   end
 

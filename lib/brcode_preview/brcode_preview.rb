@@ -45,17 +45,11 @@ module StarkBank
     #
     # ## Return:
     # - generator of BrcodePreview objects with updated attributes
-    def self.query(limit: nil, after: nil, before: nil, tags: nil, ids: nil, status: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+    def self.query(limit: nil, brcodes: nil, user: nil)
       StarkBank::Utils::Rest.get_list(
         user: user,
-        limit: limit,
-        after: after,
-        before: before,
-        tags: tags,
-        ids: ids,
-        status: status,
+        limit: nil,
+        brcodes: brcodes,
         **resource
       )
     end
