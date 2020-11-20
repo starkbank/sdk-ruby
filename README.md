@@ -200,6 +200,23 @@ dict_key = StarkBank::DictKey.get('tony@starkbank.com')
 puts dict_key
 ```
 
+### Query your DICT keys
+
+To take a look at the PIX keys linked to your workspace, just run the following:
+```ruby
+require('starkbank')
+
+dict_keys = StarkBank::DictKey.query(
+  status: 'registered',
+  type: 'evp'
+  limit: 10
+)
+
+dict_keys.each do |dict_key|
+  puts dict_key
+end
+```
+
 ### Create invoices
 
 You can create invoices to charge customers or to receive money from accounts
@@ -248,7 +265,7 @@ After its creation, an invoice QR Code png may be retrieved by passing its id.
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::Invoice.qrcode('6365512502083584')
+png = StarkBank::Invoice.qrcode('6365512502083584')
 
 File.binwrite('qrcode.png', png)
 ```
