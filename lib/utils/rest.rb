@@ -31,8 +31,7 @@ module StarkBank
 
             cursor = json['cursor']
             query['cursor'] = cursor
-
-            break if cursor.nil? || (!limit.nil? && limit <= 0)
+            break if cursor.nil? || cursor.empty? || (!limit.nil? && limit <= 0)
           end
         end
       end
