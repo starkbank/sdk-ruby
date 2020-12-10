@@ -176,6 +176,70 @@ for the value to be credited to your account.
 Here are a few examples on how to use the SDK. If you have any doubts, check out
 the function or class docstring to get more info or go straight to our [API docs].
 
+### Create transactions
+
+To send money between Stark Bank accounts, you can create transactions:
+
+```ruby
+require('starkbank')
+
+transactions = StarkBank::Transaction.create(
+  [
+    StarkBank::Transaction.new(
+      amount: 100, # (R$ 1.00)
+      receiver_id: '5083989094170624',
+      description: 'Transaction to dear provider',
+      external_id: '123456', # so we can block anything you send twice by mistake
+      tags: %w[provider]
+    ),
+    StarkBank::Transaction.new(
+      amount: 234, # (R$ 2.34)
+      receiver_id: '5083989094170624',
+      description: 'Transaction to the other provider',
+      external_id: '123457', # so we can block anything you send twice by mistake
+      tags: %w[provider]
+    )
+  ]
+)
+
+transactions.each do |transaction|
+  puts transaction
+end
+```
+
+**Note**: Instead of using Transaction objects, you can also pass each transaction element in hash format
+
+### Query transactions
+
+To understand your balance changes (bank statement), you can query
+transactions. Note that our system creates transactions for you when
+you receive boleto payments, pay a bill or make transfers, for example.
+
+```ruby
+require('starkbank')
+
+transactions = StarkBank::Transaction.query(
+  after: '2020-01-01',
+  before: '2020-03-01'
+)
+
+transactions.each do |transaction|
+  puts transaction
+end
+```
+
+### Get transaction
+
+You can get a specific transaction by its id:
+
+```ruby
+require('starkbank')
+
+transaction = StarkBank::Transaction.get('5764045667827712')
+
+puts transaction
+```
+
 ### Get balance
 
 To know how much money you have in your workspace, run:
@@ -188,33 +252,126 @@ balance = StarkBank::Balance.get()
 puts balance
 ```
 
-### Get dict key
+### Create transfers
 
-You can get the PIX key's parameters by its id.
+You can also create transfers in the SDK (TED/PIX).
 
 ```ruby
 require('starkbank')
 
-dict_key = StarkBank::DictKey.get('tony@starkbank.com')
-
-puts dict_key
-```
-
-### Query your DICT keys
-
-To take a look at the PIX keys linked to your workspace, just run the following:
-```ruby
-require('starkbank')
-
-dict_keys = StarkBank::DictKey.query(
-  status: 'registered',
-  type: 'evp'
-  limit: 10
+transfers = StarkBank::Transfer.create(
+  [
+    StarkBank::Transfer.new(
+      amount: 100,
+      bank_code: '033', # TED
+      branch_code: '0001',
+      account_number: '10000-0',
+      tax_id: '012.345.678-90',
+      name: 'Tony Stark',
+      tags: %w[iron suit]
+    ),
+    StarkBank::Transfer.new(
+      amount: 200,
+      bank_code: '20018183', # PIX
+      branch_code: '1234',
+      account_number: '123456-7',
+      tax_id: '012.345.678-90',
+      name: 'Jon Snow',
+      scheduled: Time.now + 24 * 3600,
+      tags: []
+    )
+  ]
 )
 
-dict_keys.each do |dict_key|
-  puts dict_key
+transfers.each do |transfer|
+  puts transfer
 end
+```
+
+**Note**: Instead of using Transfer objects, you can also pass each transfer element in hash format
+
+### Query transfers
+
+You can query multiple transfers according to filters.
+
+```ruby
+require('starkbank')
+
+transfers = StarkBank::Transfer.query(
+  after: '2020-01-01',
+  before: '2020-04-01'
+)
+
+transfers.each do |transfer|
+  puts transfer.name
+end
+```
+
+### Get transfer
+
+To get a single transfer by its id, run:
+
+```ruby
+require('starkbank')
+
+transfer = StarkBank::Transfer.get('4804196796727296')
+
+puts transfer
+```
+
+### Cancel a scheduled transfer
+
+To cancel a single scheduled transfer by its id, run:
+
+```ruby
+require('starkbank')
+
+transfer = StarkBank::Transfer.delete('4804196796727296')
+
+puts transfer
+```
+
+### Get transfer PDF
+
+A transfer PDF may also be retrieved by passing its id.
+This operation is only valid if the transfer status is "processing" or "success". 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Transfer.pdf('4832343898456064')
+
+File.binwrite('transfer.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Query transfer logs
+
+You can query transfer logs to better understand transfer life cycles.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::Transfer::Log.query(limit: 50)
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get a transfer log
+
+You can also get a specific log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::Transfer::Log.get('5554732936462336')
+
+puts log
 ```
 
 ### Create invoices
@@ -542,126 +699,94 @@ log = StarkBank::Boleto::Log.get('5155165527080960')
 puts log
 ```
 
-### Create transfers
+### Investigate a boleto
 
-You can also create transfers in the SDK (TED/PIX).
+You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
+This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
+Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
+happens asynchronously and the most common way to retrieve the results is to register a 'boleto-holmes' webhook
+subscription, although polling is also possible. 
 
 ```ruby
 require('starkbank')
+holmes = StarkBank::BoletoHolmes.create([
+  StarkBank::BoletoHolmes.new(
+    boleto_id: '5656565656565656'
+  ),
+  StarkBank::BoletoHolmes.new(
+    boleto_id: '4848484848484848'
+  )
+])
 
-transfers = StarkBank::Transfer.create(
-  [
-    StarkBank::Transfer.new(
-      amount: 100,
-      bank_code: '033', # TED
-      branch_code: '0001',
-      account_number: '10000-0',
-      tax_id: '012.345.678-90',
-      name: 'Tony Stark',
-      tags: %w[iron suit]
-    ),
-    StarkBank::Transfer.new(
-      amount: 200,
-      bank_code: '20018183', # PIX
-      branch_code: '1234',
-      account_number: '123456-7',
-      tax_id: '012.345.678-90',
-      name: 'Jon Snow',
-      scheduled: Time.now + 24 * 3600,
-      tags: []
-    )
-  ]
-)
-
-transfers.each do |transfer|
-  puts transfer
+holmes.each do |sherlock|
+  puts sherlock
 end
 ```
 
-**Note**: Instead of using Transfer objects, you can also pass each transfer element in hash format
+**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in hash format
 
-### Query transfers
+### Get boleto holmes
 
-You can query multiple transfers according to filters.
+To get a single Holmes by its id, run:
 
 ```ruby
 require('starkbank')
+sherlock = StarkBank::BoletoHolmes.get('19278361897236187236')
 
-transfers = StarkBank::Transfer.query(
-  after: '2020-01-01',
-  before: '2020-04-01'
-)
+puts sherlock
+```
 
-transfers.each do |transfer|
-  puts transfer.name
+### Query boleto holmes
+
+You can search for boleto Holmes using filters. 
+
+```ruby
+require('starkbank')
+holmes = StarkBank::BoletoHolmes.query(limit: 10, status: 'solved', before: DateTime.now).to_a
+
+holmes.each do |sherlock|
+  puts sherlock
 end
 ```
 
-### Get transfer
+### Query boleto holmes logs
 
-To get a single transfer by its id, run:
-
-```ruby
-require('starkbank')
-
-transfer = StarkBank::Transfer.get('4804196796727296')
-
-puts transfer
-```
-
-### Cancel a scheduled transfer
-
-To cancel a single scheduled transfer by its id, run:
+Searches are also possible with boleto holmes logs:
 
 ```ruby
 require('starkbank')
-
-transfer = StarkBank::Transfer.delete('4804196796727296')
-
-puts transfer
-```
-
-### Get transfer PDF
-
-A transfer PDF may also be retrieved by passing its id.
-This operation is only valid if the transfer status is "processing" or "success". 
-
-```ruby
-require('starkbank')
-
-pdf = StarkBank::Transfer.pdf('4832343898456064')
-
-File.binwrite('transfer.pdf', pdf)
-```
-
-Be careful not to accidentally enforce any encoding on the raw pdf content,
-as it may yield abnormal results in the final file, such as missing images
-and strange characters.
-
-### Query transfer logs
-
-You can query transfer logs to better understand transfer life cycles.
-
-```ruby
-require('starkbank')
-
-logs = StarkBank::Transfer::Log.query(limit: 50)
+logs = StarkBank::BoletoHolmes::Log.query(limit: 10, types: 'solved').to_a
 
 logs.each do |log|
   puts log
 end
 ```
 
-### Get a transfer log
+### Get boleto holmes log
 
-You can also get a specific log by its id.
+You can also get a boleto holmes log by specifying its id.
+
+```ruby
+require('starkbank')
+log = StarkBank::BoletoHolmes::Log.get('5155165527080960')
+
+puts log
+```
+
+### Preview a BR Code payment
+
+You can confirm the information on the BR Code payment before creating it with this preview method:
 
 ```ruby
 require('starkbank')
 
-log = StarkBank::Transfer::Log.get('5554732936462336')
+previews = StarkBank::BrcodePreview.query(
+  brcodes: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]
+)
 
-puts log
+previews.each do |preview|
+  puts preview
+end
 ```
 
 ### Pay a BR Code
@@ -766,7 +891,6 @@ logs.each do |log|
 end
 ```
 
-
 ### Get a BR Code payment log
 
 You can also get a BR Code payment log by specifying its id.
@@ -777,22 +901,6 @@ require('starkbank')
 log = StarkBank::BrcodePayment::Log.get('5155165527080960')
 
 puts log
-```
-
-### Preview a BR Code payment
-
-You can confirm the information on the BR Code payment before creating it with this preview method:
-
-```ruby
-require('starkbank')
-
-previews = StarkBank::BrcodePreview.query(
-  brcodes: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]
-)
-
-previews.each do |preview|
-  puts preview
-end
 ```
 
 ### Pay a boleto
@@ -914,80 +1022,6 @@ log = StarkBank::BoletoPayment::Log.get('5155165527080960')
 puts log
 ```
 
-### Investigate a boleto
-
-You can discover if a StarkBank boleto has been recently paid before we receive the response on the next day.
-This can be done by creating a BoletoHolmes object, which fetches the updated status of the corresponding
-Boleto object according to CIP to check, for example, whether it is still payable or not. The investigation
-happens asynchronously and the most common way to retrieve the results is to register a 'boleto-holmes' webhook
-subscription, although polling is also possible. 
-
-```ruby
-require('starkbank')
-holmes = StarkBank::BoletoHolmes.create([
-  StarkBank::BoletoHolmes.new(
-    boleto_id: '5656565656565656'
-  ),
-  StarkBank::BoletoHolmes.new(
-    boleto_id: '4848484848484848'
-  )
-])
-
-holmes.each do |sherlock|
-  puts sherlock
-end
-```
-
-**Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in hash format
-
-### Get boleto holmes
-
-To get a single Holmes by its id, run:
-
-```ruby
-require('starkbank')
-sherlock = StarkBank::BoletoHolmes.get('19278361897236187236')
-
-puts sherlock
-```
-
-### Query boleto holmes
-
-You can search for boleto Holmes using filters. 
-
-```ruby
-require('starkbank')
-holmes = StarkBank::BoletoHolmes.query(limit: 10, status: 'solved', before: DateTime.now).to_a
-
-holmes.each do |sherlock|
-  puts sherlock
-end
-```
-
-### Query boleto holmes logs
-
-Searches are also possible with boleto holmes logs:
-
-```ruby
-require('starkbank')
-logs = StarkBank::BoletoHolmes::Log.query(limit: 10, types: 'solved').to_a
-
-logs.each do |log|
-  puts log
-end
-```
-
-### Get boleto holmes log
-
-You can also get a boleto holmes log by specifying its id.
-
-```ruby
-require('starkbank')
-log = StarkBank::BoletoHolmes::Log.get('5155165527080960')
-
-puts log
-```
-
 ### Create utility payment
 
 It's also simple to pay utility bills (such as electricity and water bills) in the SDK.
@@ -1093,7 +1127,7 @@ logs.each do |log|
 end
 ```
 
-### Get utility bill payment log
+### Get utility payment log
 
 If you want to get a specific payment log by its id, just run:
 
@@ -1103,70 +1137,6 @@ require('starkbank')
 log = StarkBank::UtilityPayment::Log.get('4922041111150592')
 
 puts log
-```
-
-### Create transactions
-
-To send money between Stark Bank accounts, you can create transactions:
-
-```ruby
-require('starkbank')
-
-transactions = StarkBank::Transaction.create(
-  [
-    StarkBank::Transaction.new(
-      amount: 100, # (R$ 1.00)
-      receiver_id: '5083989094170624',
-      description: 'Transaction to dear provider',
-      external_id: '123456', # so we can block anything you send twice by mistake
-      tags: %w[provider]
-    ),
-    StarkBank::Transaction.new(
-      amount: 234, # (R$ 2.34)
-      receiver_id: '5083989094170624',
-      description: 'Transaction to the other provider',
-      external_id: '123457', # so we can block anything you send twice by mistake
-      tags: %w[provider]
-    )
-  ]
-)
-
-transactions.each do |transaction|
-  puts transaction
-end
-```
-
-**Note**: Instead of using Transaction objects, you can also pass each transaction element in hash format
-
-### Query transactions
-
-To understand your balance changes (bank statement), you can query
-transactions. Note that our system creates transactions for you when
-you receive boleto payments, pay a bill or make transfers, for example.
-
-```ruby
-require('starkbank')
-
-transactions = StarkBank::Transaction.query(
-  after: '2020-01-01',
-  before: '2020-03-01'
-)
-
-transactions.each do |transaction|
-  puts transaction
-end
-```
-
-### Get transaction
-
-You can get a specific transaction by its id:
-
-```ruby
-require('starkbank')
-
-transaction = StarkBank::Transaction.get('5764045667827712')
-
-puts transaction
 ```
 
 ### Create payment requests to be approved by authorized people in a cost center 
@@ -1355,6 +1325,35 @@ require('starkbank')
 event = StarkBank::Event.update('5892075044208640', is_delivered: true)
 
 puts event
+```
+
+### Get dict key
+
+You can get the PIX key's parameters by its id.
+
+```ruby
+require('starkbank')
+
+dict_key = StarkBank::DictKey.get('tony@starkbank.com')
+
+puts dict_key
+```
+
+### Query your DICT keys
+
+To take a look at the PIX keys linked to your workspace, just run the following:
+```ruby
+require('starkbank')
+
+dict_keys = StarkBank::DictKey.query(
+  status: 'registered',
+  type: 'evp'
+  limit: 10
+)
+
+dict_keys.each do |dict_key|
+  puts dict_key
+end
 ```
 
 ## Handling errors
