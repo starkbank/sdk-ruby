@@ -7,17 +7,17 @@ require_relative('../utils/checks')
 module StarkBank
   # # PaymentRequest object
   # A PaymentRequest is an indirect request to access a specific cash-out service
-  # (such as Transfer, BoletoPayments, etc.) which goes through the cost center
+  # (such as Transfer, BrcodePayments, etc.) which goes through the cost center
   #  approval flow on our website. To emit a PaymentRequest, you must direct it to
   #  a specific cost center by its ID, which can be retrieved on our website at the
   #  cost center page.
   #
   # ## Parameters (required):
   # - center_id [String]: target cost center ID. ex: '5656565656565656'
-  # - payment [Transfer, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.
+  # - payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.
   #
   # ## Parameters (optional):
-  # - type [String]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'boleto-payment'
+  # - type [String]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
   # - due [Date, DateTime, Time or string]: Payment target date in ISO format. ex: 2020-12-31
   # - tags [list of strings]: list of strings for tagging
   #
@@ -73,7 +73,7 @@ module StarkBank
     # - after [Date , DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
     # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - status [string, default '-created']: sort order considered in response. Valid options are '-created' or '-due'.
-    # - type [string, default nil]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'boleto-payment'
+    # - type [string, default nil]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
     # - sort [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
@@ -102,14 +102,16 @@ module StarkBank
     def parse_payment(payment:, type:)
       return [payment, 'transfer'] if payment.is_a?(StarkBank::Transfer)
       return [payment, 'transaction'] if payment.is_a?(StarkBank::Transaction)
+      return [payment, 'brcode-payment'] if payment.is_a?(StarkBank::BrcodePayment)
       return [payment, 'boleto-payment'] if payment.is_a?(StarkBank::BoletoPayment)
       return [payment, 'utility-payment'] if payment.is_a?(StarkBank::UtilityPayment)
 
-      raise(Exception('Payment must either be a Transfer, a Transaction, a BoletoPayment, a UtilityPayment or a hash.')) unless payment.is_a?(Hash)
+      raise(Exception('Payment must either be a Transfer, a Transaction, a BrcodePayment, BoletoPayment, a UtilityPayment or a hash.')) unless payment.is_a?(Hash)
 
       resource = {
         'transfer': StarkBank::Transfer.resource,
         'transaction': StarkBank::Transaction.resource,
+        'brcode-payment': StarkBank::BrcodePayment.resource,
         'boleto-payment': StarkBank::BoletoPayment.resource,
         'utility-payment': StarkBank::UtilityPayment.resource
       }[type.to_sym]

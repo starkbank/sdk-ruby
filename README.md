@@ -1266,6 +1266,12 @@ event = StarkBank::Event.parse(content: response.content, signature: response.he
 
 if event.subscription == 'transfer'
   puts event.log.transfer
+elsif event.subscription == 'deposit'
+  puts event.log.deposit
+elsif event.subscription == 'invoice'
+  puts event.log.invoice
+elsif event.subscription == 'brcode-payment'
+  puts event.log.payment
 elsif event.subscription == 'boleto'
   puts event.log.boleto
 elsif event.subscription == 'boleto-payment'
