@@ -8,12 +8,12 @@ module StarkBank
   # # Webhook subscription object
   #
   # A Webhook is used to subscribe to notification events on a user-selected endpoint.
-  # Currently available services for subscription are transfer, boleto, boleto-payment,
-  # and utility-payment
+  # Currently available services for subscription are transfer, invoice, deposit, brcode-payment,
+  # boleto, boleto-payment and utility-payment
   #
   # ## Parameters (required):
   # - url [string]: Url that will be notified when an event occurs.
-  # - subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['transfer', 'boleto-payment']
+  # - subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['transfer', 'deposit']
   #
   # ## Attributes:
   # - id [string, default nil]: unique id returned when the webhook is created. ex: '5656565656565656'
@@ -31,7 +31,7 @@ module StarkBank
     #
     # ## Parameters (required):
     # - url [string]: url to which notification events will be sent to. ex: 'https://webhook.site/60e9c18e-4b5c-4369-bda1-ab5fcd8e1b29'
-    # - subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['transfer', 'boleto-payment']
+    # - subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['transfer', 'invoice']
     #
     # ## Parameters (optional):
     # - user [Project object]: Project object. Not necessary if StarkBank.user was set before function call
