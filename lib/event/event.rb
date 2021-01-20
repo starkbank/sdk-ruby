@@ -77,7 +77,7 @@ module StarkBank
     # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
     # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - is_delivered [bool, default nil]: bool to filter successfully delivered events. ex: True or False
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of Event objects with updated attributes

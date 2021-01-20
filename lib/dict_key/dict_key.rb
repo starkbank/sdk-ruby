@@ -73,7 +73,7 @@ module StarkBank
     # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'canceled', 'registered'
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of DitcKey objects with updated attributes

@@ -77,7 +77,7 @@ You can interact directly with our API using two types of users: Projects and Or
 - **Projects** are workspace-specific users, that is, they are bound to the workspaces they are created in.
 One workspace can have multiple Projects.
 - **Organizations** are general users that control your entire organization.
-They can control all your Workspaces and even create new ones. The Organization is bound to your company's tax-ID only.
+They can control all your Workspaces and even create new ones. The Organization is bound to your company's tax ID only.
 Since this user is unique in your entire organization, only one credential can be linked to it.
 
 3.1 To create a Project in Sandbox:
@@ -115,7 +115,7 @@ project = StarkBank::Project.new(
 )
 ```
 
-3.2 While this feature is in beta, to register your Organization's public key, a legal representative of your organization must send an e-mail with the desired public key to developers@starkbank.com. Don`t worry, this flow will soon be integrated with our website. Here is an example on how to handle your Organization in the SDK:
+3.2 To register your Organization's public key, a legal representative of your organization must send an e-mail with the desired public key to developers@starkbank.com. This flow will soon be integrated with our website, where you'll be able to do the entire process quicker and independently. Here is an example on how to handle your Organization in the SDK:
 
 ```ruby
 require('starkbank')
@@ -141,8 +141,8 @@ organization = StarkBank::Organization.new(
 )
 
 # To dynamically use your organization credentials in a specific workspace_id,
-# you can use the Organization.with_workspace() method:
-balance = StarkBank::Balance.get(user: organization.with_workspace('4848484848484848'))
+# you can use the Organization.replace() method:
+balance = StarkBank::Balance.get(user: StarkBank::Organization.replace(organization, '4848484848484848'))
 
 puts balance
 ```
@@ -156,10 +156,10 @@ NOTE 3: The credentials you registered in `sandbox` do not exist in `production`
 
 ### 4. Setting up the user
 
-There are two kinds of users that can access our API: **Project** and **Member**.
+There are three kinds of users that can access our API: **Organization**, **Project** and **Member**.
 
+- `Project` and `Organization` are designed for integrations and are the ones meant for our SDKs.
 - `Member` is the one you use when you log into our webpage with your e-mail.
-- `Project` is designed for integrations and is the one meant for our SDK.
 
 There are two ways to inform the user to the SDK:
  
@@ -168,7 +168,7 @@ There are two ways to inform the user to the SDK:
 ```ruby
 require('starkbank')
 
-balance = StarkBank::Balance.get(user: project)
+balance = StarkBank::Balance.get(user: project) # or organization
 ```
 
 4.2 Set it as a default user in the SDK:
@@ -176,12 +176,12 @@ balance = StarkBank::Balance.get(user: project)
 ```ruby
 require('starkbank')
 
-StarkBank.user = project
+StarkBank.user = project # or organization
 
 balance = StarkBank::Balance.get()
 ```
 
-Just select the way of passing the project user that is more convenient to you.
+Just select the way of passing the user that is more convenient to you.
 On all following examples we will assume a default user has been set.
 
 ### 5. Setting up the error language
@@ -201,13 +201,13 @@ Language options are 'en-US' for english and 'pt-BR' for brazilian portuguese. E
 ## Testing in Sandbox
 
 Your initial balance is zero. For many operations in Stark Bank, you'll need funds
-in your account, which can be added to your balance by creating a Boleto. 
+in your account, which can be added to your balance by creating an Invoice or a Boleto. 
 
-In the Sandbox environment, 90% of the created Boletos will be automatically paid,
+In the Sandbox environment, most of the created Invoices and Boletos will be automatically paid,
 so there's nothing else you need to do to add funds to your account. Just create
-a few and wait around a bit.
+a few Invoices and wait around a bit.
 
-In Production, you (or one of your clients) will need to actually pay this Boleto
+In Production, you (or one of your clients) will need to actually pay this Invoice or Boleto
 for the value to be credited to your account.
 
 
@@ -294,7 +294,7 @@ puts balance
 
 ### Create transfers
 
-You can also create transfers in the SDK (TED/PIX).
+You can also create transfers in the SDK (TED/Pix).
 
 ```ruby
 require('starkbank')
@@ -312,7 +312,7 @@ transfers = StarkBank::Transfer.create(
     ),
     StarkBank::Transfer.new(
       amount: 200,
-      bank_code: '20018183', # PIX
+      bank_code: '20018183', # Pix
       branch_code: '1234',
       account_number: '123456-7',
       tax_id: '012.345.678-90',
@@ -347,7 +347,7 @@ transfers.each do |transfer|
 end
 ```
 
-### Get transfer
+### Get a transfer
 
 To get a single transfer by its id, run:
 
@@ -371,7 +371,7 @@ transfer = StarkBank::Transfer.delete('4804196796727296')
 puts transfer
 ```
 
-### Get transfer PDF
+### Get a transfer PDF
 
 A transfer PDF may also be retrieved by passing its id.
 This operation is only valid if the transfer status is "processing" or "success". 
@@ -653,7 +653,7 @@ end
 
 **Note**: Instead of using Boleto objects, you can also pass each boleto element in hash format
 
-### Get boleto
+### Get a boleto
 
 After its creation, information on a boleto may be retrieved by passing its id. 
 Its status indicates whether it's been paid.
@@ -666,7 +666,7 @@ boleto = StarkBank::Boleto.get('6365512502083584')
 puts boleto
 ```
 
-### Get boleto PDF
+### Get a boleto PDF
 
 After its creation, a boleto PDF may be retrieved by passing its id. 
 
@@ -682,7 +682,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete boleto
+### Delete a boleto
 
 You can also cancel a boleto by its id.
 Note that this is not possible if it has been processed already.
@@ -765,7 +765,7 @@ end
 
 **Note**: Instead of using BoletoHolmes objects, you can also pass each payment element in hash format
 
-### Get boleto holmes
+### Get a boleto holmes
 
 To get a single Holmes by its id, run:
 
@@ -802,7 +802,7 @@ logs.each do |log|
 end
 ```
 
-### Get boleto holmes log
+### Get a boleto holmes log
 
 You can also get a boleto holmes log by specifying its id.
 
@@ -831,7 +831,7 @@ end
 
 ### Pay a BR Code
 
-Paying a BRCode is also simple. After extracting the BRCode encoded in the PIX QRCode, you can do the following:
+Paying a BRCode is also simple. After extracting the BRCode encoded in the Pix QR Code, you can do the following:
 
 ```ruby
 require('starkbank')
@@ -976,7 +976,7 @@ end
 
 **Note**: Instead of using BoletoPayment objects, you can also pass each payment element in hash format
 
-### Get boleto payment
+### Get a boleto payment
 
 To get a single boleto payment by its id, run:
 
@@ -988,7 +988,7 @@ payment = StarkBank::BoletoPayment.get('6591161082839040')
 puts payment
 ```
 
-### Get boleto payment PDF
+### Get a boleto payment PDF
 
 After its creation, a boleto payment PDF may be retrieved by passing its id. 
 
@@ -1004,7 +1004,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete boleto payment
+### Delete a boleto payment
 
 You can also cancel a boleto payment by its id.
 Note that this is not possible if it has been processed already.
@@ -1050,7 +1050,7 @@ end
 ```
 
 
-### Get boleto payment log
+### Get a boleto payment log
 
 You can also get a boleto payment log by specifying its id.
 
@@ -1062,7 +1062,7 @@ log = StarkBank::BoletoPayment::Log.get('5155165527080960')
 puts log
 ```
 
-### Create utility payment
+### Create a utility payment
 
 It's also simple to pay utility bills (such as electricity and water bills) in the SDK.
 
@@ -1109,7 +1109,7 @@ payments.each do |payment|
 end
 ```
 
-### Get utility payment
+### Get a utility payment
 
 You can get a specific bill by its id:
 
@@ -1121,7 +1121,7 @@ payment = StarkBank::UtilityPayment.get('6258964706623488')
 puts payment
 ```
 
-### Get utility payment PDF
+### Get a utility payment PDF
 
 After its creation, a utility payment PDF may also be retrieved by passing its id. 
 
@@ -1137,7 +1137,7 @@ Be careful not to accidentally enforce any encoding on the raw pdf content,
 as it may yield abnormal results in the final file, such as missing images
 and strange characters.
 
-### Delete utility payment
+### Delete a utility payment
 
 You can also cancel a utility payment by its id.
 Note that this is not possible if it has been processed already.
@@ -1167,7 +1167,7 @@ logs.each do |log|
 end
 ```
 
-### Get utility payment log
+### Get a utility payment log
 
 If you want to get a specific payment log by its id, just run:
 
@@ -1238,7 +1238,7 @@ requests.each do |request|
 end
 ```
 
-### Create webhook subscription
+### Create a webhook subscription
 
 To create a webhook subscription and be notified whenever an event occurs, run:
 
@@ -1279,7 +1279,7 @@ webhook = StarkBank::Webhook.get('10827361982368179')
 puts webhook
 ```
 
-### Delete webhook
+### Delete a webhook
 
 You can also delete a specific webhook by its id.
 
@@ -1335,7 +1335,7 @@ events.each do |event|
 end
 ```
 
-### Get webhook event
+### Get a webhook event
 
 You can get a specific webhook event by its id.
 
@@ -1347,7 +1347,7 @@ event = StarkBank::Event.get('4828869076975616')
 puts event
 ```
 
-### Delete webhook event
+### Delete a webhook event
 
 You can also delete a specific webhook event by its id.
 
@@ -1373,9 +1373,9 @@ event = StarkBank::Event.update('5892075044208640', is_delivered: true)
 puts event
 ```
 
-### Get dict key
+### Get a DICT key
 
-You can get the PIX key's parameters by its id.
+You can get the Pix key's parameters by its id.
 
 ```ruby
 require('starkbank')
@@ -1387,7 +1387,7 @@ puts dict_key
 
 ### Query your DICT keys
 
-To take a look at the PIX keys linked to your workspace, just run the following:
+To take a look at the Pix keys linked to your workspace, just run the following:
 ```ruby
 require('starkbank')
 
@@ -1402,7 +1402,7 @@ dict_keys.each do |dict_key|
 end
 ```
 
-### Create new Workspaces
+### Create a new Workspace
 
 The Organization user allows you to create new Workspaces (bank accounts) under your organization.
 Workspaces have independent balances, statements, operations and users.

@@ -127,7 +127,7 @@ module StarkBank
     # - tax_id [string, default nil]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of Transfer objects with updated attributes

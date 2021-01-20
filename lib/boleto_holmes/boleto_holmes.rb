@@ -81,7 +81,7 @@ module StarkBank
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - boleto_id [string, default nil]: filter for holmes that investigate a specific boleto by its ID. ex: '5656565656565656'
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of BoletoHolmes objects with updated attributes

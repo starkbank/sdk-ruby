@@ -64,7 +64,7 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of Webhook objects with updated attributes

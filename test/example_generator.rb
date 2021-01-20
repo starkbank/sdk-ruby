@@ -91,6 +91,14 @@ class ExampleGenerator
     )
   end
 
+  def self.workspace_example
+    uuid = SecureRandom.uuid
+    StarkBank::Workspace.new(
+      username: "starkv2-#{uuid}",
+      name: "Stark V2: #{uuid}"
+    )
+  end
+
   def self.boleto_payment_example(schedule: true)
     StarkBank::BoletoPayment.new(
       line: '34191.09008 61713.957308 71444.640008 2 934300' + rand(1e8 - 1).to_s.rjust(8, '0'),
@@ -100,7 +108,10 @@ class ExampleGenerator
     )
   end
 
-  def self.brcode_payment_example(invoice, schedule: true)
+  def self.brcode_payment_example(invoice: nil, schedule: true)
+    if invoice.nil?
+      invoice = StarkBank::Invoice.create([invoice_example])[0]
+    end
     StarkBank::BrcodePayment.new(
       brcode: invoice.brcode,
       scheduled: schedule ? DateTime.now + 600 : nil,
@@ -149,7 +160,7 @@ class ExampleGenerator
   end
 
   def self.create_payment
-    option = rand(4)
+    option = rand(5)
     case option
     when 0
       transfer_example(schedule: false)
@@ -159,8 +170,18 @@ class ExampleGenerator
       boleto_payment_example(schedule: false)
     when 3
       utility_payment_example(schedule: false)
+    when 4
+      brcode_payment_example(schedule: false)
     else
       raise(ArgumentError, 'Bad random number')
     end
+  end
+
+  def self.organization_example
+    StarkBank::Organization.new(
+      environment: 'sandbox',
+      id: ENV['SANDBOX_ORGANIZATION_ID'], # '9999999999999999',
+      private_key: ENV['SANDBOX_ORGANIZATION_PRIVATE_KEY'] # '-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEIBEcEJZLk/DyuXVsEjz0w4vrE7plPXhQxODvcG1Jc0WToAcGBSuBBAAK\noUQDQgAE6t4OGx1XYktOzH/7HV6FBukxq0Xs2As6oeN6re1Ttso2fwrh5BJXDq75\nmSYHeclthCRgU8zl6H1lFQ4BKZ5RCQ==\n-----END EC PRIVATE KEY-----'
+    )
   end
 end

@@ -41,7 +41,7 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - brcodes [list of strings]: List of brcodes to preview. ex: %w[00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A]
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of BrcodePreview objects with updated attributes

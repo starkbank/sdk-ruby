@@ -105,7 +105,7 @@ module StarkBank
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of strings to get specific entities by ids. ex: ['12376517623', '1928367198236']
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid'
-    # - user [Project object, default nil]: Project object. Not necessary if StarkBank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
     #
     # ## Return:
     # - generator of BoletoPayment objects with updated attributes

@@ -15,20 +15,20 @@ module StarkBank
   # each request or may be defined as the default user at the start (See README).
   # If you are accessing a specific Workspace using Organization credentials, you should
   # specify the workspace ID when building the Organization object or by request, using
-  # the organization.set_workspace(workspace_id) method, which creates a copy of the organization
+  # the Organization.replace(organization, workspace_id) method, which creates a copy of the organization
   # object with the altered workspace ID. If you are listing or creating new Workspaces, the
   # workspace_id should be nil.
   #
   # ## Parameters (required):
-  # - id [string]: unique id required to identify organization. ex: '5656565656565656'
-  # - private_key [EllipticCurve.Organization()]: PEM string of the private key linked to the organization. ex: '-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----'
   # - environment [string]: environment where the organization is being used. ex: 'sandbox' or 'production'
+  # - id [string]: unique id required to identify organization. ex: '5656565656565656'
+  # - private_key [string]: PEM string of the private key linked to the organization. ex: '-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----'
   # - workspace_id [string]: unique id of the accessed Workspace, if any. ex: nil or '4848484848484848'
   #
   # ## Attributes (return-only):
   # - pem [string]: private key in pem format. ex: '-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----'
   class Organization < StarkBank::User
-    attr_reader :id, :private_key, :environment, :workspace_id, :pem
+    attr_reader :workspace_id
     def initialize(id:, environment:, private_key:, workspace_id: nil)
       super(environment, id, private_key)
       @workspace_id = workspace_id
@@ -38,16 +38,16 @@ module StarkBank
       if @workspace_id
         "organization/#{@id}/workspace/#{@workspace_id}"
       else
-        "organization/#{id}"
+        "organization/#{@id}"
       end
     end
 
-    def with_workspace(workspace_id)
+    def self.replace(organization, workspace_id)
       Organization.new(
-        id: @id,
-        environment: @environment,
-        private_key: @private_key,
-        workspace_id: @workspace_id
+        environment: organization.environment,
+        id: organization.id,
+        private_key: organization.pem,
+        workspace_id: workspace_id
       )
     end
   end
