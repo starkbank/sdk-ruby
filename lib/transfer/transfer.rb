@@ -17,11 +17,13 @@ module StarkBank
   # - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
   # - bank_code [string]: code of the receiver bank institution in Brazil. If an ISPB (8 digits) is informed, a PIX transfer will be created, else a TED will be issued. ex: '20018183' or '260'
   # - branch_code [string]: receiver bank account branch. Use '-' in case there is a verifier digit. ex: '1357-9'
-  # - account_number [string]: Receiver Bank Account number. Use '-' before the verifier digit. ex: '876543-2'
+  # - account_number [string]: receiver bank account number. Use '-' before the verifier digit. ex: '876543-2'
   #
   # ## Parameters (optional):
-  # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
+  # - account_type [string, default 'checking']: receiver bank account type. This parameter only has effect on Pix Transfers. ex: 'checking', 'savings' or 'salary'
+  # - external_id [string, default nil]: url safe string that must be unique among all your transfers. Duplicated external_ids will cause failures. By default, this parameter will block any transfer that repeats amount and receiver information on the same date. ex: 'my-internal-id-123456'
   # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 13, 12, 11)
+  # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
   #
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when Transfer is created. ex: '5656565656565656'
@@ -31,8 +33,8 @@ module StarkBank
   # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkBank::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :scheduled, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
-    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, scheduled: nil, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
+    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
+    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
       @amount = amount
       @name = name
@@ -40,6 +42,8 @@ module StarkBank
       @bank_code = bank_code
       @branch_code = branch_code
       @account_number = account_number
+      @account_type = account_type
+      @external_id = external_id
       @scheduled = StarkBank::Utils::Checks.check_date_or_datetime(scheduled)
       @transaction_ids = transaction_ids
       @fee = fee
@@ -124,7 +128,7 @@ module StarkBank
     # - before [Date, DateTime, Time or string, default nil] date filter for objects created or updated only before specified date. ex: Date.new(2020, 3, 10)
     # - transactionIds [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'success' or 'failed'
-    # - tax_id [string, default nil]: filter for transfers sent to the specified tax ID. ex: "012.345.678-90"
+    # - tax_id [string, default nil]: filter for transfers sent to the specified tax ID. ex: '012.345.678-90'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
@@ -161,6 +165,8 @@ module StarkBank
             bank_code: json['bank_code'],
             branch_code: json['branch_code'],
             account_number: json['account_number'],
+            account_type: json['account_type'],
+            external_id: json['external_id'],
             scheduled: json['scheduled'],
             transaction_ids: json['transaction_ids'],
             fee: json['fee'],

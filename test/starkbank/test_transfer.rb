@@ -26,8 +26,8 @@ describe(StarkBank::Transfer, '#transfer#') do
       transfers_ids_result.push(transfer.id)
     end
 
-    transfers_ids_expected = transfers_ids_expected.sort()
-    transfers_ids_result = transfers_ids_result.sort()
+    transfers_ids_expected = transfers_ids_expected.sort
+    transfers_ids_result = transfers_ids_result.sort
     expect(transfers_ids_expected).must_equal(transfers_ids_result)
   end
 
@@ -46,5 +46,4 @@ describe(StarkBank::Transfer, '#transfer#') do
     expect(transfer.id).must_equal(delete_transfer.id)
     expect(delete_transfer.status).must_equal('canceled')
   end
-
 end
