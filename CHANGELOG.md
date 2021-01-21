@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- Organization user
+- Workspace resource
+
 ## [2.2.1] - 2020-11-16
 ### Fixed
 - Invoice optional due parameter
