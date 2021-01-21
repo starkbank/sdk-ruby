@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    starkbank (2.2.1)
+    starkbank (2.3.0)
       starkbank-ecdsa (~> 0.0.5)
 
 GEM
