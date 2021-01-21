@@ -137,6 +137,8 @@ class ExampleGenerator
       bank_code: '01',
       branch_code: '0001',
       account_number: '10000-0',
+      account_type: 'checking',
+      external_id: 'ruby-' + rand(1e10).to_s,
       scheduled: schedule ? Time.now + 24 * 3600 : nil
     )
   end

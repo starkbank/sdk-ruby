@@ -315,6 +315,8 @@ transfers = StarkBank::Transfer.create(
       bank_code: '20018183', # Pix
       branch_code: '1234',
       account_number: '123456-7',
+      account_type: 'salary',
+      external_id: 'my-internal-id-12345',
       tax_id: '012.345.678-90',
       name: 'Jon Snow',
       scheduled: Time.now + 24 * 3600,
