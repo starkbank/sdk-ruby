@@ -1465,6 +1465,23 @@ workspace = StarkBank.Workspace.get('10827361982368179')
 puts workspace
 ```
 
+### Update a Workspace
+
+You can update a specific Workspace by its id.
+
+```ruby
+require('starkbank')
+
+updatedWorkspace = StarkBank::Workspace.update(
+  workspace.ID, 
+  username: "new-username-test", 
+  name: "Updated workspace test", 
+  allowed_tax_ids: ['20.018.183/0001-80']
+)
+
+puts updatedWorkspace
+```
+
 ## Handling errors
 
 The SDK may raise one of four types of errors: __InputErrors__, __InternalServerError__, __UnknownError__, __InvalidSignatureError__
