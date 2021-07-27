@@ -4,7 +4,7 @@ require_relative('../test_helper.rb')
 
 describe(StarkBank::DictKey, '#dict-key#') do
   it 'get' do
-    pix_key = 'tony@starkbank.com'
+    pix_key = 'valid@sandbox.com'
     dict_key = StarkBank::DictKey.get(pix_key)
     expect(dict_key.id).must_equal(pix_key)
   end
