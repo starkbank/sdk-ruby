@@ -17,6 +17,7 @@ module StarkBank
   # - name [string, default nil]: account owner full name. ex: 'Tony Stark'
   # - tax_id [string, default nil]: key owner tax ID (CNPJ or masked CPF). ex: '***.345.678-**' or '20.018.183/0001-80'
   # - owner_type [string, default nil]: DICT key owner type. ex 'naturalPerson' or 'legalPerson'
+  # - bank_name [string, default nil]: bank name associated with the DICT key. ex: 'Stark Bank'
   # - ispb [string, default nil]: bank ISPB associated with the DICT key. ex: '20018183'
   # - branch_code [string, default nil]: bank account branch code associated with the DICT key. ex: '9585'
   # - account_number [string, default nil]: bank account number associated with the DICT key. ex: '9828282578010513'
@@ -26,16 +27,17 @@ module StarkBank
   # - owned [DateTime or string, default nil]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
   # - created [DateTime or string, default nil]: creation datetime for the DICT key. ex: '2020-03-10 10:30:00.000'
   class DictKey < StarkBank::Utils::Resource
-    attr_reader :id, :type, :name, :tax_id, :owner_type, :ispb, :branch_code, :account_number, :account_type, :status, :account_created, :owned, :created
+    attr_reader :id, :type, :name, :tax_id, :owner_type, :bank_name, :ispb, :branch_code, :account_number, :account_type, :status, :account_created, :owned, :created
     def initialize(
-      id:, type:, name:, tax_id:, owner_type:, ispb:, branch_code:, account_number:, account_type:,
-      status:, account_created:, owned:, created:
+      id:, type:, name:, tax_id:, owner_type:, bank_name:, ispb:, branch_code:, account_number:, 
+      account_type:, status:, account_created:, owned:, created:
     )
       super(id)
       @type = type
       @name = name
       @tax_id = tax_id
       @owner_type = owner_type
+      @bank_name = bank_name
       @ispb = ispb
       @branch_code = branch_code
       @account_number = account_number
@@ -102,6 +104,7 @@ module StarkBank
             name: json['name'],
             tax_id: json['tax_id'],
             owner_type: json['owner_type'],
+            bank_name: json['bank_name'],
             ispb: json['ispb'],
             branch_code: json['branch_code'],
             account_number: json['account_number'],

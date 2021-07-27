@@ -26,6 +26,8 @@ module StarkBank
   # - tags [list of strings, default nil]: list of strings for tagging
   #
   # ## Attributes (return-only):
+  # - pdf [string, default nil]: public Invoice PDF URL. ex: 'https://invoice.starkbank.com/pdf/d454fa4e524441c1b0c1a729457ed9d8'
+  # - link [string, default nil]: public Invoice webpage URL. ex: 'https://my-workspace.sandbox.starkbank.com/invoicelink/d454fa4e524441c1b0c1a729457ed9d8'
   # - id [string, default nil]: unique id returned when Invoice is created. ex: '5656565656565656'
   # - nominal_amount [integer, default nil]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000
   # - fine_amount [integer, default nil]: Invoice fine value calculated over nominal_amount. ex: 20000
@@ -37,11 +39,11 @@ module StarkBank
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Invoice < StarkBank::Utils::Resource
-    attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :tags, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :created, :updated
+    attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :tags, :pdf, :link, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :transaction_ids, :created, :updated
     def initialize(
       amount:, tax_id:, name:, due: nil, expiration: nil, fine: nil, interest: nil, discounts: nil,
-      tags: nil, descriptions: nil, nominal_amount: nil, fine_amount: nil, interest_amount: nil,
-      discount_amount: nil, id: nil, brcode: nil, fee: nil, status: nil, created: nil, updated: nil
+      tags: nil, pdf: nil, link: nil, descriptions: nil, nominal_amount: nil, fine_amount: nil, interest_amount: nil,
+      discount_amount: nil, id: nil, brcode: nil, fee: nil, status: nil, transaction_ids: nil, created: nil, updated: nil
     )
       super(id)
       @amount = amount
@@ -53,6 +55,8 @@ module StarkBank
       @interest = interest
       @discounts = discounts
       @tags = tags
+      @pdf = pdf
+      @link = link
       @descriptions = descriptions
       @nominal_amount = nominal_amount
       @fine_amount = fine_amount
@@ -61,6 +65,7 @@ module StarkBank
       @brcode = brcode
       @fee = fee
       @status = status
+      @transaction_ids = transaction_ids
       @updated = StarkBank::Utils::Checks.check_datetime(updated)
       @created = StarkBank::Utils::Checks.check_datetime(created)
     end
@@ -193,6 +198,8 @@ module StarkBank
             interest: json['interest'],
             discounts: json['discounts'],
             tags: json['tags'],
+            pdf: json['pdf'],
+            link: json['link'],
             descriptions: json['descriptions'],
             nominal_amount: json['nominal_amount'],
             fine_amount: json['fine_amount'],
@@ -201,6 +208,7 @@ module StarkBank
             brcode: json['brcode'],
             fee: json['fee'],
             status: json['status'],
+            transaction_ids: json['transaction_ids'],
             updated: json['updated'],
             created: json['created'],
           )

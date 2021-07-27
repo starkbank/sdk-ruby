@@ -15,14 +15,18 @@ module StarkBank
   # - username [string]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'
   # - name [string]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: 'Stark Bank Workspace'
   #
+  # ## Parameters (optional):
+  # - allowed_tax_ids [list of strings]: list of tax IDs that will be allowed to send Deposits to this Workspace. ex: ['012.345.678-90', '20.018.183/0001-80']
+  #
   # ## Attributes:
   # - id [string, default nil]: unique id returned when the workspace is created. ex: '5656565656565656'
   class Workspace < StarkBank::Utils::Resource
-    attr_reader :username, :name, :id
-    def initialize(username:, name:, id: nil)
+    attr_reader :username, :name, :allowed_tax_ids, :id
+    def initialize(username:, name:, allowed_tax_ids: nil, id: nil)
       super(id)
       @username = username
       @name = name
+      @allowed_tax_ids = allowed_tax_ids
     end
 
     # # Create Workspace
@@ -38,8 +42,8 @@ module StarkBank
     #
     # ## Return:
     # - Workspace object with updated attributes
-    def self.create(username:, name:, user: nil)
-      StarkBank::Utils::Rest.post_single(entity: Workspace.new(username: username, name: name), user: user, **resource)
+    def self.create(username:, name:, user: nil, allowed_tax_ids: nil)
+      StarkBank::Utils::Rest.post_single(entity: Workspace.new(username: username, name: name, allowed_tax_ids: allowed_tax_ids), user: user, **resource)
     end
 
     # # Retrieve a specific Workspace
@@ -83,7 +87,8 @@ module StarkBank
           Workspace.new(
             id: json['id'],
             username: json['username'],
-            name: json['name']
+            name: json['name'],
+            allowed_tax_ids: json['allowed_tax_ids']
           )
         }
       }

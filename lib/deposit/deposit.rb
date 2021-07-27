@@ -16,6 +16,7 @@ module StarkBank
   # - bank_code [string]: payer bank code in Brazil. ex: '20018183' or '341'
   # - branch_code [string]: payer bank account branch. ex: '1357-9's
   # - account_number [string]: payer bank account number. ex: '876543-2'
+  # - account_type [string]: payer bank account type. ex: 'checking'
   # - amount [integer]: Deposit value in cents. ex: 1234 (= R$ 12.34)
   # - type [string]: Type of settlement that originated the deposit. ex: 'pix' or 'ted'
   # - status [string]: current Deposit status. ex: 'created'
@@ -25,10 +26,10 @@ module StarkBank
   # - created [datetime.datetime]: creation datetime for the Deposit. ex: datetime.datetime(2020, 12, 10, 10, 30, 0, 0)
   # - updated [datetime.datetime]: latest update datetime for the Deposit. ex: datetime.datetime(2020, 12, 10, 10, 30, 0, 0)
   class Deposit < StarkBank::Utils::Resource
-    attr_reader :id, :name, :tax_id, :bank_code, :branch_code, :account_number, :amount, :type, :status, :tags, :fee, :transaction_ids, :created, :updated
+    attr_reader :id, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :amount, :type, :status, :tags, :fee, :transaction_ids, :created, :updated
     def initialize(
-      id:, name:, tax_id:, bank_code:, branch_code:, account_number:, amount:, type:, status:, tags:, fee:,
-      transaction_ids:, created:, updated:
+      id:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type:, amount:, type:, 
+      status:, tags:, fee:, transaction_ids:, created:, updated:
     )
       super(id)
       @name = name
@@ -36,6 +37,7 @@ module StarkBank
       @bank_code = bank_code
       @branch_code = branch_code
       @account_number = account_number
+      @account_type = account_type
       @amount = amount
       @type = type
       @status = status
@@ -105,6 +107,7 @@ module StarkBank
             bank_code: json['bank_code'],
             branch_code: json['branch_code'],
             account_number: json['account_number'],
+            account_type: json['account_type'],
             amount: json['amount'],
             type: json['type'],
             status: json['status'],
