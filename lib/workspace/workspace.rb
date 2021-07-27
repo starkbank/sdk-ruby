@@ -80,6 +80,25 @@ module StarkBank
       StarkBank::Utils::Rest.get_list(limit: limit, username: username, ids: ids, user: user, **resource)
     end
 
+    # # Update an Workspace entity
+    #
+    # Update an Workspace entity previously created in the Stark Bank API
+    #
+    # ## Parameters (required):
+    # - id [string]: Workspace unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - username [string, default nil]: query by the simplified name that defines the workspace URL. This name is always unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'
+    # - name [string, default nil]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: 'Stark Bank Workspace'
+    # - allowed_tax_ids [list of strings, default nil]: list of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. ex: ['012.345.678-90', '20.018.183/0001-80']
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    #
+    # ## Return:
+    # - updated Workspace object
+    def self.update(id, user: nil, username: nil, name: nil, allowed_tax_ids: nil)
+      StarkBank::Utils::Rest.patch_id(id: id, user: user, username: username, name: name, allowed_tax_ids: allowed_tax_ids, **resource)
+    end
+
     def self.resource
       {
         resource_name: 'Workspace',
