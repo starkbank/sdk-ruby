@@ -20,7 +20,7 @@ module StarkBank
   # - ispb [string, default nil]: bank ISPB associated with the DICT key. ex: '20018183'
   # - branch_code [string, default nil]: bank account branch code associated with the DICT key. ex: '9585'
   # - account_number [string, default nil]: bank account number associated with the DICT key. ex: '9828282578010513'
-  # - account_type [string, default nil]: bank account type associated with the DICT key. ex: 'checking', 'saving' e 'salary'
+  # - account_type [string, default nil]: bank account type associated with the DICT key. ex: 'checking', 'saving', 'salary' or 'payment'
   # - status [string, default nil]: current DICT key status. ex: 'created', 'registered', 'canceled' or 'failed'
   # - account_created [DateTime or string, default nil]: creation datetime of the bank account associated with the DICT key. ex: '2020-11-05T14:55:08.812665+00:00'
   # - owned [DateTime or string, default nil]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
