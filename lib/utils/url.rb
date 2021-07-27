@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'erb'
+
 
 module StarkBank
   module Utils
@@ -17,7 +19,7 @@ module StarkBank
 
         query_list = []
         string_params.each do |key, value|
-          query_list << "#{key}=#{value}"
+          query_list << "#{key}=#{ERB::Util.url_encode(value)}"
         end
         '?' + query_list.join('&')
       end
