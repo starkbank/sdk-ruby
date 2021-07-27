@@ -28,13 +28,15 @@ module StarkBank
   # - log [Log]: a Log object from one the subscription services (TransferLog, InvoiceLog, BoletoLog, BoletoPaymentlog or UtilityPaymentLog)
   # - created [DateTime]: creation datetime for the notification event. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
+  # - workspace_id [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: '4545454545454545'
   # - subscription [string]: service that triggered this event. ex: 'transfer', 'utility-payment'
   class Event < StarkBank::Utils::Resource
-    attr_reader :id, :log, :created, :is_delivered, :subscription
-    def initialize(id:, log:, created:, is_delivered:, subscription:)
+    attr_reader :id, :log, :created, :is_delivered, :workspace_id, :subscription
+    def initialize(id:, log:, created:, is_delivered:, workspace_id:, subscription:)
       super(id)
       @created = StarkBank::Utils::Checks.check_datetime(created)
       @is_delivered = is_delivered
+      @workspace_id = workspace_id
       @subscription = subscription
 
       resource = {
@@ -185,6 +187,7 @@ module StarkBank
               log: json['log'],
               created: json['created'],
               is_delivered: json['is_delivered'],
+              workspace_id: json['workspace_id'],
               subscription: json['subscription']
             )
           }

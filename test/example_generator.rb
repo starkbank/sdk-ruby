@@ -95,7 +95,8 @@ class ExampleGenerator
     uuid = SecureRandom.uuid
     StarkBank::Workspace.new(
       username: "starkv2-#{uuid}",
-      name: "Stark V2: #{uuid}"
+      name: "Stark V2: #{uuid}",
+      allowed_tax_ids: ['20.018.183/0001-80']
     )
   end
 

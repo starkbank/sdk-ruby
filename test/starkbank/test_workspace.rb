@@ -6,7 +6,7 @@ require_relative('../example_generator.rb')
 describe(StarkBank::Workspace, '#workspace') do
   it 'create' do
     workspace = ExampleGenerator.workspace_example
-    workspace = StarkBank::Workspace.create(username: workspace.username, name: workspace.name, user: ExampleGenerator.organization_example)
+    workspace = StarkBank::Workspace.create(username: workspace.username, name: workspace.name, allowed_tax_ids: workspace.allowed_tax_ids, user: ExampleGenerator.organization_example)
     expect(workspace.id).wont_be_nil
     expect(workspace.username).wont_be_nil
     expect(workspace.name).wont_be_nil

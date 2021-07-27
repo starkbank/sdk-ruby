@@ -12,9 +12,9 @@ module StarkBank
   # to the Stark Bank API and returns the list of created objects.
   #
   # ## Parameters (required):
-  # - brcode [string]: String loaded directly from the QRCode or copied from the invoice. ex: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"
-  # - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-  # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: "payment ABC"
+  # - brcode [string]: String loaded directly from the QRCode or copied from the invoice. ex: '00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A'
+  # - tax_id [string]: receiver tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+  # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: 'payment ABC'
   #
   # ## Parameters (conditionally required):
   # - amount [int, default nil]: If the BRCode does not provide an amount, this parameter is mandatory, else it is optional. ex: 23456 (= R$ 234.56)
@@ -24,15 +24,17 @@ module StarkBank
   # - tags [list of strings, default nil]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when payment is created. ex: "5656565656565656"
-  # - status [string, default nil]: current payment status. ex: "success" or "failed"
-  # - type [string, default nil]: brcode type. ex: "static" or "dynamic"
+  # - id [string, default nil]: unique id returned when payment is created. ex: '5656565656565656'
+  # - name [string, nil]: receiver name. ex: 'Jon Snow'
+  # - status [string, default nil]: current payment status. ex: 'success' or 'failed'
+  # - type [string, default nil]: brcode type. ex: 'static' or 'dynamic'
+  # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this payment. ex: ['19827356981273']
   # - fee [integer, default nil]: fee charged when the brcode payment is created. ex: 200 (= R$ 2.00)
   # - updated [datetime.datetime, default nil]: latest update datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   # - created [datetime.datetime, default nil]: creation datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   class BrcodePayment < StarkBank::Utils::Resource
-    attr_reader :brcode, :tax_id, :description, :amount, :scheduled, :tags, :id, :status, :type, :fee, :updated, :created
-    def initialize(brcode:, tax_id:, description:, amount: nil, scheduled: nil, tags: nil, id: nil, status: nil, type: nil, fee: nil, updated: nil, created: nil)
+    attr_reader :brcode, :tax_id, :description, :amount, :scheduled, :tags, :id, :name, :status, :type, :transaction_ids, :fee, :updated, :created
+    def initialize(brcode:, tax_id:, description:, amount: nil, scheduled: nil, tags: nil, id: nil, name: nil, status: nil, type: nil, transaction_ids: nil, fee: nil, updated: nil, created: nil)
       super(id)
       @brcode = brcode
       @tax_id = tax_id
@@ -40,8 +42,10 @@ module StarkBank
       @amount = amount
       @scheduled = StarkBank::Utils::Checks.check_date_or_datetime(scheduled)
       @tags = tags
+      @name = name
       @status = status
       @type = type
+      @transaction_ids = transaction_ids
       @fee = fee
       @updated = StarkBank::Utils::Checks.check_datetime(updated)
       @created = StarkBank::Utils::Checks.check_datetime(created)
@@ -154,8 +158,10 @@ module StarkBank
             scheduled: json['scheduled'],
             tags: json['tags'],
             id: json['id'],
+            name: json['name'],
             status: json['status'],
             type: json['type'],
+            transaction_ids: json['transaction_ids'],
             fee: json['fee'],
             updated: json['updated'],
             created: json['created']

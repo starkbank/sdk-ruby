@@ -38,15 +38,17 @@ module StarkBank
   # - fee [integer, default nil]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)
   # - line [string, default nil]: generated Boleto line for payment. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062'
   # - bar_code [string, default nil]: generated Boleto bar-code for payment. ex: '34195819600000000621090063571277307144464000'
+  # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this boleto. ex: ['19827356981273']
   # - status [string, default nil]: current Boleto status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - our_number [string, default nil]: Reference number registered at the settlement bank. ex:'10131474'
   class Boleto < StarkBank::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :created
+    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :transaction_ids, :created, :our_number
     def initialize(
       amount:, name:, tax_id:, street_line_1:, street_line_2:, district:, city:, state_code:, zip_code:,
       due: nil, fine: nil, interest: nil, overdue_limit: nil, receiver_name: nil, receiver_tax_id: nil,
       tags: nil, descriptions: nil, discounts: nil, id: nil, fee: nil, line: nil, bar_code: nil,
-      status: nil, created: nil
+      status: nil, transaction_ids: nil, created: nil, our_number: nil
     )
       super(id)
       @amount = amount
@@ -71,7 +73,9 @@ module StarkBank
       @line = line
       @bar_code = bar_code
       @status = status
+      @transaction_ids = transaction_ids
       @created = StarkBank::Utils::Checks.check_datetime(created)
+      @our_number = our_number
     end
 
     # # Create Boletos
@@ -114,8 +118,8 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - layout [string]: Layout specification. Available options are "default" and "booklet"
-    # - hidden_fields [list of strings, default nil]: List of string fields to be hidden in Boleto pdf. ex: ["customerAddress"]
+    # - layout [string]: Layout specification. Available options are 'default' and 'booklet'
+    # - hidden_fields [list of strings, default nil]: List of string fields to be hidden in Boleto pdf. ex: ['customerAddress']
     # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
@@ -198,7 +202,9 @@ module StarkBank
             line: json['line'],
             bar_code: json['bar_code'],
             status: json['status'],
-            created: json['created']
+            transaction_ids: json['transaction_ids'],
+            created: json['created'],
+            our_number: json['our_number']
           )
         }
       }
