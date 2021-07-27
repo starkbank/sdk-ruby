@@ -4,7 +4,15 @@ require('json')
 
 module StarkBank
   module Error
-    class Error < StandardError
+    class StarkBankError < StandardError
+      attr_reader :message
+      def initialize(message)
+        @message = message
+        super(message)
+      end
+    end
+
+    class Error < StarkBankError
       attr_reader :code, :message
       def initialize(code, message)
         @code = code
@@ -13,7 +21,7 @@ module StarkBank
       end
     end
 
-    class InputErrors < StandardError
+    class InputErrors < StarkBankError
       attr_reader :errors
       def initialize(content)
         errors = []
@@ -26,19 +34,19 @@ module StarkBank
       end
     end
 
-    class InternalServerError < StandardError
+    class InternalServerError < StarkBankError
       def initialize(message = 'Houston, we have a problem.')
         super(message)
       end
     end
 
-    class UnknownError < StandardError
+    class UnknownError < StarkBankError
       def initialize(message)
         super("Unknown exception encountered: #{message}")
       end
     end
 
-    class InvalidSignatureError < StandardError
+    class InvalidSignatureError < StarkBankError
     end
   end
 end

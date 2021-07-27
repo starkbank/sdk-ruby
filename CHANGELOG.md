@@ -17,6 +17,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - "payment" account type for Pix related resources
 - missing parameters to Boleto, BrcodePayment, Deposit, DictKey, Event, Invoice, Transfer and Workspace resources
 - Workspace.update() to allow parameter updates
+- Base exception class
 
 ### Fixed
 - special characters in brcodePreview query
