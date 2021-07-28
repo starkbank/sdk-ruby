@@ -115,7 +115,7 @@ module StarkBank
     # ## Return:
     # - Invoice pdf file
     def self.pdf(id, user: nil)
-      StarkBank::Utils::Rest.get_pdf(id: id, user: user, **resource)
+      StarkBank::Utils::Rest.get_content(id: id, user: user, sub_resource_name: 'pdf', **resource)
     end
 
     # # Retrieve a specific Invoice QR Code file
@@ -131,7 +131,7 @@ module StarkBank
     # ## Return:
     # - Invoice QR Code png blob
     def self.qrcode(id, user: nil)
-      StarkBank::Utils::Rest.get_qrcode(id: id, user: user, **resource)
+      StarkBank::Utils::Rest.get_content(id: id, user: user, sub_resource_name: 'qrcode', **resource)
     end
 
     # # Retrieve Invoices

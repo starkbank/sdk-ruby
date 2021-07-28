@@ -117,7 +117,7 @@ module StarkBank
     # ## Return:
     # - Transfer pdf file
     def self.pdf(id, user: nil)
-      StarkBank::Utils::Rest.get_pdf(id: id, user: user, **resource)
+      StarkBank::Utils::Rest.get_content(id: id, user: user, sub_resource_name: 'pdf', **resource)
     end
 
     # # Retrieve Transfers

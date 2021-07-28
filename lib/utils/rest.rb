@@ -46,19 +46,10 @@ module StarkBank
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
       end
 
-      def self.get_pdf(resource_name:, resource_maker:, id:, user: nil, **query)
+      def self.get_content(resource_name:, resource_maker:, sub_resource_name:, id:, user: nil, **query)
         StarkBank::Utils::Request.fetch(
           method: 'GET',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/pdf",
-          query: StarkBank::Utils::API.cast_json_to_api_format(query),
-          user: user
-        ).content
-      end
-
-      def self.get_qrcode(resource_name:, resource_maker:, id:, user: nil, **query)
-        StarkBank::Utils::Request.fetch(
-          method: 'GET',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/qrcode",
+          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/#{sub_resource_name}",
           query: StarkBank::Utils::API.cast_json_to_api_format(query),
           user: user
         ).content
