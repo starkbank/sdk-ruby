@@ -1401,6 +1401,32 @@ event = StarkBank::Event.update('5892075044208640', is_delivered: true)
 puts event
 ```
 
+### Query failed webhook event delivery attempts information
+
+You can also get information on failed webhook event delivery attempts.
+
+```ruby
+require('starkbank')
+
+attempts = StarkBank::Event::Attempt.query(after: "2020-03-20").to_a;
+
+attempts.each do |attempt|
+  puts attempt
+end
+```
+
+### Get a failed webhook event delivery attempt information
+
+To retrieve information on a single attempt, use the following function:
+
+```ruby
+require('starkbank')
+
+attempt = StarkBank::Event::Attempt.get("1616161616161616")
+
+puts attempt
+```
+
 ### Get a DICT key
 
 You can get the Pix key's parameters by its id.

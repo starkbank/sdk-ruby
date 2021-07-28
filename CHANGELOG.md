@@ -19,6 +19,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Workspace.update() to allow parameter updates
 - Base exception class
 - Invoice::Payment sub-resource to allow retrieval of invoice payment information
+- Event::Attempt sub-resource to allow retrieval of information on failed webhook event delivery attempts
 
 ### Fixed
 - special characters in brcodePreview query

@@ -27,6 +27,7 @@ require_relative('utility_payment/utility_payment')
 require_relative('utility_payment/log')
 require_relative('webhook/webhook')
 require_relative('event/event')
+require_relative('event/attempt')
 require_relative('payment_request/payment_request')
 
 # SDK to facilitate Ruby integrations with Stark Bank
