@@ -12,6 +12,20 @@ describe(StarkBank::Event, '#event#') do
     end
   end
 
+  it 'query and attempt' do
+    events = StarkBank::Event.query(limit: 2, is_delivered: false).to_a
+    expect(events.length).must_equal(2)
+    events.each do |event|
+      expect(event.id).wont_be_nil
+      expect(event.log).wont_be_nil
+      attempts = StarkBank::Event::Attempt.query(event_ids: [event.id], limit: 1).to_a
+      attempts.each do |attempt|
+        attempt_get = StarkBank::Event::Attempt.get(attempt.id)
+        expect(attempt_get.id).must_equal(attempt.id)
+      end
+    end
+  end
+
   it 'query, get, update and delete' do
     event = StarkBank::Event.query(limit: 100, is_delivered: false).to_a.sample
     expect(event.is_delivered).must_equal(false)

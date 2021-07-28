@@ -57,6 +57,7 @@ module StarkBank
       def self.endpoint(resource_name)
         kebab = StarkBank::Utils::Case.camel_to_kebab(resource_name)
         kebab.sub!('-log', '/log')
+        kebab.sub!('-attempt', '/attempt')
         kebab
       end
 
