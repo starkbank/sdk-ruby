@@ -74,6 +74,22 @@ module StarkBank
         )
       end
 
+      # # Retrieve a specific Invoice::Log pdf file
+      #
+      # Receive a single Invoice::Log pdf file generated in the Stark Bank API by passing its id.
+      #
+      # ## Parameters (required):
+      # - id [string]: object unique id. ex: '5656565656565656'
+      #
+      # ## Parameters (optional):
+      # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+      #
+      # ## Return:
+      # - Invoice::Log pdf file
+      def self.pdf(id, user: nil)
+        StarkBank::Utils::Rest.get_content(id: id, user: user, sub_resource_name: 'pdf', **resource)
+      end
+
       def self.resource
         invoice_maker = StarkBank::Invoice.resource[:resource_maker]
         {

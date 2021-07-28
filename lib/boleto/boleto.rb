@@ -125,7 +125,7 @@ module StarkBank
     # ## Return:
     # - Boleto pdf file
     def self.pdf(id, layout: nil, hidden_fields: nil, user: nil)
-      StarkBank::Utils::Rest.get_pdf(id: id, layout: layout, hidden_fields: hidden_fields, user: user, **resource)
+      StarkBank::Utils::Rest.get_content(id: id, layout: layout, hidden_fields: hidden_fields, sub_resource_name: 'pdf', user: user, **resource)
     end
 
     # # Retrieve Boletos

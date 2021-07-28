@@ -18,4 +18,10 @@ describe(StarkBank::Invoice::Log, '#invoice/log#') do
     get_log = StarkBank::Invoice::Log.get(log.id)
     expect(log.id).must_equal(get_log.id)
   end
+
+  it 'query and pdf' do
+    log = StarkBank::Invoice::Log.query(limit: 1, types: ['reversed']).to_a[0]
+    pdf = StarkBank::Invoice::Log.pdf(log.id)
+    File.binwrite('invoice_log.pdf', pdf)
+  end
 end
