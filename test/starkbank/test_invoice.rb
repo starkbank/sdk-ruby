@@ -29,4 +29,10 @@ describe(StarkBank::Invoice, '#invoice#') do
     updated_invoice = StarkBank::Invoice.update(invoice.id, amount: 100, expiration: 3600, due: Time.now + 86400 * 10)
     expect(invoice.id).must_equal(updated_invoice.id)
   end
+
+  it 'payment' do
+    invoices = StarkBank::Invoice.query(status: 'paid', limit: 1).to_a
+    payment_info = StarkBank::Invoice.payment(invoices[0].id)
+    expect(payment_info.name).wont_be_nil
+  end
 end
