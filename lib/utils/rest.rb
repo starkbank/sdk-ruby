@@ -115,6 +115,17 @@ module StarkBank
         entity = json[StarkBank::Utils::API.last_name(resource_name)]
         StarkBank::Utils::API.from_api_json(resource_maker, entity)
       end
+
+      def self.get_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, id:, user: nil, **query)
+        json = StarkBank::Utils::Request.fetch(
+          method: 'GET',
+          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/#{StarkBank::Utils::API.endpoint(sub_resource_name)}",
+          user: user,
+          query: StarkBank::Utils::API.cast_json_to_api_format(query)
+        ).json
+        entity = json[StarkBank::Utils::API.last_name(sub_resource_name)]
+        StarkBank::Utils::API.from_api_json(sub_resource_maker, entity)
+      end
     end
   end
 end

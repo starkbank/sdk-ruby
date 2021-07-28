@@ -579,6 +579,18 @@ log = StarkBank::Invoice::Log.get('5155165527080960')
 puts log
 ```
 
+### Get an invoice payment information
+
+Once an invoice has been paid, you can get the payment information using the InvoicePayment sub-resource:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::Invoice.payment("5155165527080960");
+
+puts payment
+```
+
 ### Query deposits
 
 You can get a list of created deposits given some filters.

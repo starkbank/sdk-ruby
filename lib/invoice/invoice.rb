@@ -145,7 +145,7 @@ module StarkBank
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid' or 'registered'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Invoice objects with updated attributes
@@ -181,6 +181,22 @@ module StarkBank
     # - updated Invoice object
     def self.update(id, status: nil, amount: nil, due: nil, expiration: nil, user: nil)
       StarkBank::Utils::Rest.patch_id(id: id, status: status, amount: amount, due: due, expiration: expiration, user: user, **resource)
+    end
+
+    # # Retrieve a specific Invoice payment information
+    #
+    # Receive the Invoice::Payment sub-resource associated with a paid Invoice.
+    #
+    # ## Parameters (required):
+    # - id [string]: Invoice unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - Invoice::Payment sub-resource
+    def self.payment(id, user: nil)
+      StarkBank::Utils::Rest.get_sub_resource(id: id, user: user, **resource, **StarkBank::Invoice::Payment.resource)
     end
 
     def self.resource
