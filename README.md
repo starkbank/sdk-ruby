@@ -579,6 +579,22 @@ log = StarkBank::Invoice::Log.get('5155165527080960')
 puts log
 ```
 
+### Get a reversed invoice log PDF
+
+Whenever an Invoice is successfully reversed, a reversed log will be created.
+To retrieve a specific reversal receipt, you can request the corresponding log PDF:
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::Invoice::Log.pdf("5155165527080960")
+File.binwrite('invoice_log.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
 ### Get an invoice payment information
 
 Once an invoice has been paid, you can get the payment information using the InvoicePayment sub-resource:
