@@ -15,6 +15,7 @@ require_relative('../brcode_payment/log')
 require_relative('../transfer/log')
 require_relative('../boleto_payment/log')
 require_relative('../utility_payment/log')
+require_relative('../tax_payment/log')
 
 module StarkBank
   # # Webhook Event object
@@ -47,6 +48,7 @@ module StarkBank
         'boleto': StarkBank::Boleto::Log.resource,
         'boleto-payment': StarkBank::BoletoPayment::Log.resource,
         'utility-payment': StarkBank::UtilityPayment::Log.resource,
+        'tax-payment': StarkBank::TaxPayment::Log.resource,
         'boleto-holmes': StarkBank::BoletoHolmes::Log.resource
       }[subscription.to_sym]
 

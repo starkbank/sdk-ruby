@@ -643,7 +643,7 @@ To retrieve a specific reversal receipt, you can request the corresponding log P
 ```ruby
 require('starkbank')
 
-pdf = StarkBank::Invoice::Log.pdf("5155165527080960")
+pdf = StarkBank::Invoice::Log.pdf('5155165527080960')
 File.binwrite('invoice_log.pdf', pdf)
 ```
 
@@ -658,7 +658,7 @@ Once an invoice has been paid, you can get the payment information using the Inv
 ```ruby
 require('starkbank')
 
-payment = StarkBank::Invoice.payment("5155165527080960");
+payment = StarkBank::Invoice.payment('5155165527080960');
 
 puts payment
 ```
@@ -921,7 +921,7 @@ You can confirm the information on the BR Code payment before creating it with t
 require('starkbank')
 
 previews = StarkBank::BrcodePreview.query(
-  brcodes: ["00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"]
+  brcodes: ['00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A']
 )
 
 previews.each do |preview|
@@ -939,7 +939,7 @@ require('starkbank')
 payments = StarkBank::BrcodePayment.create(
   [
     StarkBank::BrcodePayment.new(
-      line: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
+      line: '00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A',
       tax_id: '012.345.678-90',
       scheduled: Time.now,
       description: 'take my money',
@@ -985,7 +985,7 @@ and strange characters.
 
 ### Cancel a BR Code payment
 
-You can cancel a BR Code payment by changing its status to "canceled".
+You can cancel a BR Code payment by changing its status to 'canceled'.
 Note that this is not possible if it has been processed already.
 
 ```ruby
@@ -1279,6 +1279,121 @@ log = StarkBank::UtilityPayment::Log.get('4922041111150592')
 puts log
 ```
 
+### Create tax payments
+
+It is also simple to pay taxes (such as ISS and DAS) using this SDK.
+
+```ruby
+require('starkbank')
+
+payments = StarkBank.TaxPayment.create(
+  [
+    StarkBank::TaxPayment.new(
+      bar_code: '85660000001549403280074119002551100010601813',
+      description: 'fix the road',
+      tags: ['take', 'my', 'money'],
+      scheduled: '2020-08-13'
+    ),
+    StarkBank::TaxPayment.new(
+      line: '85800000003 0 28960328203 1 56072020190 5 22109674804 0',
+      description: 'build the hospital, hopefully',
+      tags: ['expensive'],
+      scheduled: '2020-08-13'
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using TaxPayment objects, you can also pass each payment element in dictionary format
+
+### Query tax payments
+
+To search for tax payments using filters, run:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::TaxPayment.query(limit: 5).to_a
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+### Get tax payment
+
+You can get a specific tax payment by its id:
+
+```ruby
+require('starkbank')
+
+tax_payment = StarkBank::TaxPayment.get('5155165527080960')
+
+puts tax_payment
+```
+
+### Get tax payment PDF
+
+After its creation, a tax payment PDF may also be retrieved by its id.
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::TaxPayment.pdf('5155165527080960')
+File.binwrite('tax_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+### Delete tax payment
+
+You can also cancel a tax payment by its id.
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+tax_payment = StarkBank::TaxPayment.delete('5155165527080960')
+
+puts tax_payment
+```
+
+### Query tax payment logs
+
+You can search for payment logs by specifying filters. Use this to understand each payment life cycle.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::TaxPayment::Log.query(limit: 5).to_a
+
+logs.each do |log|
+  puts log
+end
+```
+
+### Get tax payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```ruby
+require('starkbank')
+
+log = StarkBank::TaxPayment::Log.get('1902837198237992')
+
+puts log
+```
+
+**Note**: Some taxes can't be payed with bar codes. Since they have specific parameters, each one of them has its own
+resource and routes, which are all analogous to the TaxPayment resource. The ones we currently support are:
+- DarfPayment, for DARFs
+
 ### Create payment requests to be approved by authorized people in a cost center 
 
 You can also request payments that must pass through a specific cost center approval flow to be executed.
@@ -1347,7 +1462,7 @@ require('starkbank')
 
 webhook = StarkBank::Webhook.create(
   url: 'https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec',
-  subscriptions: %w[transfer boleto boleto-payment utility-payment]
+  subscriptions: %w[transfer invoice deposit brcode-payment boleto boleto-payment utility-payment tax-payment]
 )
 
 puts webhook
@@ -1480,7 +1595,7 @@ You can also get information on failed webhook event delivery attempts.
 ```ruby
 require('starkbank')
 
-attempts = StarkBank::Event::Attempt.query(after: "2020-03-20").to_a;
+attempts = StarkBank::Event::Attempt.query(after: '2020-03-20').to_a;
 
 attempts.each do |attempt|
   puts attempt
@@ -1494,7 +1609,7 @@ To retrieve information on a single attempt, use the following function:
 ```ruby
 require('starkbank')
 
-attempt = StarkBank::Event::Attempt.get("1616161616161616")
+attempt = StarkBank::Event::Attempt.get('1616161616161616')
 
 puts attempt
 ```
@@ -1584,8 +1699,8 @@ require('starkbank')
 
 updatedWorkspace = StarkBank::Workspace.update(
   workspace.ID, 
-  username: "new-username-test", 
-  name: "Updated workspace test", 
+  username: 'new-username-test', 
+  name: 'Updated workspace test', 
   allowed_tax_ids: ['20.018.183/0001-80']
 )
 
