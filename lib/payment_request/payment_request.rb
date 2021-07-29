@@ -141,15 +141,17 @@ module StarkBank
       return [payment, 'brcode-payment'] if payment.is_a?(StarkBank::BrcodePayment)
       return [payment, 'boleto-payment'] if payment.is_a?(StarkBank::BoletoPayment)
       return [payment, 'utility-payment'] if payment.is_a?(StarkBank::UtilityPayment)
+      return [payment, 'tax-payment'] if payment.is_a?(StarkBank::TaxPayment)
 
-      raise(Exception('Payment must either be a Transfer, a Transaction, a BrcodePayment, BoletoPayment, a UtilityPayment or a hash.')) unless payment.is_a?(Hash)
+      raise(Exception('Payment must either be a Transfer, a Transaction, a BrcodePayment, BoletoPayment, a UtilityPayment, a TaxPayment or a hash.')) unless payment.is_a?(Hash)
 
       resource = {
         'transfer': StarkBank::Transfer.resource,
         'transaction': StarkBank::Transaction.resource,
         'brcode-payment': StarkBank::BrcodePayment.resource,
         'boleto-payment': StarkBank::BoletoPayment.resource,
-        'utility-payment': StarkBank::UtilityPayment.resource
+        'utility-payment': StarkBank::UtilityPayment.resource,
+        'tax-payment': StarkBank::TaxPayment.resource
       }[type.to_sym]
 
       payment = StarkBank::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?

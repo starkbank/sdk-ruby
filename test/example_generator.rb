@@ -152,6 +152,15 @@ class ExampleGenerator
     )
   end
 
+  def self.tax_payment_example(schedule: true)
+    StarkBank::TaxPayment.new(
+      bar_code: '8566000' + rand(1e5).to_s.rjust(8, '0') + '00640074119002551100010601813',
+      scheduled: schedule ? Date.today + 2 : nil,
+      description: 'paying taxes',
+      tags: ['test1', 'test2', 'test3']
+    )
+  end
+
   def self.payment_request_example
     payment = create_payment
     due = nil
