@@ -472,6 +472,20 @@ log = StarkBank::Transfer::Log.get('5554732936462336')
 puts log
 ```
 
+### Query Bacen institutions
+
+You can query institutions registered by the Brazilian Central Bank for Pix and TED transactions.
+
+```ruby
+require('starkbank')
+
+institutions = StarkBank::Institution.query(search: 'stark').to_a
+
+institutions.each do |institution|
+  puts institution
+end
+```
+
 ### Create invoices
 
 You can create invoices to charge customers or to receive money from accounts
