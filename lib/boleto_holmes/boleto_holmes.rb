@@ -75,20 +75,55 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - after [Date , DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-    # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'solved'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - boleto_id [string, default nil]: filter for holmes that investigate a specific boleto by its ID. ex: '5656565656565656'
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of BoletoHolmes objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, boleto_id: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(
+      StarkBank::Utils::Rest.get_stream(
+        limit: limit,
+        after: after,
+        before: before,
+        status: status,
+        tags: tags,
+        ids: ids,
+        boleto_id: boleto_id,
+        user: user,
+        **resource
+      )
+    end
+
+    # # Retrieve paged BoletoHolmes
+    #
+    # Receive a list of up to 100 BoletoHolmes objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - status [string, default nil]: filter for status of retrieved objects. ex: 'solved'
+    # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - boleto_id [string, default nil]: filter for holmes that investigate a specific boleto by its ID. ex: '5656565656565656'
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of BoletoHolmes objects with updated attributes and cursor to retrieve the next page of BoletoHolmes objects
+    def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, boleto_id: nil, user: nil)
+      after = StarkBank::Utils::Checks.check_date(after)
+      before = StarkBank::Utils::Checks.check_date(before)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
         limit: limit,
         after: after,
         before: before,

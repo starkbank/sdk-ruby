@@ -13,6 +13,23 @@ describe(StarkBank::Invoice, '#invoice#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    invoices = nil
+    (0..1).step(1) do
+      invoices, cursor = StarkBank::Invoice.page(limit: 5, cursor: cursor)
+      invoices.each do |invoice|
+        expect(ids).wont_include(invoice.id)
+        ids << invoice.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'create, get, get qrcode and cancel' do
     invoice = StarkBank::Invoice.create([ExampleGenerator.invoice_example])[0]
     get_invoice = StarkBank::Invoice.get(invoice.id)

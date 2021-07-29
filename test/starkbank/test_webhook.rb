@@ -11,6 +11,23 @@ describe(StarkBank::Webhook, '#webhook#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    webhooks = nil
+    (0..1).step(1) do
+      webhooks, cursor = StarkBank::Webhook.page(limit: 2, cursor: cursor)
+      webhooks.each do |webhook|
+        expect(ids).wont_include(webhook.id)
+        ids << webhook.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_be :<=, 4
+  end
+
   it 'create, get and delete' do
     webhook = ExampleGenerator.webhook_example
     webhook = StarkBank::Webhook.create(url: webhook.url, subscriptions: webhook.subscriptions)

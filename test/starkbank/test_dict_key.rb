@@ -17,4 +17,21 @@ describe(StarkBank::DictKey, '#dict-key#') do
       expect(dict_key.status).must_equal('registered')
     end
   end
+
+  it 'page' do
+    ids = []
+    cursor = nil
+    dict_keys = nil
+    (0..1).step(1) do
+      dict_keys, cursor = StarkBank::DictKey.page(limit: 2, cursor: cursor)
+      dict_keys.each do |dict_key|
+        expect(ids).wont_include(dict_key.id)
+        ids << dict_key.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_be :<=, 4
+  end
 end

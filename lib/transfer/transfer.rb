@@ -126,21 +126,57 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - after [Date, DateTime, Time or string, default nil] date filter for objects created or updated only after specified date. ex: Date.new(2020, 3, 10)
-    # - before [Date, DateTime, Time or string, default nil] date filter for objects created or updated only before specified date. ex: Date.new(2020, 3, 10)
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created or updated only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created or updated only before specified date. ex: Date.new(2020, 3, 10)
     # - transactionIds [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - status [string, default nil]: filter for status of retrieved objects. ex: 'success' or 'failed'
     # - tax_id [string, default nil]: filter for transfers sent to the specified tax ID. ex: '012.345.678-90'
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Transfer objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, ids: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(
+      StarkBank::Utils::Rest.get_stream(
+        limit: limit,
+        after: after,
+        before: before,
+        transaction_ids: transaction_ids,
+        status: status,
+        tax_id: tax_id,
+        sort: sort,
+        tags: tags,
+        ids: ids,
+        user: user,
+        **resource
+      )
+    end
+
+    # # Retrieve paged Transfers
+    #
+    # Receive a list of up to 100 Transfer objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+    # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of Transfer objects with updated attributes and cursor to retrieve the next page of Transfer objects
+    def self.page(cursor: nil, limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, ids: nil, user: nil)
+      after = StarkBank::Utils::Checks.check_date(after)
+      before = StarkBank::Utils::Checks.check_date(before)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
         limit: limit,
         after: after,
         before: before,

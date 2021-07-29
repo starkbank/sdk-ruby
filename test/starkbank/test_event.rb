@@ -12,6 +12,23 @@ describe(StarkBank::Event, '#event#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    events = nil
+    (0..1).step(1) do
+      events, cursor = StarkBank::Event.page(limit: 5, cursor: cursor)
+      events.each do |event|
+        expect(ids).wont_include(event.id)
+        ids << event.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'query and attempt' do
     events = StarkBank::Event.query(limit: 2, is_delivered: false).to_a
     expect(events.length).must_equal(2)

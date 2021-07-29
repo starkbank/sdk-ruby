@@ -13,6 +13,23 @@ describe(StarkBank::BrcodePayment::Log, '#brcode-payment/log#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    logs = nil
+    (0..1).step(1) do
+      logs, cursor = StarkBank::BrcodePayment::Log.page(limit: 5, cursor: cursor)
+      logs.each do |log|
+        expect(ids).wont_include(log.id)
+        ids << log.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'query and get' do
     log = StarkBank::BrcodePayment::Log.query(limit: 1).to_a[0]
     get_log = StarkBank::BrcodePayment::Log.get(log.id)

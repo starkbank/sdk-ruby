@@ -13,6 +13,23 @@ describe(StarkBank::Deposit, '#deposit#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    deposits = nil
+    (0..1).step(1) do
+      deposits, cursor = StarkBank::Deposit.page(limit: 5, cursor: cursor)
+      deposits.each do |deposit|
+        expect(ids).wont_include(deposit.id)
+        ids << deposit.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'query and get' do
     deposits = StarkBank::Deposit.query(limit: 1).to_a
     get_deposit = StarkBank::Deposit.get(deposits[0].id)

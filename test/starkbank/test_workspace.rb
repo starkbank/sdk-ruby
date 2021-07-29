@@ -28,4 +28,21 @@ describe(StarkBank::Workspace, '#workspace') do
       expect(workspace.id).must_equal(workspace_get.id)
     end
   end
+
+  it 'page' do
+    ids = []
+    cursor = nil
+    workspaces = nil
+    (0..1).step(1) do
+      workspaces, cursor = StarkBank::Workspace.page(limit: 2, cursor: cursor, user: ExampleGenerator.organization_example)
+      workspaces.each do |workspace|
+        expect(ids).wont_include(workspace.id)
+        ids << workspace.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_be :==, 4
+  end
 end

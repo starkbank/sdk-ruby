@@ -54,7 +54,7 @@ module StarkBank
     # - id [string]: object unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - Workspace object with updated attributes
@@ -72,12 +72,37 @@ module StarkBank
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
     # - username [string]: query by the simplified name that defines the workspace URL. This name is always unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Workspace objects with updated attributes
     def self.query(limit: nil, username: nil, ids: nil, user: nil)
-      StarkBank::Utils::Rest.get_list(limit: limit, username: username, ids: ids, user: user, **resource)
+      StarkBank::Utils::Rest.get_stream(limit: limit, username: username, ids: ids, user: user, **resource)
+    end
+
+    # # Retrieve paged Workspaces
+    #
+    # Receive a list of up to 100 Workspace objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - username [string]: query by the simplified name that defines the workspace URL. This name is always unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of Workspace objects with updated attributes and cursor to retrieve the next page of Workspace objects
+    def self.page(cursor: nil, limit: nil, username: nil, ids: nil, user: nil)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
+        limit: limit, 
+        username: username, 
+        ids: ids, 
+        user: user, 
+        **resource
+      )
     end
 
     # # Update an Workspace entity
@@ -91,7 +116,7 @@ module StarkBank
     # - username [string, default nil]: query by the simplified name that defines the workspace URL. This name is always unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'
     # - name [string, default nil]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: 'Stark Bank Workspace'
     # - allowed_tax_ids [list of strings, default nil]: list of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. ex: ['012.345.678-90', '20.018.183/0001-80']
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - updated Workspace object

@@ -33,6 +33,23 @@ describe(StarkBank::Transaction, '#transaction#') do
     expect(transactions_ids_expected).must_equal(transactions_ids_result)
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    transactions = nil
+    (0..1).step(1) do
+      transactions, cursor = StarkBank::Transaction.page(limit: 5, cursor: cursor)
+      transactions.each do |transaction|
+        expect(ids).wont_include(transaction.id)
+        ids << transaction.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'create and get' do
     transaction = ExampleGenerator.transaction_example
     create_transaction = StarkBank::Transaction.create([transaction])[0]
