@@ -53,7 +53,7 @@ module StarkBank
     #
     # ## Parameters
     # - payment_requests [list of PaymentRequest objects]: list of PaymentRequest objects to be created in the API
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return
     # - list of PaymentRequest objects with updated attributes
@@ -70,21 +70,57 @@ module StarkBank
     # - center_id [string]: target cost center ID. ex: '5656565656565656'
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - after [Date , DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-    # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - status [string, default '-created']: sort order considered in response. Valid options are '-created' or '-due'.
     # - type [string, default nil]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
     # - sort [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of PaymentRequest objects with updated attributes
     def self.query(center_id:, limit: nil, after: nil, before: nil, status: nil, type: nil, sort: nil, tags: nil, ids: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(
+      StarkBank::Utils::Rest.get_stream(
+        center_id: center_id,
+        limit: limit,
+        after: after,
+        before: before,
+        status: status,
+        type: type,
+        sort: sort,
+        tags: tags,
+        ids: ids,
+        user: user,
+        **resource
+      )
+    end
+
+    # # Retrieve paged PaymentRequests
+    #
+    # Receive a list of up to 100 PaymentRequest objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - status [string, default nil]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+    # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
+    # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of PaymentRequest objects with updated attributes and cursor to retrieve the next page of PaymentRequest objects
+    def self.page(cursor: nil, center_id:, limit: nil, after: nil, before: nil, status: nil, type: nil, sort: nil, tags: nil, ids: nil, user: nil)
+      after = StarkBank::Utils::Checks.check_date(after)
+      before = StarkBank::Utils::Checks.check_date(before)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
         center_id: center_id,
         limit: limit,
         after: after,

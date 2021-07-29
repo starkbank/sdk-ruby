@@ -79,19 +79,48 @@ module StarkBank
     # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
     # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
     # - is_delivered [bool, default nil]: bool to filter successfully delivered events. ex: True or False
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Event objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, is_delivered: nil, user: nil)
       after = StarkBank::Utils::Checks.check_date(after)
       before = StarkBank::Utils::Checks.check_date(before)
-      StarkBank::Utils::Rest.get_list(
+      StarkBank::Utils::Rest.get_stream(
         user: user,
         limit: limit,
         after: after,
         before: before,
         is_delivered: is_delivered,
+        **resource
+      )
+    end
+
+    # # Retrieve paged Events
+    #
+    # Receive a list of up to 100 Event objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+    # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+    # - is_delivered [bool, default nil]: bool to filter successfully delivered events. ex: True or False
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of Event objects with updated attributes and cursor to retrieve the next page of Event objects
+    def self.page(cursor: nil, limit: nil, after: nil, before: nil, is_delivered: nil, user: nil)
+      after = StarkBank::Utils::Checks.check_date(after)
+      before = StarkBank::Utils::Checks.check_date(before)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
+        limit: limit,
+        after: after,
+        before: before,
+        is_delivered: is_delivered,
+        user: user,
         **resource
       )
     end

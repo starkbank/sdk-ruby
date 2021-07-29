@@ -13,6 +13,23 @@ describe(StarkBank::Transfer, '#transfer#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    transfers = nil
+    (0..1).step(1) do
+      transfers, cursor = StarkBank::Transfer.page(limit: 5, cursor: cursor)
+      transfers.each do |transfer|
+        expect(ids).wont_include(transfer.id)
+        ids << transfer.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'query' do
     transfers = StarkBank::Transfer.query(limit: 10).to_a
     expect(transfers.length).must_equal(10)

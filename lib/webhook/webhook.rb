@@ -64,12 +64,33 @@ module StarkBank
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-    # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - generator of Webhook objects with updated attributes
     def self.query(limit: nil, user: nil)
-      StarkBank::Utils::Rest.get_list(user: user, limit: limit, **resource)
+      StarkBank::Utils::Rest.get_stream(user: user, limit: limit, **resource)
+    end
+
+    # # Retrieve paged Webhooks
+    #
+    # Receive a list of up to 100 Webhook objects previously created in the Stark Bank API and the cursor to the next page.
+    # Use this function instead of query if you want to manually page your requests.
+    #
+    # ## Parameters (optional):
+    # - cursor [string, default nil]: cursor returned on the previous page function call
+    # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+    #
+    # ## Return:
+    # - list of Webhook objects with updated attributes and cursor to retrieve the next page of Webhook objects
+    def self.page(cursor: nil, limit: nil, user: nil)
+      return StarkBank::Utils::Rest.get_page(
+        cursor: cursor,
+        limit: limit,
+        user: user,
+        **resource
+      )
     end
 
     # # Delete a Webhook entity

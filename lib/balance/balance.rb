@@ -36,7 +36,7 @@ module StarkBank
     # ## Return:
     # - Balance object with updated attributes
     def self.get(user: nil)
-      StarkBank::Utils::Rest.get_list(user: user, **resource).next
+      StarkBank::Utils::Rest.get_stream(user: user, **resource).next
     end
 
     class << self

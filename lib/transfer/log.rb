@@ -51,18 +51,49 @@ module StarkBank
       #
       # ## Parameters (optional):
       # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
-      # - after [Date, DateTime, Time or string, default nil] date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
-      # - before [Date, DateTime, Time or string, default nil] date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+      # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+      # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
       # - types [list of strings, default nil]: filter retrieved objects by types. ex: 'success' or 'failed'
       # - transfer_ids [list of strings, default nil]: list of Transfer ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-      # - user [Organization/Project object]: Organization or Project object. Not necessary if Starkbank.user was set before function call
+      # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
       #
       # ## Return:
       # - list of Log objects with updated attributes
       def self.query(limit: nil, after: nil, before: nil, types: nil, transfer_ids: nil, user: nil)
         after = StarkBank::Utils::Checks.check_date(after)
         before = StarkBank::Utils::Checks.check_date(before)
-        StarkBank::Utils::Rest.get_list(
+        StarkBank::Utils::Rest.get_stream(
+          limit: limit,
+          after: after,
+          before: before,
+          types: types,
+          transfer_ids: transfer_ids,
+          user: user,
+          **resource
+        )
+      end
+
+      # # Retrieve paged Logs
+      #
+      # Receive a list of up to 100 Log objects previously created in the Stark Bank API and the cursor to the next page.
+      # Use this function instead of query if you want to manually page your requests.
+      #
+      # ## Parameters (optional):
+      # - cursor [string, default nil]: cursor returned on the previous page function call
+      # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
+      # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
+      # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
+      # - types [list of strings, default nil]: filter retrieved objects by types. ex: 'success' or 'failed'
+      # - transfer_ids [list of strings, default nil]: list of Transfer ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+      # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
+      #
+      # ## Return:
+      # - list of Log objects with updated attributes and cursor to retrieve the next page of Log objects
+      def self.page(cursor: nil, limit: nil, after: nil, before: nil, types: nil, transfer_ids: nil, user: nil)
+        after = StarkBank::Utils::Checks.check_date(after)
+        before = StarkBank::Utils::Checks.check_date(before)
+        return StarkBank::Utils::Rest.get_page(
+          cursor: cursor,
           limit: limit,
           after: after,
           before: before,

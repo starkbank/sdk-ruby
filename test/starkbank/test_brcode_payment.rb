@@ -13,6 +13,23 @@ describe(StarkBank::BrcodePayment, '#brcode-payment#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    brcode_payment = nil
+    (0..1).step(1) do
+      brcode_payment, cursor = StarkBank::BrcodePayment.page(limit: 5, cursor: cursor)
+      brcode_payment.each do |payment|
+        expect(ids).wont_include(payment.id)
+        ids << payment.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'create and get' do
     invoices = StarkBank::Invoice.create([ExampleGenerator.invoice_example, ExampleGenerator.invoice_example])
     payment = StarkBank::BrcodePayment.create([ExampleGenerator.brcode_payment_example(invoice: invoices[0]), ExampleGenerator.brcode_payment_example(invoice: invoices[1])])[0]

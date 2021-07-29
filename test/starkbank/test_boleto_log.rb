@@ -18,4 +18,22 @@ describe(StarkBank::Boleto::Log, '#boleto/log#') do
     get_log = StarkBank::Boleto::Log.get(log.id)
     expect(log.id).must_equal(get_log.id)
   end
+
+  it 'page' do
+    ids = []
+    cursor = nil
+    logs = nil
+    (0..1).step(1) do
+      logs, cursor = StarkBank::Boleto::Log.page(limit: 5, cursor: cursor)
+      logs.each do |log|
+        expect(ids).wont_include(log.id)
+        ids << log.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
 end

@@ -13,6 +13,23 @@ describe(StarkBank::PaymentRequest, '#payment-request#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    payment_requests = nil
+    (0..1).step(1) do
+      payment_requests, cursor = StarkBank::PaymentRequest.page(center_id: ENV['SANDBOX_CENTER_ID'], limit: 5, cursor: cursor)
+      payment_requests.each do |payment_request|
+        expect(ids).wont_include(payment_request.id)
+        ids << payment_request.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'create' do
     requests = []
     10.times { requests.push(ExampleGenerator.payment_request_example) }

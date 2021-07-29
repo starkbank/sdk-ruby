@@ -13,6 +13,23 @@ describe(StarkBank::BoletoHolmes, '#holmes#') do
     end
   end
 
+  it 'page' do
+    ids = []
+    cursor = nil
+    boleto_holmes = nil
+    (0..1).step(1) do
+      boleto_holmes, cursor = StarkBank::BoletoHolmes.page(limit: 5, cursor: cursor)
+      boleto_holmes.each do |boleto|
+        expect(ids).wont_include(boleto.id)
+        ids << boleto.id
+      end
+      if cursor.nil?
+        break
+      end
+    end
+    expect(ids.length).must_equal(10)
+  end
+
   it 'create and get' do
     boleto = StarkBank::Boleto.create([ExampleGenerator.boleto_example])[0]
     holmes = StarkBank::BoletoHolmes.create([StarkBank::BoletoHolmes.new(boleto_id: boleto.id)])

@@ -6,7 +6,21 @@ require_relative('api')
 module StarkBank
   module Utils
     module Rest
-      def self.get_list(resource_name:, resource_maker:, user: nil, **query)
+      def self.get_page(resource_name:, resource_maker:, user: nil, **query)
+        json = StarkBank::Utils::Request.fetch(
+          method: 'GET',
+          path: StarkBank::Utils::API.endpoint(resource_name),
+          query: query,
+          user: user
+        ).json
+        entities = []
+        json[StarkBank::Utils::API.last_name_plural(resource_name)].each do |entity_json|
+          entities << StarkBank::Utils::API.from_api_json(resource_maker, entity_json)
+        end
+        return entities, json['cursor']
+      end
+
+      def self.get_stream(resource_name:, resource_maker:, user: nil, **query)
         limit = query[:limit]
         query[:limit] = limit.nil? ? limit : [limit, 100].min
 
