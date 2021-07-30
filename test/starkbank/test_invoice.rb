@@ -23,9 +23,7 @@ describe(StarkBank::Invoice, '#invoice#') do
         expect(ids).wont_include(invoice.id)
         ids << invoice.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

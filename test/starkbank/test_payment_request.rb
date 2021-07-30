@@ -23,9 +23,7 @@ describe(StarkBank::PaymentRequest, '#payment-request#') do
         expect(ids).wont_include(payment_request.id)
         ids << payment_request.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

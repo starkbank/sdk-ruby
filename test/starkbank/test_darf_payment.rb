@@ -4,9 +4,9 @@ require_relative('../test_helper.rb')
 require_relative('../example_generator.rb')
 require('date')
 
-describe(StarkBank::TaxPayment, '#tax-payment#') do
+describe(StarkBank::DarfPayment, '#darf-payment#') do
   it 'query' do
-    payments = StarkBank::TaxPayment.query(limit: 5).to_a
+    payments = StarkBank::DarfPayment.query(limit: 5).to_a
     expect(payments.length).must_equal(5)
     payments.each do |payment|
       expect(payment.id).wont_be_nil
@@ -16,10 +16,10 @@ describe(StarkBank::TaxPayment, '#tax-payment#') do
   it 'page' do
     ids = []
     cursor = nil
-    tax_payments = nil
+    darf_payments = nil
     (0..1).step(1) do
-      tax_payments, cursor = StarkBank::TaxPayment.page(limit: 5, cursor: cursor)
-      tax_payments.each do |payment|
+      darf_payments, cursor = StarkBank::DarfPayment.page(limit: 5, cursor: cursor)
+      darf_payments.each do |payment|
         expect(ids).wont_include(payment.id)
         ids << payment.id
       end
@@ -29,14 +29,14 @@ describe(StarkBank::TaxPayment, '#tax-payment#') do
   end
 
   it 'create, get, get_pdf and delete' do
-    payment = StarkBank::TaxPayment.create([ExampleGenerator.tax_payment_example])[0]
-    get_payment = StarkBank::TaxPayment.get(payment.id)
+    payment = StarkBank::DarfPayment.create([ExampleGenerator.darf_payment_example])[0]
+    get_payment = StarkBank::DarfPayment.get(payment.id)
     expect(payment.id).must_equal(get_payment.id)
 
-    pdf = StarkBank::TaxPayment.pdf(payment.id)
-    File.binwrite('tax_payment.pdf', pdf)
+    pdf = StarkBank::DarfPayment.pdf(payment.id)
+    File.binwrite('darf_payment.pdf', pdf)
 
-    delete_payment = StarkBank::TaxPayment.delete(payment.id)
+    delete_payment = StarkBank::DarfPayment.delete(payment.id)
     expect(payment.id).must_equal(delete_payment.id)
   end
 end

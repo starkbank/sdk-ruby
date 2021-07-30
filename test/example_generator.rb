@@ -152,6 +152,22 @@ class ExampleGenerator
     )
   end
 
+  def self.darf_payment_example(schedule: true)
+    StarkBank::DarfPayment.new(
+      revenue_code: "1240",
+      tax_id: "012.345.678-90",
+      competence: Date.today - 2,
+      reference_number: "2340978970",
+      nominal_amount: 1234,
+      fine_amount: 12,
+      interest_amount: 34,
+      due: Date.today + 10,
+      scheduled: schedule ? Date.today + 2 : nil,
+      tags: ["test1", "test2"],
+      description: "Darf Payment test"
+    )
+  end
+
   def self.tax_payment_example(schedule: true)
     StarkBank::TaxPayment.new(
       bar_code: '8566000' + rand(1e5).to_s.rjust(8, '0') + '00640074119002551100010601813',

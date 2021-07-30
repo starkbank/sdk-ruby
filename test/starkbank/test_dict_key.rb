@@ -28,9 +28,7 @@ describe(StarkBank::DictKey, '#dict-key#') do
         expect(ids).wont_include(dict_key.id)
         ids << dict_key.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_be :<=, 4
   end

@@ -23,9 +23,7 @@ describe(StarkBank::BoletoPayment, '#boleto-payment#') do
         expect(ids).wont_include(payment.id)
         ids << payment.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end
