@@ -43,9 +43,7 @@ describe(StarkBank::Transaction, '#transaction#') do
         expect(ids).wont_include(transaction.id)
         ids << transaction.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

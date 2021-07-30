@@ -21,9 +21,7 @@ describe(StarkBank::Webhook, '#webhook#') do
         expect(ids).wont_include(webhook.id)
         ids << webhook.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_be :<=, 4
   end

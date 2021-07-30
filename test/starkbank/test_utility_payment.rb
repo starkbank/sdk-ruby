@@ -24,9 +24,7 @@ describe(StarkBank::UtilityPayment, '#utility-payment#') do
         expect(ids).wont_include(utility_payment.id)
         ids << utility_payment.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

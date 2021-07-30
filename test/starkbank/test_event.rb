@@ -22,9 +22,7 @@ describe(StarkBank::Event, '#event#') do
         expect(ids).wont_include(event.id)
         ids << event.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

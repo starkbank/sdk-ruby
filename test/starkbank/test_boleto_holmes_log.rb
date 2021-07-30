@@ -23,9 +23,7 @@ describe(StarkBank::BoletoHolmes::Log, '#boleto/log#') do
         expect(ids).wont_include(log.id)
         ids << log.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_equal(10)
   end

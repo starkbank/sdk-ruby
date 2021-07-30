@@ -39,9 +39,7 @@ describe(StarkBank::Workspace, '#workspace') do
         expect(ids).wont_include(workspace.id)
         ids << workspace.id
       end
-      if cursor.nil?
-        break
-      end
+      break if cursor.nil?
     end
     expect(ids.length).must_be :==, 4
   end
