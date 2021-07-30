@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [2.5.0] - 2021-07-30
 ### Added
 - "payment" account type for Pix related resources
 - missing parameters to Boleto, BrcodePayment, Deposit, DictKey, Event, Invoice, Transfer and Workspace resources
@@ -25,10 +27,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Institution resource to allow query of institutions recognized by the Brazilian Central Bank for Pix and TED transactions
 - TaxPayment resource
 - DarfPayment resource
-
 ### Fixed
 - special characters in brcodePreview query
-
 
 ## [2.4.0] - 2021-01-21
 ### Added
