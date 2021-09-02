@@ -33,6 +33,11 @@ require_relative('webhook/webhook')
 require_relative('event/event')
 require_relative('event/attempt')
 require_relative('payment_request/payment_request')
+require_relative('payment_preview/payment_preview')
+require_relative('payment_preview/brcode_preview')
+require_relative('payment_preview/boleto_preview')
+require_relative('payment_preview/tax_preview')
+require_relative('payment_preview/utility_preview')
 require_relative('institution/institution')
 
 # SDK to facilitate Ruby integrations with Stark Bank

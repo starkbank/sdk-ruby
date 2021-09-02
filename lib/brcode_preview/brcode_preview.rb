@@ -35,7 +35,8 @@ module StarkBank
       @reconciliation_id = reconciliation_id
     end
 
-    # # Retrieve BrcodePreviews
+    # # BrcodePreview is DEPRECATED: Please use PaymentPreview instead.
+    # Retrieve BrcodePreviews
     #
     # Receive a generator of BrcodePreview objects previously created in the Stark Bank API
     #
@@ -46,6 +47,7 @@ module StarkBank
     # ## Return:
     # - generator of BrcodePreview objects with updated attributes
     def self.query(limit: nil, brcodes: nil, user: nil)
+      warn "[DEPRECATION] `BrcodePreview` is deprecated.  Please use `PaymentPreview` instead."
       StarkBank::Utils::Rest.get_stream(
         user: user,
         limit: nil,
