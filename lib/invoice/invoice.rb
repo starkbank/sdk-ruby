@@ -10,6 +10,8 @@ module StarkBank
   # When you initialize an Invoice, the entity will not be automatically
   # sent to the Stark Bank API. The 'create' function sends the objects
   # to the Stark Bank API and returns the list of created objects.
+  # To create scheduled Invoices, which will display the discount, interest, etc. on the final users banking interface,
+  # use dates instead of datetimes on the "due" and "discounts" fields.
   #
   # ## Parameters (required):
   # - amount [integer]: Invoice value in cents. Minimum = 0 (any value will be accepted). ex: 1234 (= R$ 12.34)
@@ -47,13 +49,12 @@ module StarkBank
     )
       super(id)
       @amount = amount
-      @due = StarkBank::Utils::Checks.check_datetime(due)
+      @due = StarkBank::Utils::Checks.check_date_or_datetime(due)
       @tax_id = tax_id
       @name = name
       @expiration = expiration
       @fine = fine
       @interest = interest
-      @discounts = discounts
       @tags = tags
       @pdf = pdf
       @link = link
@@ -68,6 +69,14 @@ module StarkBank
       @transaction_ids = transaction_ids
       @updated = StarkBank::Utils::Checks.check_datetime(updated)
       @created = StarkBank::Utils::Checks.check_datetime(created)
+      if !discounts.nil?
+        checked_discounts = []
+        discounts.each do |discount|
+          discount["due"] = StarkBank::Utils::Checks.check_datetime(discount["due"])
+          checked_discounts.push(discount)
+        end
+        @discounts = checked_discounts
+      end
     end
 
     # # Create Invoices
