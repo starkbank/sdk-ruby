@@ -17,23 +17,21 @@ module StarkBank
   # - payment [BrcodePreview, BoletoPreview, UtilityPreview or TaxPreview]: Information preview of the informed payment.
   class PaymentPreview < StarkBank::Utils::Resource
     attr_reader :id, :scheduled, :type, :payment
-    def initialize(
-      id: nil, scheduled: nil, type: nil, payment: nil
-    )
+    def initialize(id: nil, scheduled: nil, type: nil, payment: nil)
       super(id)
-      @scheduled = scheduled
+      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
       @type = type
       @payment = payment
+      return if type.nil?
 
-      sub_resource_by_type = {
-          'brcode-payment': StarkBank::PaymentPreview::BrcodePreview.resource,
-          'boleto-payment': StarkBank::PaymentPreview::BoletoPreview.resource,
-          'tax-payment': StarkBank::PaymentPreview::TaxPreview.resource,
-          'utility-payment': StarkBank::PaymentPreview::UtilityPreview.resource
-      }
-      if sub_resource_by_type.key?(@payment)
-          @payment = StarkBank::Utils::API.from_api_json(sub_resource_by_type[@type], payment)
-      end
+      resource = {
+        'brcode-payment': StarkBank::PaymentPreview::BrcodePreview.resource,
+        'boleto-payment': StarkBank::PaymentPreview::BoletoPreview.resource,
+        'tax-payment': StarkBank::PaymentPreview::TaxPreview.resource,
+        'utility-payment': StarkBank::PaymentPreview::UtilityPreview.resource
+      }[type.to_sym]
+
+      @payment = StarkBank::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?
     end
 
     # # Create PaymentPreviews

@@ -72,7 +72,7 @@ module StarkBank
       if !discounts.nil?
         checked_discounts = []
         discounts.each do |discount|
-          discount["due"] = StarkBank::Utils::Checks.check_datetime(discount["due"])
+          discount["due"] = StarkBank::Utils::Checks.check_date_or_datetime(discount["due"])
           checked_discounts.push(discount)
         end
         @discounts = checked_discounts
