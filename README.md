@@ -1601,9 +1601,9 @@ the event.
 ```ruby
 require('starkbank')
 
-response = listen()  # this is the method you made to get the events posted to your webhook
+request = listen()  # this is the method you made to get the events posted to your webhook
 
-event = StarkBank::Event.parse(content: response.content, signature: response.headers['Digital-Signature'])
+event = StarkBank::Event.parse(content: request.body.read, signature: request.headers['Digital-Signature'])
 
 if event.subscription == 'transfer'
   puts event.log.transfer
