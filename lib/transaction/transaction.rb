@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # Transaction object
@@ -31,7 +30,7 @@ module StarkBank
   # - fee [integer, default nil]: fee charged when transaction is created. ex: 200 (= R$ 2.00)
   # - balance [integer, default nil]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)
   # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class Transaction < StarkBank::Utils::Resource
+  class Transaction < StarkCore::Utils::Resource
     attr_reader :amount, :description, :external_id, :receiver_id, :sender_id, :tags, :id, :fee, :created, :source
     def initialize(amount:, description:, external_id:, receiver_id:, sender_id: nil, tags: nil, id: nil, fee: nil, source: nil, balance: nil, created: nil)
       super(id)
@@ -44,7 +43,7 @@ module StarkBank
       @fee = fee
       @source = source
       @balance = balance
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Create Transactions
@@ -95,8 +94,8 @@ module StarkBank
     # ## Return:
     # - generator of Transaction objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, tags: nil, external_ids: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -127,8 +126,8 @@ module StarkBank
     # ## Return:
     # - list of Transaction objects with updated attributes and cursor to retrieve the next page of Transaction objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, tags: nil, external_ids: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

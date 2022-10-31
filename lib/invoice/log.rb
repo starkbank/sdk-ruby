@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 require_relative('invoice')
 
 module StarkBank
@@ -20,14 +19,14 @@ module StarkBank
     # - errors [list of strings]: list of errors linked to this Invoice event
     # - type [string]: type of the Invoice event which triggered the log creation. ex: 'canceled' or 'paid'
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-    class Log < StarkBank::Utils::Resource
+    class Log < StarkCore::Utils::Resource
       attr_reader :id, :created, :type, :errors, :invoice
       def initialize(id:, created:, type:, errors:, invoice:)
         super(id)
         @type = type
         @errors = errors
         @invoice = invoice
-        @created = StarkBank::Utils::Checks.check_datetime(created)
+        @created = StarkCore::Utils::Checks.check_datetime(created)
       end
 
       # # Retrieve a specific Log
@@ -61,8 +60,8 @@ module StarkBank
       # ## Return:
       # - list of Log objects with updated attributes
       def self.query(limit: nil, after: nil, before: nil, types: nil, invoice_ids: nil, user: nil)
-        after = StarkBank::Utils::Checks.check_date(after)
-        before = StarkBank::Utils::Checks.check_date(before)
+        after = StarkCore::Utils::Checks.check_date(after)
+        before = StarkCore::Utils::Checks.check_date(before)
         StarkBank::Utils::Rest.get_stream(
           limit: limit,
           after: after,
@@ -91,8 +90,8 @@ module StarkBank
       # ## Return:
       # - list of Log objects with updated attributes and cursor to retrieve the next page of Log objects
       def self.page(cursor: nil, limit: nil, after: nil, before: nil, types: nil, invoice_ids: nil, user: nil)
-        after = StarkBank::Utils::Checks.check_date(after)
-        before = StarkBank::Utils::Checks.check_date(before)
+        after = StarkCore::Utils::Checks.check_date(after)
+        before = StarkCore::Utils::Checks.check_date(before)
         return StarkBank::Utils::Rest.get_page(
           cursor: cursor,
           limit: limit,
@@ -131,7 +130,7 @@ module StarkBank
               created: json['created'],
               type: json['type'],
               errors: json['errors'],
-              invoice: StarkBank::Utils::API.from_api_json(invoice_maker, json['invoice'])
+              invoice: StarkCore::Utils::API.from_api_json(invoice_maker, json['invoice'])
             )
           }
         }

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # PaymentPreview object
@@ -15,11 +14,11 @@ module StarkBank
   # - scheduled [DateTime or string]: intended payment date. Right now, this parameter only has effect on BrcodePreviews. ex: '2020-04-30'
   # - type [string]: Payment type. ex: 'brcode-payment', 'boleto-payment', 'utility-payment' or 'tax-payment'
   # - payment [BrcodePreview, BoletoPreview, UtilityPreview or TaxPreview]: Information preview of the informed payment.
-  class PaymentPreview < StarkBank::Utils::Resource
+  class PaymentPreview < StarkCore::Utils::Resource
     attr_reader :id, :scheduled, :type, :payment
     def initialize(id: nil, scheduled: nil, type: nil, payment: nil)
       super(id)
-      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
+      @scheduled = StarkCore::Utils::Checks.check_date(scheduled)
       @type = type
       @payment = payment
       return if type.nil?
@@ -31,7 +30,7 @@ module StarkBank
         'utility-payment': StarkBank::PaymentPreview::UtilityPreview.resource
       }[type.to_sym]
 
-      @payment = StarkBank::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?
+      @payment = StarkCore::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?
     end
 
     # # Create PaymentPreviews

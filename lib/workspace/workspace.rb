@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # Workspace object
@@ -20,7 +19,7 @@ module StarkBank
   #
   # ## Attributes:
   # - id [string, default nil]: unique id returned when the workspace is created. ex: '5656565656565656'
-  class Workspace < StarkBank::Utils::Resource
+  class Workspace < StarkCore::Utils::Resource
     attr_reader :username, :name, :allowed_tax_ids, :id
     def initialize(username:, name:, allowed_tax_ids: nil, id: nil)
       super(id)

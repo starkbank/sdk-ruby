@@ -2,10 +2,9 @@
 
 require('json')
 require('starkbank-ecdsa')
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
-require_relative('../utils/cache')
+require_relative('../utils/parse')
 require_relative('../error')
 require_relative('../boleto/log')
 require_relative('../boleto_holmes/log')
@@ -32,11 +31,11 @@ module StarkBank
   # - is_delivered [bool]: true if the event has been successfully delivered to the user url. ex: False
   # - workspace_id [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: '4545454545454545'
   # - subscription [string]: service that triggered this event. ex: 'transfer', 'utility-payment'
-  class Event < StarkBank::Utils::Resource
+  class Event < StarkCore::Utils::Resource
     attr_reader :id, :log, :created, :is_delivered, :workspace_id, :subscription
     def initialize(id:, log:, created:, is_delivered:, workspace_id:, subscription:)
       super(id)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
       @is_delivered = is_delivered
       @workspace_id = workspace_id
       @subscription = subscription
@@ -55,7 +54,7 @@ module StarkBank
       }[subscription.to_sym]
 
       @log = log
-      @log = StarkBank::Utils::API.from_api_json(resource[:resource_maker], log) unless resource.nil?
+      @log = StarkCore::Utils::API.from_api_json(resource[:resource_maker], log) unless resource.nil?
     end
 
     # # Retrieve a specific notification Event
@@ -88,8 +87,8 @@ module StarkBank
     # ## Return:
     # - generator of Event objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, is_delivered: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         user: user,
         limit: limit,
@@ -116,8 +115,8 @@ module StarkBank
     # ## Return:
     # - list of Event objects with updated attributes and cursor to retrieve the next page of Event objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, is_delivered: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,
@@ -179,53 +178,29 @@ module StarkBank
     # ## Return:
     # - Parsed Event object
     def self.parse(content:, signature:, user: nil)
-      event = StarkBank::Utils::API.from_api_json(resource[:resource_maker], JSON.parse(content)['event'])
-
-      begin
-        signature = EllipticCurve::Signature.fromBase64(signature)
-      rescue
-        raise(StarkBank::Error::InvalidSignatureError, 'The provided signature is not valid')
-      end
-
-      return event if verify_signature(content: content, signature: signature, user: user)
-
-      return event if verify_signature(content: content, signature: signature, user: user, refresh: true)
-
-      raise(StarkBank::Error::InvalidSignatureError, 'The provided signature and content do not match the Stark Bank public key')
+      return StarkBank::Utils::Parse.parse_and_verify(
+        content: content,
+        signature: signature,
+        user: user,
+        resource: resource,
+        key: 'event'
+      )
     end
 
-    class << self
-      private
-
-      def verify_signature(content:, signature:, user:, refresh: false)
-        public_key = StarkBank::Utils::Cache.starkbank_public_key
-        if public_key.nil? || refresh
-          pem = get_public_key_pem(user)
-          public_key = EllipticCurve::PublicKey.fromPem(pem)
-          StarkBank::Utils::Cache.starkbank_public_key = public_key
-        end
-        EllipticCurve::Ecdsa.verify(content, signature, public_key)
-      end
-
-      def get_public_key_pem(user)
-        StarkBank::Utils::Request.fetch(method: 'GET', path: 'public-key', query: { limit: 1 }, user: user).json['publicKeys'][0]['content']
-      end
-
-      def resource
-        {
-          resource_name: 'Event',
-          resource_maker: proc { |json|
-            Event.new(
-              id: json['id'],
-              log: json['log'],
-              created: json['created'],
-              is_delivered: json['is_delivered'],
-              workspace_id: json['workspace_id'],
-              subscription: json['subscription']
-            )
-          }
+    def self.resource
+      {
+        resource_name: 'Event',
+        resource_maker: proc { |json|
+          Event.new(
+            id: json['id'],
+            log: json['log'],
+            created: json['created'],
+            is_delivered: json['is_delivered'],
+            workspace_id: json['workspace_id'],
+            subscription: json['subscription']
+          )
         }
-      end
+      }
     end
   end
 end

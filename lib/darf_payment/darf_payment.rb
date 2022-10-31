@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # DarfPayment object
@@ -34,7 +33,7 @@ module StarkBank
   # - fee [integer, default nil]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class DarfPayment < StarkBank::Utils::Resource
+  class DarfPayment < StarkCore::Utils::Resource
     attr_reader :id, :revenue_code, :tax_id, :competence, :reference_number, :fine_amount, :interest_amount, 
     :due, :description, :tags, :scheduled, :status, :amount, :nominal_amount, :fee, :updated, :created
     def initialize(
@@ -44,20 +43,20 @@ module StarkBank
       super(id)
       @revenue_code = revenue_code
       @tax_id = tax_id
-      @competence = StarkBank::Utils::Checks.check_date(competence)
+      @competence = StarkCore::Utils::Checks.check_date(competence)
       @reference_number = reference_number
       @fine_amount = fine_amount
       @interest_amount = interest_amount
-      @due = StarkBank::Utils::Checks.check_date(due)
+      @due = StarkCore::Utils::Checks.check_date(due)
       @description = description
       @tags = tags
-      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
+      @scheduled = StarkCore::Utils::Checks.check_date(scheduled)
       @status = status
       @amount = amount
       @nominal_amount = nominal_amount
       @fee = fee
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Create DarfPayments
@@ -125,8 +124,8 @@ module StarkBank
     # ## Return:
     # - generator of DarfPayment objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -157,8 +156,8 @@ module StarkBank
     # ## Return:
     # - list of Darf Payment objects with updated attributes and cursor to retrieve the next page of Darf Payment objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

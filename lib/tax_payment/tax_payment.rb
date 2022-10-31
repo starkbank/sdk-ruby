@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # TaxPayment object
@@ -30,7 +29,7 @@ module StarkBank
   # - fee [integer, default nil]: fee charged when tax payment is created. ex: 200 (= R$ 2.00)
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class TaxPayment < StarkBank::Utils::Resource
+  class TaxPayment < StarkCore::Utils::Resource
     attr_reader :id, :line, :bar_code, :description, :tags, :scheduled, :status, :amount, :fee, :type, :updated, :created
     def initialize(
       id: nil, line: nil, bar_code: nil, description:, tags: nil, scheduled: nil, 
@@ -41,13 +40,13 @@ module StarkBank
       @bar_code = bar_code
       @description = description
       @tags = tags
-      @scheduled = StarkBank::Utils::Checks.check_date(scheduled)
+      @scheduled = StarkCore::Utils::Checks.check_date(scheduled)
       @status = status
       @amount = amount
       @fee = fee
       @type = type
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Create TaxPayments
@@ -115,8 +114,8 @@ module StarkBank
     # ## Return:
     # - generator of TaxPayment objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -147,8 +146,8 @@ module StarkBank
     # ## Return:
     # - list of Tax Payment objects with updated attributes and cursor to retrieve the next page of Tax Payment objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 
 module StarkBank
   # # Boleto object
@@ -42,7 +41,7 @@ module StarkBank
   # - status [string, default nil]: current Boleto status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - our_number [string, default nil]: Reference number registered at the settlement bank. ex:'10131474'
-  class Boleto < StarkBank::Utils::Resource
+  class Boleto < StarkCore::Utils::Resource
     attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :transaction_ids, :created, :our_number
     def initialize(
       amount:, name:, tax_id:, street_line_1:, street_line_2:, district:, city:, state_code:, zip_code:,
@@ -60,7 +59,7 @@ module StarkBank
       @city = city
       @state_code = state_code
       @zip_code = zip_code
-      @due = StarkBank::Utils::Checks.check_date(due)
+      @due = StarkCore::Utils::Checks.check_date(due)
       @fine = fine
       @interest = interest
       @overdue_limit = overdue_limit
@@ -74,7 +73,7 @@ module StarkBank
       @bar_code = bar_code
       @status = status
       @transaction_ids = transaction_ids
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
       @our_number = our_number
     end
 
@@ -144,8 +143,8 @@ module StarkBank
     # ## Return:
     # - generator of Boleto objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -176,8 +175,8 @@ module StarkBank
     # ## Return:
     # - list of Boleto objects with updated attributes and cursor to retrieve the next page of Boleto objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

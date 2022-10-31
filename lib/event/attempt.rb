@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require_relative('../../starkcore/lib/starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
 require_relative('event')
 
 module StarkBank
@@ -19,7 +18,7 @@ module StarkBank
     # - event_id [string]: ID of the Event whose delivery failed. ex: "4848484848484848"
     # - webhook_id [string]: ID of the Webhook that triggered this event. ex: "5656565656565656"
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-    class Attempt < StarkBank::Utils::Resource
+    class Attempt < StarkCore::Utils::Resource
       attr_reader :id, :code, :message, :event_id, :webhook_id, :created
       def initialize(id:, code:, message:, event_id:, webhook_id:, created:)
         super(id)
@@ -27,7 +26,7 @@ module StarkBank
         @message = message
         @event_id = event_id
         @webhook_id = webhook_id
-        @created = StarkBank::Utils::Checks.check_datetime(created)
+        @created = StarkCore::Utils::Checks.check_datetime(created)
       end
 
       # # Retrieve a specific Event::Attempt
@@ -61,8 +60,8 @@ module StarkBank
       # ## Return:
       # - generator of Event::Attempt objects with updated attributes
       def self.query(limit: nil, after: nil, before: nil, event_ids: nil, webhook_ids: nil, user: nil)
-        after = StarkBank::Utils::Checks.check_date(after)
-        before = StarkBank::Utils::Checks.check_date(before)
+        after = StarkCore::Utils::Checks.check_date(after)
+        before = StarkCore::Utils::Checks.check_date(before)
         StarkBank::Utils::Rest.get_stream(
           limit: limit,
           after: after,
@@ -91,8 +90,8 @@ module StarkBank
       # ## Return:
       # - list of Attempt objects with updated attributes and cursor to retrieve the next page of Attempt objects
       def self.page(cursor: nil, limit: nil, after: nil, before: nil, event_ids: nil, webhook_ids: nil, user: nil)
-        after = StarkBank::Utils::Checks.check_date(after)
-        before = StarkBank::Utils::Checks.check_date(before)
+        after = StarkCore::Utils::Checks.check_date(after)
+        before = StarkCore::Utils::Checks.check_date(before)
         return StarkBank::Utils::Rest.get_page(
           cursor: cursor,
           limit: limit,
