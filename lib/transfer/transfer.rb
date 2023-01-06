@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # Transfer object
@@ -33,7 +33,7 @@ module StarkBank
   # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ['19827356981273']
   # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class Transfer < StarkBank::Utils::Resource
+  class Transfer < StarkCore::Utils::Resource
     attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
     def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
@@ -45,14 +45,15 @@ module StarkBank
       @account_number = account_number
       @account_type = account_type
       @external_id = external_id
-      @scheduled = StarkBank::Utils::Checks.check_date_or_datetime(scheduled)
+      @scheduled = StarkCore::Utils::Checks.check_date_or_datetime(scheduled)
       @description = description
       @transaction_ids = transaction_ids
       @fee = fee
       @tags = tags
       @status = status
-      @created = StarkBank::Utils::Checks.check_datetime(created)
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
+      @transaction_ids = transaction_ids
+      @created = StarkCore::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
 
     # # Create Transfers
@@ -138,8 +139,8 @@ module StarkBank
     # ## Return:
     # - generator of Transfer objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -173,8 +174,8 @@ module StarkBank
     # ## Return:
     # - list of Transfer objects with updated attributes and cursor to retrieve the next page of Transfer objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, transaction_ids: nil, status: nil, tax_id: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

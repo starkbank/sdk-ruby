@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource.rb')
 require_relative('../utils/rest.rb')
-require_relative('../utils/checks.rb')
+
 
 module StarkBank
   # # DictKey object
@@ -26,7 +25,7 @@ module StarkBank
   # - account_created [DateTime or string, default nil]: creation datetime of the bank account associated with the DICT key. ex: '2020-11-05T14:55:08.812665+00:00'
   # - owned [DateTime or string, default nil]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
   # - created [DateTime or string, default nil]: creation datetime for the DICT key. ex: '2020-03-10 10:30:00.000'
-  class DictKey < StarkBank::Utils::Resource
+  class DictKey < StarkCore::Utils::Resource
     attr_reader :id, :type, :name, :tax_id, :owner_type, :bank_name, :ispb, :branch_code, :account_number, :account_type, :status, :account_created, :owned, :created
     def initialize(
       id:, type:, name:, tax_id:, owner_type:, bank_name:, ispb:, branch_code:, account_number:, 
@@ -43,9 +42,9 @@ module StarkBank
       @account_number = account_number
       @account_type = account_type
       @status = status
-      @account_created = StarkBank::Utils::Checks.check_datetime(account_created)
-      @owned = StarkBank::Utils::Checks.check_datetime(owned)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @account_created = StarkCore::Utils::Checks.check_datetime(account_created)
+      @owned = StarkCore::Utils::Checks.check_datetime(owned)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Retrieve a specific DictKey
@@ -80,8 +79,8 @@ module StarkBank
     # ## Return:
     # - generator of DitcKey objects with updated attributes
     def self.query(limit: nil, type: nil, after: nil, before: nil, ids: nil, status: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         type: type,
@@ -112,8 +111,8 @@ module StarkBank
     # ## Return:
     # - list of DictKey objects with updated attributes and cursor to retrieve the next page of DictKey objects
     def self.page(cursor: nil, limit: nil, type: nil, after: nil, before: nil, ids: nil, status: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

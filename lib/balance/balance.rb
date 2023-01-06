@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # Balance object
@@ -17,13 +17,13 @@ module StarkBank
   # - amount [integer, default nil]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
   # - currency [string, default nil]: currency of the current workspace. Expect others to be added eventually. ex:'BRL'
   # - updated [DateTime, default nil]: update datetime for the balance. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class Balance < StarkBank::Utils::Resource
+  class Balance < StarkCore::Utils::Resource
     attr_reader :amount, :currency, :updated
     def initialize(amount:, currency:, updated:, id:)
       super(id)
       @amount = amount
       @currency = currency
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
 
     # # Retrieve the Balance object

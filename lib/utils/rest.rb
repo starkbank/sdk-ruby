@@ -1,135 +1,158 @@
 # frozen_string_literal: true
 
-require_relative('request')
-require_relative('api')
+require('starkcore')
 
 module StarkBank
   module Utils
     module Rest
-      def self.get_page(resource_name:, resource_maker:, user: nil, **query)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'GET',
-          path: StarkBank::Utils::API.endpoint(resource_name),
-          query: query,
-          user: user
-        ).json
-        entities = []
-        json[StarkBank::Utils::API.last_name_plural(resource_name)].each do |entity_json|
-          entities << StarkBank::Utils::API.from_api_json(resource_maker, entity_json)
-        end
-        return entities, json['cursor']
+
+      def self.get_page(resource_name:, resource_maker:, user:, **query)
+        return StarkCore::Utils::Rest.get_page(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          **query
+        )
       end
 
-      def self.get_stream(resource_name:, resource_maker:, user: nil, **query)
-        limit = query[:limit]
-        query[:limit] = limit.nil? ? limit : [limit, 100].min
-
-        Enumerator.new do |enum|
-          loop do
-            json = StarkBank::Utils::Request.fetch(
-              method: 'GET',
-              path: StarkBank::Utils::API.endpoint(resource_name),
-              query: query,
-              user: user
-            ).json
-            entities = json[StarkBank::Utils::API.last_name_plural(resource_name)]
-
-            entities.each do |entity|
-              enum << StarkBank::Utils::API.from_api_json(resource_maker, entity)
-            end
-
-            unless limit.nil?
-              limit -= 100
-              query[:limit] = [limit, 100].min
-            end
-
-            cursor = json['cursor']
-            query['cursor'] = cursor
-            break if cursor.nil? || cursor.empty? || (!limit.nil? && limit <= 0)
-          end
-        end
+      def self.get_stream(resource_name:, resource_maker:, user:, **query)
+        return StarkCore::Utils::Rest.get_stream(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          **query
+        )
       end
 
-      def self.get_id(resource_name:, resource_maker:, id:, user: nil)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'GET',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
-          user: user
-        ).json
-        entity = json[StarkBank::Utils::API.last_name(resource_name)]
-        StarkBank::Utils::API.from_api_json(resource_maker, entity)
+      def self.get_id(resource_name:, resource_maker:, user:, id:, **query)
+        return StarkCore::Utils::Rest.get_id(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          id: id,
+          **query
+        )
       end
 
-      def self.get_content(resource_name:, resource_maker:, sub_resource_name:, id:, user: nil, **query)
-        StarkBank::Utils::Request.fetch(
-          method: 'GET',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/#{sub_resource_name}",
-          query: StarkBank::Utils::API.cast_json_to_api_format(query),
-          user: user
-        ).content
+      def self.get_content(resource_name:, resource_maker:, user:, sub_resource_name:, id:, **query)
+        return StarkCore::Utils::Rest.get_content(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          sub_resource_name: sub_resource_name, 
+          id: id,
+          **query
+        )
       end
 
-      def self.post(resource_name:, resource_maker:, entities:, user: nil)
-        jsons = []
-        entities.each do |entity|
-          jsons << StarkBank::Utils::API.api_json(entity)
-        end
-        payload = { StarkBank::Utils::API.last_name_plural(resource_name) => jsons }
-        json = StarkBank::Utils::Request.fetch(
-          method: 'POST',
-          path: StarkBank::Utils::API.endpoint(resource_name),
-          payload: payload,
-          user: user
-        ).json
-        returned_jsons = json[StarkBank::Utils::API.last_name_plural(resource_name)]
-        entities = []
-        returned_jsons.each do |returned_json|
-          entities << StarkBank::Utils::API.from_api_json(resource_maker, returned_json)
-        end
-        entities
+      def self.get_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, user:, id:, **query)
+        return StarkCore::Utils::Rest.get_sub_resource(
+          resource_name: resource_name,
+          sub_resource_maker: sub_resource_maker, 
+          sub_resource_name: sub_resource_name, 
+          sdk_version: StarkBank::SDK_VERSION, 
+          host: StarkBank::HOST, 
+          api_version: StarkBank::API_VERSION, 
+          user: user ? user : StarkBank.user, 
+          language: StarkBank.language, 
+          timeout: StarkBank.timeout, 
+          id: id, 
+          **query
+        )
       end
 
-      def self.post_single(resource_name:, resource_maker:, entity:, user: nil)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'POST',
-          path: StarkBank::Utils::API.endpoint(resource_name),
-          payload: StarkBank::Utils::API.api_json(entity),
-          user: user
-        ).json
-        entity_json = json[StarkBank::Utils::API.last_name(resource_name)]
-        StarkBank::Utils::API.from_api_json(resource_maker, entity_json)
+      def self.get_sub_resources(resource_name:, sub_resource_maker:, sub_resource_name:, user:, id:, **query)
+        return StarkCore::Utils::Rest.get_sub_resource(
+          resource_name: resource_name,
+          sub_resource_maker: sub_resource_maker, 
+          sub_resource_name: sub_resource_name, 
+          sdk_version: StarkBank::SDK_VERSION, 
+          host: StarkBank::HOST, 
+          api_version: StarkBank::API_VERSION, 
+          user: user ? user : StarkBank.user, 
+          language: StarkBank.language, 
+          timeout: StarkBank.timeout, 
+          id: id, 
+          **query
+        )
       end
 
-      def self.delete_id(resource_name:, resource_maker:, id:, user: nil)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'DELETE',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
-          user: user
-        ).json
-        entity = json[StarkBank::Utils::API.last_name(resource_name)]
-        StarkBank::Utils::API.from_api_json(resource_maker, entity)
+      def self.post(resource_name:, resource_maker:, user:, entities:, **query)
+        return StarkCore::Utils::Rest.post(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          entities: entities,
+          **query
+        )
       end
 
-      def self.patch_id(resource_name:, resource_maker:, id:, user: nil, **payload)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'PATCH',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}",
-          user: user,
-          payload: StarkBank::Utils::API.cast_json_to_api_format(payload)
-        ).json
-        entity = json[StarkBank::Utils::API.last_name(resource_name)]
-        StarkBank::Utils::API.from_api_json(resource_maker, entity)
+      def self.post_single(resource_name:, resource_maker:, user:, entity:)
+        return StarkCore::Utils::Rest.post_single(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          entity: entity
+        )
       end
 
-      def self.get_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, id:, user: nil, **query)
-        json = StarkBank::Utils::Request.fetch(
-          method: 'GET',
-          path: "#{StarkBank::Utils::API.endpoint(resource_name)}/#{id}/#{StarkBank::Utils::API.endpoint(sub_resource_name)}",
-          user: user,
-          query: StarkBank::Utils::API.cast_json_to_api_format(query)
-        ).json
-        entity = json[StarkBank::Utils::API.last_name(sub_resource_name)]
-        StarkBank::Utils::API.from_api_json(sub_resource_maker, entity)
+      def self.delete_id(resource_name:, resource_maker:, user:, id:)
+        return StarkCore::Utils::Rest.delete_id(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          id: id
+        )
+      end
+
+      def self.patch_id(resource_name:, resource_maker:, user:, id:, **payload)
+        return StarkCore::Utils::Rest.patch_id(
+          resource_name: resource_name,
+          resource_maker: resource_maker,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          id: id,
+          **payload
+        )
       end
     end
   end

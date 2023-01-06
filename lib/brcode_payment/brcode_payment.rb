@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # BrcodePayment object
@@ -32,7 +32,7 @@ module StarkBank
   # - fee [integer, default nil]: fee charged when the brcode payment is created. ex: 200 (= R$ 2.00)
   # - updated [datetime.datetime, default nil]: latest update datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   # - created [datetime.datetime, default nil]: creation datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-  class BrcodePayment < StarkBank::Utils::Resource
+  class BrcodePayment < StarkCore::Utils::Resource
     attr_reader :brcode, :tax_id, :description, :amount, :scheduled, :tags, :id, :name, :status, :type, :transaction_ids, :fee, :updated, :created
     def initialize(brcode:, tax_id:, description:, amount: nil, scheduled: nil, tags: nil, id: nil, name: nil, status: nil, type: nil, transaction_ids: nil, fee: nil, updated: nil, created: nil)
       super(id)
@@ -40,15 +40,15 @@ module StarkBank
       @tax_id = tax_id
       @description = description
       @amount = amount
-      @scheduled = StarkBank::Utils::Checks.check_date_or_datetime(scheduled)
+      @scheduled = StarkCore::Utils::Checks.check_date_or_datetime(scheduled)
       @tags = tags
       @name = name
       @status = status
       @type = type
       @transaction_ids = transaction_ids
       @fee = fee
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Create BrcodePayments
@@ -132,8 +132,8 @@ module StarkBank
     # ## Return:
     # - generator of BrcodePayment objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, tags: nil, ids: nil, status: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -164,8 +164,8 @@ module StarkBank
     # ## Return:
     # - list of BrcodePayment objects with updated attributes and cursor to retrieve the next page of BrcodePayment objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, tags: nil, ids: nil, status: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

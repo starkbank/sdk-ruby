@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/sub_resource')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   class PaymentPreview
@@ -16,7 +15,7 @@ module StarkBank
     # - description [string]: utility payment description. ex: "Utility Payment - Light Company"
     # - line [string]: Number sequence that identifies the payment. ex: "82660000002 8 44361143007 7 41190025511 7 00010601813 8"
     # - bar_code [string]: Bar code number that identifies the payment. ex: "82660000002443611430074119002551100010601813"
-    class UtilityPreview < StarkBank::Utils::SubResource
+    class UtilityPreview < StarkCore::Utils::SubResource
       attr_reader :amount, :name, :description, :line, :bar_code
       def initialize(amount:, name:, description:, line:, bar_code:)
         @amount = amount

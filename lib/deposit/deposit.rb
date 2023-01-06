@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # Deposit object
@@ -25,7 +25,7 @@ module StarkBank
   # - transaction_ids [list of strings]: ledger transaction ids linked to this Deposit (if there are more than one, all but first are reversals). ex: ['19827356981273']
   # - created [datetime.datetime]: creation datetime for the Deposit. ex: datetime.datetime(2020, 12, 10, 10, 30, 0, 0)
   # - updated [datetime.datetime]: latest update datetime for the Deposit. ex: datetime.datetime(2020, 12, 10, 10, 30, 0, 0)
-  class Deposit < StarkBank::Utils::Resource
+  class Deposit < StarkCore::Utils::Resource
     attr_reader :id, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :amount, :type, :status, :tags, :fee, :transaction_ids, :created, :updated
     def initialize(
       id:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type:, amount:, type:, 
@@ -44,8 +44,8 @@ module StarkBank
       @tags = tags
       @fee = fee
       @transaction_ids = transaction_ids
-      @created = StarkBank::Utils::Checks.check_datetime(created)
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
 
     # # Retrieve a specific Deposit
@@ -81,8 +81,8 @@ module StarkBank
     # ## Return:
     # - generator of Deposit objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -115,8 +115,8 @@ module StarkBank
     # ## Return:
     # - list of Deposit objects with updated attributes and cursor to retrieve the next page of Deposit objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

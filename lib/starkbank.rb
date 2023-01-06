@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative('key')
-require_relative('user/project')
-require_relative('user/organization')
 require_relative('workspace/workspace')
 require_relative('balance/balance')
 require_relative('transaction/transaction')
@@ -42,7 +39,19 @@ require_relative('institution/institution')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
+
+  API_VERSION = 'v2'
+  SDK_VERSION = '2.6.0'
+  HOST = "bank"
+  public_constant :API_VERSION, :SDK_VERSION, :HOST;
+
   @user = nil
   @language = 'en-US'
-  class << self; attr_accessor :user, :language; end
+  @timeout = 15
+  class << self; attr_accessor :user, :language, :timeout; end
+
+  Project = StarkCore::Project
+  Organization = StarkCore::Organization
+  Key = StarkCore::Key
+
 end

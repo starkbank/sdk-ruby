@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/sub_resource')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   class PaymentPreview
@@ -26,7 +25,7 @@ module StarkBank
     # - payer_tax_id [string]: payer tax ID (CPF or CNPJ). ex: '20.018.183/0001-80'
     # - line [string]: Number sequence that identifies the payment. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062'
     # - bar_code [string]: Bar code number that identifies the payment. ex: '34195819600000000621090063571277307144464000'
-    class BoletoPreview < StarkBank::Utils::SubResource
+    class BoletoPreview < StarkCore::Utils::SubResource
       attr_reader :status, :amount, :discount_amount, :fine_amount, :interest_amount, :due, :expiration, :name, :tax_id, :receiver_name, :receiver_tax_id, :payer_name, :payer_tax_id, :line, :bar_code
       def initialize(status:, amount:, discount_amount:, fine_amount:, interest_amount:, due:, expiration:, name:, tax_id:, receiver_name:, receiver_tax_id:, payer_name:, payer_tax_id:, line:, bar_code:)
         @status = status
@@ -34,8 +33,8 @@ module StarkBank
         @discount_amount = discount_amount
         @fine_amount = fine_amount
         @interest_amount = interest_amount
-        @due = StarkBank::Utils::Checks.check_datetime(due)
-        @expiration = StarkBank::Utils::Checks.check_datetime(expiration)
+        @due = StarkCore::Utils::Checks.check_datetime(due)
+        @expiration = StarkCore::Utils::Checks.check_datetime(expiration)
         @name = name
         @tax_id = tax_id
         @receiver_name = receiver_name

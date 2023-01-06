@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/sub_resource')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # Institution object
@@ -17,7 +16,7 @@ module StarkBank
   # - name [string]: full version of the institution name. ex: 'Stark Bank S.A.'
   # - spi_code [string]: SPI code used to identify the institution on Pix transactions. ex: '20018183'
   # - str_code [string]: STR code used to identify the institution on TED transactions. ex: '123'
-  class Institution < StarkBank::Utils::SubResource
+  class Institution < StarkCore::Utils::SubResource
     attr_reader :display_name, :name, :spi_code, :str_code
     def initialize(display_name: nil, name: nil, spi_code: nil, str_code: nil)
       @display_name = display_name
