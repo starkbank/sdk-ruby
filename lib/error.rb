@@ -1,52 +1,19 @@
 # frozen_string_literal: true
 
-require('json')
+require('starkcore')
 
 module StarkBank
   module Error
-    class StarkBankError < StandardError
-      attr_reader :message
-      def initialize(message)
-        @message = message
-        super(message)
-      end
-    end
+    StarkBankError = StarkCore::Error::StarkCoreError
 
-    class Error < StarkBankError
-      attr_reader :code, :message
-      def initialize(code, message)
-        @code = code
-        @message = message
-        super("#{code}: #{message}")
-      end
-    end
+    Error = StarkCore::Error::Error
 
-    class InputErrors < StarkBankError
-      attr_reader :errors
-      def initialize(content)
-        errors = []
-        content.each do |error|
-          errors << Error.new(error['code'], error['message'])
-        end
-        @errors = errors
+    InputErrors = StarkCore::Error::InputErrors
 
-        super(content.to_json)
-      end
-    end
+    InternalServerError = StarkCore::Error::InternalServerError
 
-    class InternalServerError < StarkBankError
-      def initialize(message = 'Houston, we have a problem.')
-        super(message)
-      end
-    end
+    UnknownError = StarkCore::Error::UnknownError
 
-    class UnknownError < StarkBankError
-      def initialize(message)
-        super("Unknown exception encountered: #{message}")
-      end
-    end
-
-    class InvalidSignatureError < StarkBankError
-    end
+    InvalidSignatureError = StarkCore::Error::InvalidSignatureError
   end
 end

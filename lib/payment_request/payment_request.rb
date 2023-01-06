@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # PaymentRequest object
@@ -29,7 +29,7 @@ module StarkBank
   # - updated [DateTime, default nil]: latest update datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - created [DateTime, default nil]: creation datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   #
-  class PaymentRequest < StarkBank::Utils::Resource
+  class PaymentRequest < StarkCore::Utils::Resource
     attr_reader :center_id, :payment, :type, :due, :tags, :amount, :status, :actions, :updated, :created
     def initialize(
       payment:, center_id:, id: nil, type: nil, due: nil, tags: nil, amount: nil, status: nil,
@@ -82,8 +82,8 @@ module StarkBank
     # ## Return:
     # - generator of PaymentRequest objects with updated attributes
     def self.query(center_id:, limit: nil, after: nil, before: nil, status: nil, type: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         center_id: center_id,
         limit: limit,
@@ -117,8 +117,8 @@ module StarkBank
     # ## Return:
     # - list of PaymentRequest objects with updated attributes and cursor to retrieve the next page of PaymentRequest objects
     def self.page(cursor: nil, center_id:, limit: nil, after: nil, before: nil, status: nil, type: nil, sort: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         center_id: center_id,
@@ -156,7 +156,7 @@ module StarkBank
         'darf-payment': StarkBank::DarfPayment.resource
       }[type.to_sym]
 
-      payment = StarkBank::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?
+      payment = StarkCore::Utils::API.from_api_json(resource[:resource_maker], payment) unless resource.nil?
 
       [payment, type]
     end

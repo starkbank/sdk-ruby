@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # Invoice object
@@ -40,7 +40,7 @@ module StarkBank
   # - status [string, default nil]: current Invoice status. ex: 'registered' or 'paid'
   # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class Invoice < StarkBank::Utils::Resource
+  class Invoice < StarkCore::Utils::Resource
     attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :tags, :pdf, :link, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :transaction_ids, :created, :updated
     def initialize(
       amount:, tax_id:, name:, due: nil, expiration: nil, fine: nil, interest: nil, discounts: nil,
@@ -49,7 +49,7 @@ module StarkBank
     )
       super(id)
       @amount = amount
-      @due = StarkBank::Utils::Checks.check_date_or_datetime(due)
+      @due = StarkCore::Utils::Checks.check_date_or_datetime(due)
       @tax_id = tax_id
       @name = name
       @expiration = expiration
@@ -67,12 +67,12 @@ module StarkBank
       @fee = fee
       @status = status
       @transaction_ids = transaction_ids
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
-      @created = StarkBank::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
       if !discounts.nil?
         checked_discounts = []
         discounts.each do |discount|
-          discount["due"] = StarkBank::Utils::Checks.check_date_or_datetime(discount["due"])
+          discount["due"] = StarkCore::Utils::Checks.check_date_or_datetime(discount["due"])
           checked_discounts.push(discount)
         end
         @discounts = checked_discounts
@@ -159,8 +159,8 @@ module StarkBank
     # ## Return:
     # - generator of Invoice objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -191,8 +191,8 @@ module StarkBank
     # ## Return:
     # - list of Invoice objects with updated attributes and cursor to retrieve the next page of Invoice objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,

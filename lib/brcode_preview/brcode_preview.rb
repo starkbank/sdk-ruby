@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # BrcodePreview object
@@ -20,7 +20,7 @@ module StarkBank
   # - allow_change [bool]: If True, the payment is able to receive amounts that are diferent from the nominal one. ex: True or False
   # - amount [integer]: Value in cents that this payment is expecting to receive. If 0, any value is accepted. ex: 123 (= R$1,23)
   # - reconciliation_id [string]: Reconciliation ID linked to this payment. ex: 'txId', 'payment-123'
-  class BrcodePreview < StarkBank::Utils::Resource
+  class BrcodePreview < StarkCore::Utils::Resource
     attr_reader :status, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :allow_change, :amount, :reconciliation_id
     def initialize(status:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type:, allow_change:, amount:, reconciliation_id:)
       @status = status

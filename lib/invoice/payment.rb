@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative('../utils/sub_resource')
 require_relative('invoice')
 
 module StarkBank
@@ -20,7 +19,7 @@ module StarkBank
         # - account_type [string]: payer bank account type. ex: 'checking', 'savings', 'salary' or 'payment'
         # - end_to_end_id [string]: central bank's unique transaction ID. ex: 'E79457883202101262140HHX553UPqeq'
         # - method [string]: payment method that was used. ex: 'pix'
-        class Payment < StarkBank::Utils::SubResource
+        class Payment < StarkCore::Utils::SubResource
             attr_reader :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :amount, :end_to_end_id, :method
             def initialize(name:, tax_id:, bank_code:, branch_code:, account_number:, account_type:, amount:, end_to_end_id:, method:)
                 @name = name

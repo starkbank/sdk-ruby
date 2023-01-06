@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('../utils/sub_resource')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   class PaymentPreview
@@ -16,7 +15,7 @@ module StarkBank
     # - description [string]: tax payment description. ex: "ISS Payment - Iron Throne"
     # - line [string]: Number sequence that identifies the payment. ex: "85660000006 6 67940064007 5 41190025511 7 00010601813 8"
     # - bar_code [string]: Bar code number that identifies the payment. ex: "85660000006679400640074119002551100010601813"
-    class TaxPreview < StarkBank::Utils::SubResource
+    class TaxPreview < StarkCore::Utils::SubResource
       attr_reader :amount, :name, :description, :line, :bar_code
       def initialize(amount:, name:, description:, line:, bar_code:)
         @amount = amount

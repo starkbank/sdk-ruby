@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative('../utils/resource')
+require('starkcore')
 require_relative('../utils/rest')
-require_relative('../utils/checks')
+
 
 module StarkBank
   # # BoletoHolmes object
@@ -23,7 +23,7 @@ module StarkBank
   # - result [string, default nil]: result of boleto status investigation. ex: 'paid' or 'cancelled'
   # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  class BoletoHolmes < StarkBank::Utils::Resource
+  class BoletoHolmes < StarkCore::Utils::Resource
     attr_reader :boleto_id, :tags, :id, :status, :result, :created, :updated
     def initialize(
       boleto_id:, tags: nil, id: nil, status: nil, result: nil, created: nil, updated: nil
@@ -33,8 +33,8 @@ module StarkBank
       @tags = tags
       @status = status
       @result = result
-      @created = StarkBank::Utils::Checks.check_datetime(created)
-      @updated = StarkBank::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
 
     # # Create BoletoHolmes
@@ -86,8 +86,8 @@ module StarkBank
     # ## Return:
     # - generator of BoletoHolmes objects with updated attributes
     def self.query(limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, boleto_id: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       StarkBank::Utils::Rest.get_stream(
         limit: limit,
         after: after,
@@ -120,8 +120,8 @@ module StarkBank
     # ## Return:
     # - list of BoletoHolmes objects with updated attributes and cursor to retrieve the next page of BoletoHolmes objects
     def self.page(cursor: nil, limit: nil, after: nil, before: nil, status: nil, tags: nil, ids: nil, boleto_id: nil, user: nil)
-      after = StarkBank::Utils::Checks.check_date(after)
-      before = StarkBank::Utils::Checks.check_date(before)
+      after = StarkCore::Utils::Checks.check_date(after)
+      before = StarkCore::Utils::Checks.check_date(before)
       return StarkBank::Utils::Rest.get_page(
         cursor: cursor,
         limit: limit,
