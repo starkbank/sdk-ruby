@@ -388,7 +388,7 @@ puts balance
 
 ## Create transfers
 
-You can also create transfers in the SDK (TED/Pix).
+You can also create transfers in the SDK (TED/Pix) and configure transfer behavior according to its rules.
 
 ```ruby
 require('starkbank')
@@ -414,7 +414,12 @@ transfers = StarkBank::Transfer.create(
       tax_id: '012.345.678-90',
       name: 'Jon Snow',
       scheduled: Time.now + 24 * 3600,
-      tags: []
+      tags: [],
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',    # Set maximum number of retries if Transfer fails due to systemic issues at the receiver bank
+          value: 5                  # Our resending limit is 10 by default
+      ]
     )
   ]
 )
@@ -995,11 +1000,16 @@ require('starkbank')
 payments = StarkBank::BrcodePayment.create(
   [
     StarkBank::BrcodePayment.new(
-      line: '00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A',
+      line: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A",
       tax_id: '012.345.678-90',
       scheduled: Time.now,
       description: 'take my money',
-      tags: %w[take my money]
+      tags: %w[take my money],
+      rules: [
+        StarkBank::BrcodePayment::Rule.new(
+          key: 'resendingLimit',    # Set maximum number of retries if BrcodePayment fails due to systemic issues at the receiver bank
+          value: 5                  # Our resending limit is 10 by default
+      ]
     )
   ]
 )
@@ -1009,6 +1019,7 @@ payments.each do |payment|
 end
 ```
 
+**Note**: You can also configure payment behavior according to its rules
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in hash format
 
 ## Get a BR Code payment

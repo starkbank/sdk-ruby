@@ -25,6 +25,7 @@ module StarkBank
   # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 13, 12, 11)
   # - description [string, default nil]: optional description to override default description to be shown in the bank statement. ex: 'Payment for service #1234'
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
+  # - rules [list of Transfer::Rules, default []]: list of Transfer::Rule objects for modifying transfer behavior. ex: [Transfer::Rule(key: "resendingLimit", value: 5)]
   #
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when Transfer is created. ex: '5656565656565656'
@@ -34,8 +35,8 @@ module StarkBank
   # - created [DateTime, default nil]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime, default nil]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkCore::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :fee, :tags, :status, :id, :created, :updated
-    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, fee: nil, tags: nil, status: nil, id: nil, created: nil, updated: nil)
+    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :fee, :tags, :rules, :status, :id, :created, :updated
+    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, fee: nil, tags: nil, rules: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
       @amount = amount
       @name = name
@@ -47,9 +48,9 @@ module StarkBank
       @external_id = external_id
       @scheduled = StarkCore::Utils::Checks.check_date_or_datetime(scheduled)
       @description = description
-      @transaction_ids = transaction_ids
-      @fee = fee
       @tags = tags
+      @rules = StarkBank::Transfer::Rule.parse_rules(rules)
+      @fee = fee
       @status = status
       @transaction_ids = transaction_ids
       @created = StarkCore::Utils::Checks.check_datetime(created)
@@ -197,7 +198,6 @@ module StarkBank
         resource_name: 'Transfer',
         resource_maker: proc { |json|
           Transfer.new(
-            id: json['id'],
             amount: json['amount'],
             name: json['name'],
             tax_id: json['tax_id'],
@@ -208,10 +208,12 @@ module StarkBank
             external_id: json['external_id'],
             scheduled: json['scheduled'],
             description: json['description'],
-            transaction_ids: json['transaction_ids'],
-            fee: json['fee'],
             tags: json['tags'],
+            rules: json['rules'],
+            id: json['id'],
+            fee: json['fee'],
             status: json['status'],
+            transaction_ids: json['transaction_ids'],
             created: json['created'],
             updated: json['updated']
           )

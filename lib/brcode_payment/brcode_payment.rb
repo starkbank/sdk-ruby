@@ -22,6 +22,7 @@ module StarkBank
   # ## Parameters (optional):
   # - scheduled [datetime.date, datetime.datetime or string, default now]: payment scheduled date or datetime. ex: datetime.datetime(2020, 3, 10, 15, 17, 3)
   # - tags [list of strings, default nil]: list of strings for tagging
+  # - rules [list of BrcodePayment::Rules, default []]: list of BrcodePayment::Rule objects for modifying transfer behavior. ex: [BrcodePayment::Rule(key: "resendingLimit", value: 5)]
   #
   # ## Attributes (return-only):
   # - id [string, default nil]: unique id returned when payment is created. ex: '5656565656565656'
@@ -33,8 +34,8 @@ module StarkBank
   # - updated [datetime.datetime, default nil]: latest update datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   # - created [datetime.datetime, default nil]: creation datetime for the payment. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
   class BrcodePayment < StarkCore::Utils::Resource
-    attr_reader :brcode, :tax_id, :description, :amount, :scheduled, :tags, :id, :name, :status, :type, :transaction_ids, :fee, :updated, :created
-    def initialize(brcode:, tax_id:, description:, amount: nil, scheduled: nil, tags: nil, id: nil, name: nil, status: nil, type: nil, transaction_ids: nil, fee: nil, updated: nil, created: nil)
+    attr_reader :brcode, :tax_id, :description, :amount, :scheduled, :tags, :rules,:id, :name, :status, :type, :transaction_ids, :fee, :updated, :created
+    def initialize(brcode:, tax_id:, description:, amount: nil, scheduled: nil, tags: nil, rules: nil, id: nil, name: nil, status: nil, type: nil, transaction_ids: nil, fee: nil, updated: nil, created: nil)
       super(id)
       @brcode = brcode
       @tax_id = tax_id
@@ -42,6 +43,7 @@ module StarkBank
       @amount = amount
       @scheduled = StarkCore::Utils::Checks.check_date_or_datetime(scheduled)
       @tags = tags
+      @rules = StarkBank::BrcodePayment::Rule.parse_rules(rules)
       @name = name
       @status = status
       @type = type
@@ -190,6 +192,7 @@ module StarkBank
             amount: json['amount'],
             scheduled: json['scheduled'],
             tags: json['tags'],
+            rules: json['rules'],
             id: json['id'],
             name: json['name'],
             status: json['status'],

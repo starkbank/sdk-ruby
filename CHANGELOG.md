@@ -13,6 +13,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- rules attribute to BrcodePayment resource
+- BrcodePayment::Rule sub-resource
+- rules attribute to Transfer resource
+- Transfer::Rule sub-resource
+
 ### Changed
 - internal structure to use starkcore as a dependency.
 

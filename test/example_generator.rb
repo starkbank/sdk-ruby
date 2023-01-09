@@ -117,7 +117,13 @@ class ExampleGenerator
       brcode: invoice.brcode,
       scheduled: schedule ? DateTime.now + 600 : nil,
       description: 'paying a PIX',
-      tax_id: '20.018.183/0001-80'
+      tax_id: '20.018.183/0001-80',
+      rules: [
+        StarkBank::BrcodePayment::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
     )
   end
 
@@ -140,7 +146,13 @@ class ExampleGenerator
       account_number: '10000-0',
       account_type: 'checking',
       external_id: 'ruby-' + rand(1e10).to_s,
-      scheduled: schedule ? Time.now + 24 * 3600 : nil
+      scheduled: schedule ? Time.now + 24 * 3600 : nil,
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
     )
   end
 
