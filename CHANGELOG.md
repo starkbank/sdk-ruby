@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- DynamicBrcode resource
 ### Changed
 - internal structure to use starkcore as a dependency.
 

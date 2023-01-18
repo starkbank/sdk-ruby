@@ -205,6 +205,14 @@ class ExampleGenerator
     end
   end
 
+  def self.dynamic_brcode_example
+    StarkBank::DynamicBrcode.new(
+      amount: 100_000,
+      expiration: 3600 * 2,
+      tags: ["test1", "test2"],
+    )
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',
