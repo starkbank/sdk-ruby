@@ -14,18 +14,20 @@ module StarkBank
     # user, but it can be retrieved to check additional information
     # on the BoletoHolmes.
     #
-    # ## Attributes:
+    # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - holmes [BoletoHolmes]: BoletoHolmes entity to which the log refers to.
     # - type [string]: type of the Boleto event which triggered the log creation. ex: 'registered' or 'paid'
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+    # - updated [DateTime]: latest update datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     class Log < StarkCore::Utils::Resource
-      attr_reader :id, :holmes, :type, :created
-      def initialize(id:, holmes:, type:, created:)
+      attr_reader :id, :holmes, :type, :created, :updated
+      def initialize(id:, holmes:, type:, created:, updated:)
         super(id)
         @holmes = holmes
         @type = type
         @created = StarkCore::Utils::Checks.check_datetime(created)
+        @updated = StarkCore::Utils::Checks.check_datetime(updated)
       end
 
       # # Retrieve a specific Log
@@ -112,7 +114,8 @@ module StarkBank
               id: json['id'],
               holmes: StarkCore::Utils::API.from_api_json(holmes_maker, json['holmes']),
               type: json['type'],
-              created: json['created']
+              created: json['created'],
+              updated: json['updated']
             )
           }
         }

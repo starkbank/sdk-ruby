@@ -23,14 +23,17 @@ module StarkBank
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when payment is created. ex: '5656565656565656'
-  # - status [string, default nil]: current payment status. ex: 'success' or 'failed'
-  # - amount [int, default nil]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
-  # - fee [integer, default nil]: fee charged when utility payment is created. ex: 200 (= R$ 2.00)
-  # - created [DateTime, default nil]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string]: unique id returned when payment is created. ex: '5656565656565656'
+  # - status [string]: current payment status. ex: 'success' or 'failed'
+  # - amount [int]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
+  # - fee [integer]: fee charged when utility payment is created. ex: 200 (= R$ 2.00)
+  # - type [string]: payment type. ex: "utility"
+  # - transaction_ids [list of strings]: ledger transaction ids linked to this UtilityPayment. ex: ["19827356981273"]
+  # - created [DateTime]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - updated [DateTime]: latest update datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class UtilityPayment < StarkCore::Utils::Resource
-    attr_reader :description, :line, :bar_code, :tags, :scheduled, :id, :amount, :fee, :status, :created
-    def initialize(description:, line: nil, bar_code: nil, tags: nil, scheduled: nil, id: nil, amount: nil, fee: nil, status: nil, created: nil)
+    attr_reader :description, :line, :bar_code, :tags, :scheduled, :id, :amount, :fee, :type, :transaction_ids, :status, :created, :updated
+    def initialize(description:, line: nil, bar_code: nil, tags: nil, scheduled: nil, id: nil, amount: nil, fee: nil, type: nil, transaction_ids: nil, status: nil, created: nil, updated: nil)
       super(id)
       @description = description
       @line = line
@@ -40,7 +43,10 @@ module StarkBank
       @amount = amount
       @fee = fee
       @status = status
+      @type = type
+      @transaction_ids = transaction_ids
       @created = StarkCore::Utils::Checks.check_datetime(created)
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
 
     # # Create UtilityPayments
@@ -184,8 +190,11 @@ module StarkBank
             scheduled: json['scheduled'],
             amount: json['amount'],
             fee: json['fee'],
+            type: json['type'],
+            transaction_ids: json['transaction_ids'],
             status: json['status'],
-            created: json['created']
+            created: json['created'],
+            updated: json['updated']
           )
         }
       }

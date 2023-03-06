@@ -13,7 +13,6 @@ module StarkBank
   #
   # ## Parameters (required):
   # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: 'payment ABC'
-  # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: 'payment ABC'
   # - revenue_code [string]: 4-digit tax code assigned by Federal Revenue. ex: '5948'
   # - tax_id [tax_id]: tax id (formatted or unformatted) of the payer. ex: '12.345.678/0001-95'
   # - competence [Date, DateTime, Time or string, default today]: competence month of the service. ex: Date.new(2020, 3, 10)
@@ -28,18 +27,19 @@ module StarkBank
   # - tags [list of strings, default nil]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when payment is created. ex: '5656565656565656'
-  # - status [string, default nil]: current payment status. ex: 'success' or 'failed'
-  # - amount [int, default nil]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)
-  # - fee [integer, default nil]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)
-  # - created [DateTime, default nil]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  # - updated [DateTime, default nil]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string]: unique id returned when payment is created. ex: '5656565656565656'
+  # - status [string]: current payment status. ex: 'success' or 'failed'
+  # - amount [int]: Total amount due calculated from other amounts. ex: 24146 (= R$ 241.46)
+  # - fee [integer]: fee charged when the DarfPayment is processed. ex: 0 (= R$ 0.00)
+  # - transaction_ids [list of strings]: ledger transaction ids linked to this DarfPayment. ex: ["19827356981273"]
+  # - created [DateTime]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - updated [DateTime]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class DarfPayment < StarkCore::Utils::Resource
     attr_reader :id, :revenue_code, :tax_id, :competence, :reference_number, :fine_amount, :interest_amount, 
-    :due, :description, :tags, :scheduled, :status, :amount, :nominal_amount, :fee, :updated, :created
+    :due, :description, :tags, :scheduled, :status, :amount, :nominal_amount, :fee, :transaction_ids, :updated, :created
     def initialize(
         id: nil, revenue_code:, tax_id:, competence:, reference_number:, fine_amount:, interest_amount:, due:, description: nil, 
-        tags: nil, scheduled: nil, status: nil, amount: nil, nominal_amount: nil, fee: nil, updated: nil, created: nil
+        tags: nil, scheduled: nil, status: nil, amount: nil, nominal_amount: nil, fee: nil, transaction_ids: nil, updated: nil, created: nil
     )
       super(id)
       @revenue_code = revenue_code
@@ -56,6 +56,7 @@ module StarkBank
       @amount = amount
       @nominal_amount = nominal_amount
       @fee = fee
+      @transaction_ids = @transaction_ids
       @updated = StarkCore::Utils::Checks.check_datetime(updated)
       @created = StarkCore::Utils::Checks.check_datetime(created)
     end
@@ -209,6 +210,7 @@ module StarkBank
             nominal_amount: json['nominal_amount'],
             fee: json['fee'],
             updated: json['updated'],
+            transaction_ids: json['transaction_ids'],
             created: json['created'],          
           )
         }

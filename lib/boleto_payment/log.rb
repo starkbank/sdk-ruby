@@ -14,7 +14,7 @@ module StarkBank
     # user, but it can be retrieved to check additional information
     # on the BoletoPayment.
     #
-    # ## Attributes:
+    # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - payment [BoletoPayment]: BoletoPayment entity to which the log refers to.
     # - errors [list of strings]: list of errors linked to this BoletoPayment event.

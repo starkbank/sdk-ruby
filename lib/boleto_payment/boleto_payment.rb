@@ -20,28 +20,30 @@ module StarkBank
   # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: 'payment ABC'
   #
   # ## Parameters (optional):
+  # - amount [int, default nil]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
   # - scheduled [Date, DateTime, Time or string, default today]: payment scheduled date. ex: Date.new(2020, 3, 10)
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when payment is created. ex: '5656565656565656'
-  # - status [string, default nil]: current payment status. ex: 'success' or 'failed'
-  # - amount [int, default nil]: amount automatically calculated from line or bar_code. ex: 23456 (= R$ 234.56)
-  # - fee [integer, default nil]: fee charged when the boleto payment is created. ex: 200 (= R$ 2.00)
-  # - created [DateTime, default nil]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string]: unique id returned when payment is created. ex: '5656565656565656'
+  # - status [string]: current payment status. ex: 'success' or 'failed'
+  # - fee [integer]: fee charged when the boleto payment is created. ex: 200 (= R$ 2.00)
+  # - transaction_ids [list of strings]: ledger transaction ids linked to this BoletoPayment. ex: ["19827356981273"]
+  # - created [DateTime]: creation datetime for the payment. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class BoletoPayment < StarkCore::Utils::Resource
-    attr_reader :tax_id, :description, :line, :bar_code, :scheduled, :tags, :id, :status, :amount, :fee, :created
-    def initialize(tax_id:, description:, line: nil, bar_code: nil, scheduled: nil, tags: nil, id: nil, status: nil, amount: nil, fee: nil, created: nil)
+    attr_reader :tax_id, :description, :line, :bar_code, :scheduled, :tags, :id, :status, :amount, :fee, :transaction_ids, :created
+    def initialize(tax_id:, description:, line: nil, bar_code: nil, scheduled: nil, tags: nil, id: nil, status: nil, amount: nil, fee: nil, transaction_ids: nil, created: nil)
       super(id)
       @tax_id = tax_id
       @description = description
       @line = line
       @bar_code = bar_code
+      @amount = amount
       @scheduled = StarkCore::Utils::Checks.check_date(scheduled)
       @tags = tags
       @status = status
-      @amount = amount
       @fee = fee
+      @transaction_ids = transaction_ids
       @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
@@ -181,11 +183,12 @@ module StarkBank
             description: json['description'],
             line: json['line'],
             bar_code: json['bar_code'],
+            amount: json['amount'],
             scheduled: json['scheduled'],
             tags: json['tags'],
             status: json['status'],
-            amount: json['amount'],
             fee: json['fee'],
+            transaction_ids: json['transaction_ids'],
             created: json['created']
           )
         }

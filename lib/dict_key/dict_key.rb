@@ -6,25 +6,25 @@ require_relative('../utils/rest.rb')
 module StarkBank
   # # DictKey object
   #
-  # DictKey represents a PIX key registered in Bacen's DICT system.
+  # DictKey represents a Pix key registered in Bacen's DICT system.
   #
-  # ## Parameters (required):
-  # - id [string]: DictKey object unique id and PIX key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'
+  # ## Parameters (optional):
+  # - id [string]: DictKey object unique id and Pix key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'
   #
   # ## Attributes (return-only):
-  # - type [string, default nil]: DICT key type. ex: 'email', 'cpf', 'cnpj', 'phone' or 'evp'
-  # - name [string, default nil]: account owner full name. ex: 'Tony Stark'
-  # - tax_id [string, default nil]: key owner tax ID (CNPJ or masked CPF). ex: '***.345.678-**' or '20.018.183/0001-80'
-  # - owner_type [string, default nil]: DICT key owner type. ex 'naturalPerson' or 'legalPerson'
-  # - bank_name [string, default nil]: bank name associated with the DICT key. ex: 'Stark Bank'
-  # - ispb [string, default nil]: bank ISPB associated with the DICT key. ex: '20018183'
-  # - branch_code [string, default nil]: bank account branch code associated with the DICT key. ex: '9585'
-  # - account_number [string, default nil]: bank account number associated with the DICT key. ex: '9828282578010513'
-  # - account_type [string, default nil]: bank account type associated with the DICT key. ex: 'checking', 'saving', 'salary' or 'payment'
-  # - status [string, default nil]: current DICT key status. ex: 'created', 'registered', 'canceled' or 'failed'
-  # - account_created [DateTime or string, default nil]: creation datetime of the bank account associated with the DICT key. ex: '2020-11-05T14:55:08.812665+00:00'
-  # - owned [DateTime or string, default nil]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
-  # - created [DateTime or string, default nil]: creation datetime for the DICT key. ex: '2020-03-10 10:30:00.000'
+  # - type [string]: DICT key type. ex: 'email', 'cpf', 'cnpj', 'phone' or 'evp'
+  # - name [string]: account owner full name. ex: 'Tony Stark'
+  # - tax_id [string]: key owner tax ID (CNPJ or masked CPF). ex: '***.345.678-**' or '20.018.183/0001-80'
+  # - owner_type [string]: DICT key owner type. ex 'naturalPerson' or 'legalPerson'
+  # - bank_name [string]: bank name associated with the DICT key. ex: 'Stark Bank'
+  # - ispb [string]: bank ISPB associated with the DICT key. ex: '20018183'
+  # - branch_code [string]: bank account branch code associated with the DICT key. ex: '9585'
+  # - account_number [string]: bank account number associated with the DICT key. ex: '9828282578010513'
+  # - account_type [string]: bank account type associated with the DICT key. ex: 'checking', 'saving', 'salary' or 'payment'
+  # - status [string]: current DICT key status. ex: 'created', 'registered', 'canceled' or 'failed'
+  # - account_created [DateTime or string]: creation datetime of the bank account associated with the DICT key. ex: '2020-11-05T14:55:08.812665+00:00'
+  # - owned [DateTime or string]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
+  # - created [DateTime or string]: creation datetime for the DICT key. ex: '2020-03-10 10:30:00.000'
   class DictKey < StarkCore::Utils::Resource
     attr_reader :id, :type, :name, :tax_id, :owner_type, :bank_name, :ispb, :branch_code, :account_number, :account_type, :status, :account_created, :owned, :created
     def initialize(
@@ -52,7 +52,7 @@ module StarkBank
     # Receive a single DictKey object by passing its id
     #
     # ## Parameters (required):
-    # - id [string]: DictKey object unique id and PIX key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'
+    # - id [string]: DictKey object unique id and Pix key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'
     #
     # ## Parameters (optional):
     # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call

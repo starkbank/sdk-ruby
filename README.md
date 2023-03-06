@@ -30,15 +30,18 @@ is as easy as sending a text message to your client!
     - [Transfers](#create-transfers): Wire transfers (TED and manual Pix)
     - [DictKeys](#get-dict-key): Pix Key queries to use with Transfers
     - [Institutions](#query-bacen-institutions): Instutitions recognized by the Central Bank
-    - [Invoices](#create-invoices): Reconciled receivables (dynamic PIX QR Codes)
-    - [Deposits](#query-deposits): Other cash-ins (static PIX QR Codes, manual PIX, etc)
+    - [Invoices](#create-invoices): Reconciled receivables (dynamic Pix QR Codes)
+    - [DynamicBrcode](#create-dynamicbrcodes): Simplified reconciled receivables (dynamic Pix QR Codes)
+    - [Deposits](#query-deposits): Other cash-ins (static Pix QR Codes, DynamicBrcodes, manual Pix, etc)
     - [Boletos](#create-boletos): Boleto receivables
     - [BoletoHolmes](#investigate-a-boleto): Boleto receivables investigator
     - [BrcodePayments](#pay-a-br-code): Pay Pix QR Codes
     - [BoletoPayments](#pay-a-boleto): Pay Boletos
     - [UtilityPayments](#create-utility-payments): Pay Utility bills (water, light, etc.)
     - [TaxPayments](#create-tax-payments): Pay taxes
+    - [DarfPayments](#create-darf-payment): Pay DARFs
     - [PaymentPreviews](#preview-payment-information-before-executing-the-payment): Preview all sorts of payments
+    - [PaymentRequest](#create-payment-requests-to-be-approved-by-authorized-people-in-a-cost-center): Request a payment approval to a cost center
     - [Webhooks](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -388,7 +391,7 @@ puts balance
 
 ## Create transfers
 
-You can also create transfers in the SDK (TED/Pix).
+You can also create transfers in the SDK (TED/Pix) and configure transfer behavior according to its rules.
 
 ```ruby
 require('starkbank')
@@ -414,7 +417,12 @@ transfers = StarkBank::Transfer.create(
       tax_id: '012.345.678-90',
       name: 'Jon Snow',
       scheduled: Time.now + 24 * 3600,
-      tags: []
+      tags: [],
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',    # Set maximum number of retries if Transfer fails due to systemic issues at the receiver bank
+          value: 5                  # Our resending limit is 10 by default
+      ]
     )
   ]
 )
@@ -735,6 +743,75 @@ payment = StarkBank::Invoice.payment('5155165527080960');
 puts payment
 ```
 
+## Create DynamicBrcodes
+
+You can create simplified dynamic QR Codes to receive money using Pix transactions. 
+When a DynamicBrcode is paid, a Deposit is created with the tags parameter containing the character “dynamic-brcode/” followed by the DynamicBrcode’s uuid "dynamic-brcode/{uuid}" for conciliation.
+
+The differences between an Invoice and the DynamicBrcode are the following:
+
+|                       | Invoice | DynamicBrcode |
+|-----------------------|:-------:|:-------------:|
+| Expiration            |    ✓    |       ✓       |
+| Can only be paid once |    ✓    |       ✓       |
+| Due, fine and fee     |    ✓    |       X       |
+| Discount              |    ✓    |       X       |
+| Description           |    ✓    |       X       |
+| Can be updated        |    ✓    |       X       |
+
+**Note:** In order to check if a BR code has expired, you must first calculate its expiration date (add the expiration to the creation date). 
+**Note:** To know if the BR code has been paid, you need to query your Deposits by the tag "dynamic-brcode/{uuid}" to check if it has been paid.
+
+```ruby
+require('starkbank')
+
+brcodes = StarkBank::DynamicBrcode.create([
+    StarkBank::DynamicBrcode.new(
+      amount: 23571,  # R$ 235,71 
+      expiration: 3600 * 3
+    ),
+    StarkBank::DynamicBrcode(
+      amount: 23571,  # R$ 235,71 
+      expiration: 3600 * 3
+    )
+])
+
+brcodes.each do |brcode|
+  puts brcode
+end
+```
+
+**Note**: Instead of using DynamicBrcode objects, you can also pass each brcode element in dictionary format
+
+## Get a DynamicBrcode
+
+After its creation, information on a DynamicBrcode may be retrieved by its uuid.
+
+```ruby
+require('starkbank')
+
+brcode = StarkBank::DynamicBrcode.get("bb9cd43ea6f4403391bf7ef6aa876600")
+
+puts brcode
+```
+
+## Query DynamicBrcodes
+
+You can get a list of created DynamicBrcodes given some filters.
+
+```ruby
+require('starkbank')
+
+brcodes = StarkBank::DynamicBrcode.query(
+    after: "2023-01-01",
+    before: "2023-03-01"
+)
+
+brcodes.each do |brcode|
+  puts brcode
+end
+```
+
 ## Query deposits
 
 You can get a list of created deposits given some filters.
@@ -996,10 +1073,15 @@ payments = StarkBank::BrcodePayment.create(
   [
     StarkBank::BrcodePayment.new(
       line: '00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A',
-      tax_id: '012.345.678-90',
+      tax_id:"012.345.678-90",
       scheduled: Time.now,
-      description: 'take my money',
-      tags: %w[take my money]
+      description: "take my money",
+      tags: %w[take my money],
+      rules: [
+        StarkBank::BrcodePayment::Rule.new(
+          key: "resendingLimit",    # Set maximum number of retries if BrcodePayment fails due to systemic issues at the receiver bank
+          value: 5                  # Our resending limit is 10 by default
+      ]
     )
   ]
 )
@@ -1009,6 +1091,7 @@ payments.each do |payment|
 end
 ```
 
+**Note**: You can also configure payment behavior according to its rules
 **Note**: Instead of using BrcodePayment objects, you can also pass each payment element in hash format
 
 ## Get a BR Code payment
@@ -1387,9 +1470,9 @@ You can get a specific tax payment by its id:
 ```ruby
 require('starkbank')
 
-tax_payment = StarkBank::TaxPayment.get('5155165527080960')
+payment = StarkBank::TaxPayment.get('5155165527080960')
 
-puts tax_payment
+puts payment
 ```
 
 ## Get tax payment PDF
@@ -1415,9 +1498,9 @@ Note that this is not possible if it has been processed already.
 ```ruby
 require('starkbank')
 
-tax_payment = StarkBank::TaxPayment.delete('5155165527080960')
+payment = StarkBank::TaxPayment.delete('5155165527080960')
 
-puts tax_payment
+puts payment
 ```
 
 ## Query tax payment logs
@@ -1449,6 +1532,120 @@ puts log
 **Note**: Some taxes can't be payed with bar codes. Since they have specific parameters, each one of them has its own
 resource and routes, which are all analogous to the TaxPayment resource. The ones we currently support are:
 - DarfPayment, for DARFs
+
+## Create DARF payment
+
+If you want to manually pay DARFs without barcodes, you may create DarfPayments:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::DarfPayment.create(
+  [
+    StarkBank::DarfPayment.new(
+        revenue_code: "1240",
+        tax_id: "012.345.678-90",
+        competence: "2023-09-01",
+        reference_number: "2340978970",
+        nominal_amount: 1234,
+        fine_amount: 12,
+        interest_amount: 34,
+        due: "2023-03-05",
+        scheduled: "2023-03-05",
+        tags: ["DARF", "making money"],
+        description: "take my money",
+    )
+  ]
+)
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+**Note**: Instead of using DarfPayment objects, you can also pass each payment element in dictionary format
+
+## Query DARF payments
+
+To search for DARF payments using filters, run:
+
+```ruby
+require('starkbank')
+
+payments = StarkBank::DarfPayment.query(
+    tags: ["darf", "july"]
+).to_a
+
+payments.each do |payment|
+  puts payment
+end
+```
+
+## Get DARF payment
+
+You can get a specific DARF payment by its id:
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::DarfPayment.get('5155165527080960')
+
+puts payment
+```
+
+## Get DARF payment PDF
+
+After its creation, a DARF payment PDF may also be retrieved by its id. 
+
+```ruby
+require('starkbank')
+
+pdf = StarkBank::DarfPayment.pdf('5155165527080960')
+File.binwrite('tax_payment.pdf', pdf)
+```
+
+Be careful not to accidentally enforce any encoding on the raw pdf content,
+as it may yield abnormal results in the final file, such as missing images
+and strange characters.
+
+## Delete DARF payment
+
+You can also cancel a DARF payment by its id.
+Note that this is not possible if it has been processed already.
+
+```ruby
+require('starkbank')
+
+payment = StarkBank::DarfPayment.delete('5155165527080960')
+
+puts payment
+```
+
+## Query DARF payment logs
+
+You can search for payment logs by specifying filters. Use this to understand each payment life cycle.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::DarfPayment::Log.query(limit: 5).to_a
+
+logs.each do |log|
+  puts log
+end
+```
+
+## Get DARF payment log
+
+If you want to get a specific payment log by its id, just run:
+
+```ruby
+require('starkbank')
+
+log = StarkBank::DarfPayment::Log.get('1902837198237992')
+
+puts log
+```
 
 ## Preview payment information before executing the payment
 
@@ -1754,11 +1951,29 @@ You can update a specific Workspace by its id.
 ```ruby
 require('starkbank')
 
+picture = open("path/to/picture.png", "rb").read()
+
 updatedWorkspace = StarkBank::Workspace.update(
   workspace.ID, 
   username: 'new-username-test', 
   name: 'Updated workspace test', 
-  allowed_tax_ids: ['20.018.183/0001-80']
+  allowed_tax_ids: ['20.018.183/0001-80'],
+  picture: picture,
+  picture_type: "image/png"
+)
+
+puts updatedWorkspace
+```
+
+You can also block a specific Workspace by its id.
+
+```ruby
+require('starkbank')
+
+updatedWorkspace = StarkBank::Workspace.update(
+  workspace.ID, 
+  status: "blocked",
+  user:starkbank.Organization.replace(organization, workspace.ID)
 )
 
 puts updatedWorkspace

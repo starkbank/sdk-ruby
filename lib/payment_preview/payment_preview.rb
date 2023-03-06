@@ -10,9 +10,13 @@ module StarkBank
   # A PaymentPreview is used to get information from a payment code before confirming the payment.
   # This resource can be used to preview BR Codes and bar codes of boleto, tax and utility payments
   #
-  # ## Attributes (return-only):
+  # ## Parameters (required):
   # - id [string]: Main identification of the payment. This should be the BR Code for Pix payments and lines or bar codes for payment slips. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062', '00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A'
+  #
+  # ## Parameters (optional):
   # - scheduled [DateTime or string]: intended payment date. Right now, this parameter only has effect on BrcodePreviews. ex: '2020-04-30'
+  #
+  # ## Attributes (return-only):
   # - type [string]: Payment type. ex: 'brcode-payment', 'boleto-payment', 'utility-payment' or 'tax-payment'
   # - payment [BrcodePreview, BoletoPreview, UtilityPreview or TaxPreview]: Information preview of the informed payment.
   class PaymentPreview < StarkCore::Utils::Resource

@@ -18,11 +18,11 @@ module StarkBank
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when holmes is created. ex: '5656565656565656'
-  # - status [string, default nil]: current holmes status. ex: 'solving' or 'solved'
-  # - result [string, default nil]: result of boleto status investigation. ex: 'paid' or 'cancelled'
-  # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  # - updated [DateTime, default nil]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - id [string]: unique id returned when holmes is created. ex: '5656565656565656'
+  # - status [string]: current holmes status. ex: 'solving' or 'solved'
+  # - result [string]: result of boleto status investigation. ex: 'paid' or 'cancelled'
+  # - created [DateTime]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - updated [DateTime]: latest update datetime for the holmes. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class BoletoHolmes < StarkCore::Utils::Resource
     attr_reader :boleto_id, :tags, :id, :status, :result, :created, :updated
     def initialize(
