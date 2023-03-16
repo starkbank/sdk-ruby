@@ -6,6 +6,7 @@ require_relative('../utils/rest')
 
 module StarkBank
   # # PaymentRequest object
+  #
   # A PaymentRequest is an indirect request to access a specific cash-out service
   # (such as Transfer, BrcodePayments, etc.) which goes through the cost center
   #  approval flow on our website. To emit a PaymentRequest, you must direct it to
@@ -16,24 +17,27 @@ module StarkBank
   # - center_id [String]: target cost center ID. ex: '5656565656565656'
   # - payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.
   #
-  # ## Parameters (optional):
+  # ## Parameters (conditionally required):
   # - type [String]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
+  #
+  # ## Parameters (optional):
   # - due [Date, DateTime, Time or string]: Payment target date in ISO format. ex: 2020-12-31
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
   # - id [String]: unique id returned when PaymentRequest is created. ex: '5656565656565656'
-  # - amount [integer, default nil]: PaymentRequest amount. ex: 100000 = R$1.000,00
-  # - status [string, default nil]: current PaymentRequest status.ex: 'pending' or 'approved'
-  # - actions [list of dictionaries, default nil]: list of actions that are affecting this PaymentRequest. ex: [{'type': 'member', 'id': '56565656565656, 'action': 'requested'}]
-  # - updated [DateTime, default nil]: latest update datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  # - created [DateTime, default nil]: creation datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - amount [integer]: PaymentRequest amount. ex: 100000 = R$1.000,00
+  # - description [string]: payment request description. ex: "Tony Stark's Suit"
+  # - status [string]: current PaymentRequest status.ex: 'pending' or 'approved'
+  # - actions [list of dictionaries]: list of actions that are affecting this PaymentRequest. ex: [{'type': 'member', 'id': '56565656565656, 'action': 'requested'}]
+  # - updated [DateTime]: latest update datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - created [DateTime]: creation datetime for the PaymentRequest. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   #
   class PaymentRequest < StarkCore::Utils::Resource
-    attr_reader :center_id, :payment, :type, :due, :tags, :amount, :status, :actions, :updated, :created
+    attr_reader :center_id, :payment, :type, :due, :tags, :amount, :description, :status, :actions, :updated, :created
     def initialize(
       payment:, center_id:, id: nil, type: nil, due: nil, tags: nil, amount: nil, status: nil,
-      actions: nil, updated: nil, created: nil
+      description: nil, actions: nil, updated: nil, created: nil
     )
       super(id)
       @center_id = center_id
@@ -42,6 +46,7 @@ module StarkBank
       @amount = amount
       @status = status
       @actions = actions
+      @description = description
       @updated = updated
       @created = created
 
@@ -173,6 +178,7 @@ module StarkBank
             tags: json['tags'],
             amount: json['amount'],
             status: json['status'],
+            description: json['description'],
             actions: json['actions'],
             updated: json['updated'],
             created: json['created']

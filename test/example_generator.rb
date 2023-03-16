@@ -116,8 +116,14 @@ class ExampleGenerator
     StarkBank::BrcodePayment.new(
       brcode: invoice.brcode,
       scheduled: schedule ? DateTime.now + 600 : nil,
-      description: 'paying a PIX',
-      tax_id: '20.018.183/0001-80'
+      description: 'paying a Pix',
+      tax_id: '20.018.183/0001-80',
+      rules: [
+        StarkBank::BrcodePayment::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
     )
   end
 
@@ -140,7 +146,13 @@ class ExampleGenerator
       account_number: '10000-0',
       account_type: 'checking',
       external_id: 'ruby-' + rand(1e10).to_s,
-      scheduled: schedule ? Time.now + 24 * 3600 : nil
+      scheduled: schedule ? Time.now + 24 * 3600 : nil,
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
     )
   end
 
@@ -203,6 +215,14 @@ class ExampleGenerator
     else
       raise(ArgumentError, 'Bad random number')
     end
+  end
+
+  def self.dynamic_brcode_example
+    StarkBank::DynamicBrcode.new(
+      amount: 100_000,
+      expiration: 3600 * 2,
+      tags: ["test1", "test2"],
+    )
   end
 
   def self.organization_example

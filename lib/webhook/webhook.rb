@@ -15,8 +15,8 @@ module StarkBank
   # - url [string]: Url that will be notified when an event occurs.
   # - subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['transfer', 'deposit']
   #
-  # ## Attributes:
-  # - id [string, default nil]: unique id returned when the webhook is created. ex: '5656565656565656'
+  # ## Attributes (return-only):
+  # - id [string]: unique id returned when the webhook is created. ex: '5656565656565656'
   class Webhook < StarkCore::Utils::Resource
     attr_reader :url, :subscriptions, :id
     def initialize(url:, subscriptions:, id: nil)

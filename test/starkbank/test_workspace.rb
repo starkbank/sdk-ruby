@@ -43,4 +43,30 @@ describe(StarkBank::Workspace, '#workspace') do
     end
     expect(ids.length).must_be :==, 4
   end
+
+  it 'update status in workspace' do
+    workspaces, cursor = StarkBank::Workspace.page(limit: 1, user: ExampleGenerator.organization_example)
+
+    workspace = StarkBank::Workspace.update(
+      workspaces[0].id,
+      status: "blocked",
+      user: StarkBank::Organization.replace(ExampleGenerator.organization_example, workspaces[0].id)
+    )
+    expect(workspace.status).must_equal("blocked")
+  end
+
+  it 'update picture in workspace' do
+    workspaces, cursor = StarkBank::Workspace.page(limit: 1, user: ExampleGenerator.organization_example)
+    file = open('test/utils/logo.png', 'rb')
+    picture = file.read
+    file.close
+
+    workspace = StarkBank::Workspace.update(
+      workspaces[0].id,
+      picture: picture,
+      picture_type: 'image/png',
+      user: StarkBank::Organization.replace(ExampleGenerator.organization_example, workspaces[0].id)
+    )
+    expect(workspace.id).must_equal(workspaces[0].id)
+  end
 end

@@ -26,11 +26,11 @@ module StarkBank
   #
   # ## Attributes (return-only):
   # - sender_id [string]: unique id of the sending workspace. ex: '5656565656565656'
-  # - source [string, default nil]: locator of the entity that generated the transaction. ex: 'charge/1827351876292', 'transfer/92873912873/chargeback'
-  # - id [string, default nil]: unique id returned when Transaction is created. ex: '7656565656565656'
-  # - fee [integer, default nil]: fee charged when transaction is created. ex: 200 (= R$ 2.00)
-  # - balance [integer, default nil]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)
-  # - created [DateTime, default nil]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - source [string]: locator of the entity that generated the transaction. ex: 'charge/1827351876292', 'transfer/92873912873/chargeback'
+  # - id [string]: unique id returned when Transaction is created. ex: '7656565656565656'
+  # - fee [integer]: fee charged when transaction is created. ex: 200 (= R$ 2.00)
+  # - balance [integer]: account balance after transaction was processed. ex: 100000000 (= R$ 1,000,000.00)
+  # - created [DateTime]: creation datetime for the boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transaction < StarkCore::Utils::Resource
     attr_reader :amount, :description, :external_id, :receiver_id, :sender_id, :tags, :id, :fee, :created, :source
     def initialize(amount:, description:, external_id:, receiver_id:, sender_id: nil, tags: nil, id: nil, fee: nil, source: nil, balance: nil, created: nil)

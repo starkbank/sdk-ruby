@@ -34,21 +34,22 @@ module StarkBank
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
-  # - id [string, default nil]: unique id returned when Boleto is created. ex: '5656565656565656'
-  # - fee [integer, default nil]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)
-  # - line [string, default nil]: generated Boleto line for payment. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062'
-  # - bar_code [string, default nil]: generated Boleto bar-code for payment. ex: '34195819600000000621090063571277307144464000'
-  # - transaction_ids [list of strings, default nil]: ledger transaction ids linked to this boleto. ex: ['19827356981273']
-  # - status [string, default nil]: current Boleto status. ex: 'registered' or 'paid'
-  # - created [DateTime, default nil]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
-  # - our_number [string, default nil]: Reference number registered at the settlement bank. ex:'10131474'
+  # - id [string]: unique id returned when Boleto is created. ex: '5656565656565656'
+  # - fee [integer]: fee charged when Boleto is paid. ex: 200 (= R$ 2.00)
+  # - line [string]: generated Boleto line for payment. ex: '34191.09008 63571.277308 71444.640008 5 81960000000062'
+  # - bar_code [string]: generated Boleto bar-code for payment. ex: '34195819600000000621090063571277307144464000'
+  # - transaction_ids [list of strings]: ledger transaction ids linked to this boleto. ex: ['19827356981273']
+  # - workspace_id [string]: ID of the Workspace where this Boleto was generated. ex: "4545454545454545"
+  # - status [string]: current Boleto status. ex: 'registered' or 'paid'
+  # - created [DateTime]: creation datetime for the Boleto. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
+  # - our_number [string]: Reference number registered at the settlement bank. ex:'10131474'
   class Boleto < StarkCore::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :transaction_ids, :created, :our_number
+    attr_reader :amount, :name, :tax_id, :street_line_1, :street_line_2, :district, :city, :state_code, :zip_code, :due, :fine, :interest, :overdue_limit, :receiver_name, :receiver_tax_id, :tags, :descriptions, :discounts, :id, :fee, :line, :bar_code, :status, :transaction_ids, :workspace_id, :created, :our_number
     def initialize(
       amount:, name:, tax_id:, street_line_1:, street_line_2:, district:, city:, state_code:, zip_code:,
       due: nil, fine: nil, interest: nil, overdue_limit: nil, receiver_name: nil, receiver_tax_id: nil,
       tags: nil, descriptions: nil, discounts: nil, id: nil, fee: nil, line: nil, bar_code: nil,
-      status: nil, transaction_ids: nil, created: nil, our_number: nil
+      status: nil, transaction_ids: nil, workspace_id: nil, created: nil, our_number: nil
     )
       super(id)
       @amount = amount
@@ -74,6 +75,7 @@ module StarkBank
       @bar_code = bar_code
       @status = status
       @transaction_ids = transaction_ids
+      @workspace_id = workspace_id
       @created = StarkCore::Utils::Checks.check_datetime(created)
       @our_number = our_number
     end
@@ -236,6 +238,7 @@ module StarkBank
             bar_code: json['bar_code'],
             status: json['status'],
             transaction_ids: json['transaction_ids'],
+            workspace_id: json['workspace_id'],
             created: json['created'],
             our_number: json['our_number']
           )
