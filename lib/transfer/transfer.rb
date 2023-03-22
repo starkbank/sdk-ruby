@@ -32,11 +32,12 @@ module StarkBank
   # - fee [integer]: fee charged when transfer is created. ex: 200 (= R$ 2.00)
   # - status [string]: current transfer status. ex: 'success' or 'failed'
   # - transaction_ids [list of strings]: ledger transaction ids linked to this transfer (if there are two, second is the chargeback). ex: ['19827356981273']
+  # - metadata [dictionary object]: dictionary object used to store additional information about the Transfer object.
   # - created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkCore::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :fee, :tags, :rules, :status, :id, :created, :updated
-    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, fee: nil, tags: nil, rules: nil, status: nil, id: nil, created: nil, updated: nil)
+    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :metadata, :fee, :tags, :rules, :status, :id, :created, :updated
+    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, metadata: nil, fee: nil, tags: nil, rules: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
       @amount = amount
       @name = name
@@ -53,6 +54,7 @@ module StarkBank
       @fee = fee
       @status = status
       @transaction_ids = transaction_ids
+      @metadata = metadata
       @created = StarkCore::Utils::Checks.check_datetime(created)
       @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
@@ -214,6 +216,7 @@ module StarkBank
             fee: json['fee'],
             status: json['status'],
             transaction_ids: json['transaction_ids'],
+            metadata: json['metadata'],
             created: json['created'],
             updated: json['updated']
           )
