@@ -14,9 +14,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 
-## [2.7.0] - 2023-03-16
+## [2.8.0] - 2023-03-23
 ### Added
 - metadata attribute to Transfer resource
+
+## [2.7.0] - 2023-03-16
+### Added
 - updated, type and transaction_ids attribute to UtilityPayment resource
 - workspace_id attribute to Boleto resource
 - updated attribute to BoletoHolmes::Log resource

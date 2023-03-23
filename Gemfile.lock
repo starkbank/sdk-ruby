@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    starkbank (2.7.0)
+    starkbank (2.8.0)
       starkcore (~> 0.0.1)
 
 GEM
@@ -25,6 +25,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     ruby-progressbar (1.10.1)
+    starkbank-ecdsa (2.0.0)
     starkcore (0.0.1)
       starkbank-ecdsa (~> 2.0.0)
     unicode-display_width (1.7.0)
