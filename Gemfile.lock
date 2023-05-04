@@ -7,31 +7,35 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.0)
-    jaro_winkler (1.5.4)
-    minitest (5.14.1)
-    parallel (1.19.1)
-    parser (2.7.1.0)
-      ast (~> 2.4.0)
-    rainbow (3.0.0)
-    rake (13.0.1)
+    ast (2.4.2)
+    minitest (5.14.4)
+    parallel (1.23.0)
+    parser (3.2.2.0)
+      ast (~> 2.4.1)
+    rainbow (3.1.1)
+    rake (13.0.6)
+    regexp_parser (2.8.0)
     rexml (3.2.5)
-    rubocop (0.81.0)
-      jaro_winkler (~> 1.5.1)
+    rubocop (0.93.1)
       parallel (~> 1.10)
-      parser (>= 2.7.0.1)
+      parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8)
       rexml
+      rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    ruby-progressbar (1.10.1)
+    rubocop-ast (1.28.0)
+      parser (>= 3.2.1.0)
+    ruby-progressbar (1.13.0)
     starkbank-ecdsa (2.0.0)
     starkcore (0.0.1)
       starkbank-ecdsa (~> 2.0.0)
-    unicode-display_width (1.7.0)
+    unicode-display_width (1.8.0)
 
 PLATFORMS
-  ruby
+  arm64-darwin-21
+  arm64-darwin-22
 
 DEPENDENCIES
   minitest (~> 5.14.1)

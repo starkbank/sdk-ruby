@@ -47,8 +47,8 @@ module StarkBank
       @status = status
       @actions = actions
       @description = description
-      @updated = updated
-      @created = created
+      @updated = StarkCore::Utils::Checks.check_datetime(updated)
+      @created = StarkCore::Utils::Checks.check_datetime(created)
 
       @payment, @type = parse_payment(payment: payment, type: type)
     end

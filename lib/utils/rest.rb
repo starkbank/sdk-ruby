@@ -126,6 +126,20 @@ module StarkBank
         )
       end
 
+      def self.post_raw(path:, payload:, user:, **query)
+        return StarkCore::Utils::Rest.post_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          payload: payload,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          **query,
+        )
+      end
+
       def self.delete_id(resource_name:, resource_maker:, user:, id:)
         return StarkCore::Utils::Rest.delete_id(
           resource_name: resource_name,
