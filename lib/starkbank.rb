@@ -58,7 +58,7 @@ require_relative('institution/institution')
 module StarkBank
 
   API_VERSION = 'v2'
-  SDK_VERSION = '2.8.0'
+  SDK_VERSION = '2.9.0'
   HOST = "bank"
   public_constant :API_VERSION, :SDK_VERSION, :HOST;
 
