@@ -13,6 +13,20 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- CorporateBalance resource
+- CorporateCard resource
+- CorporateHolder resource
+- CorporateInvoice resource
+- CorporatePurchase resource
+- CorporateRule resource
+- CorporateTransaction resource
+- CorporateWithdrawal resource
+- CardMethod sub-resource
+- MerchantCategory sub-resource
+- MerchantCountry sub-resource
+### Changed
+- StarkCore lib from 0.0.1 to 0.1.0
 
 ## [2.8.0] - 2023-03-23
 ### Added

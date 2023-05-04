@@ -225,6 +225,39 @@ class ExampleGenerator
     )
   end
 
+  def self.corporatecard_example
+    holder = StarkBank::CorporateHolder.create(holders: [self.corporateholder_example])[0]
+
+    StarkBank::CorporateCard.new(
+      holder_id: holder.id
+    )
+  end
+
+  def self.corporateholder_example
+    StarkBank::CorporateHolder.new(
+      name: 'Test Ruby SDK - ' + rand(1e10).to_s,
+      permissions: [
+        StarkBank::CorporateHolder::Permission.new(
+          owner_id: ENV['SANDBOX_ID'],
+          owner_type: "project"
+        )
+      ]
+    )
+  end
+
+  def self.corporateinvoice_example
+    StarkBank::CorporateInvoice.new(
+      amount: 10000
+    )
+  end
+
+  def self.corporatewithdrawal_example
+    StarkBank::CorporateWithdrawal.new(
+      amount: 10000,
+      external_id: SecureRandom.base64
+    )
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',
