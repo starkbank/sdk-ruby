@@ -14,14 +14,14 @@ module StarkBank
     # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - purchase [CorporatePurchase]: CorporatePurchase entity to which the log refers to.
-    # - description [string]: purchase descriptions. ex: "my_description"
+    # - description [string]: purchase descriptions. ex: 'my_description'
     # - corporate_transaction_id [string]: transaction ID related to the CorporateCard.
     # - errors [list of strings]: list of errors linked to this CorporatePurchase event
     # - type [string]: type of the CorporatePurchase event which triggered the log creation. ex: 'approved', 'canceled', 'confirmed', 'denied', 'reversed', 'voided'.
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     class Log < StarkCore::Utils::Resource
-      attr_reader :id, :purchase, :corporate_transaction_id, :errors, :type, :created
-      def initialize(id: nil, purchase: nil, corporate_transaction_id: nil, errors: nil, type: nil, created: nil)
+      attr_reader :id, :purchase, :description, :corporate_transaction_id, :errors, :type, :created
+      def initialize(id: nil, purchase: nil, description: nil, corporate_transaction_id: nil, errors: nil, type: nil, created: nil)
         super(id)
         @purchase = purchase
         @description = description
