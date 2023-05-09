@@ -56,7 +56,7 @@ module StarkBank
       @amount = amount
       @nominal_amount = nominal_amount
       @fee = fee
-      @transaction_ids = @transaction_ids
+      @transaction_ids = transaction_ids
       @updated = StarkCore::Utils::Checks.check_datetime(updated)
       @created = StarkCore::Utils::Checks.check_datetime(created)
     end

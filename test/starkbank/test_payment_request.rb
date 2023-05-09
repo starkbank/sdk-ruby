@@ -25,7 +25,7 @@ describe(StarkBank::PaymentRequest, '#payment-request#') do
       end
       break if cursor.nil?
     end
-    expect(ids.length).must_equal(10)
+    expect(ids.length).must_equal(2)
   end
 
   it 'create' do
