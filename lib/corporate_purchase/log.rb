@@ -14,6 +14,7 @@ module StarkBank
     # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - purchase [CorporatePurchase]: CorporatePurchase entity to which the log refers to.
+    # - description [string]: purchase descriptions. ex: "my_description"
     # - corporate_transaction_id [string]: transaction ID related to the CorporateCard.
     # - errors [list of strings]: list of errors linked to this CorporatePurchase event
     # - type [string]: type of the CorporatePurchase event which triggered the log creation. ex: 'approved', 'canceled', 'confirmed', 'denied', 'reversed', 'voided'.
@@ -23,6 +24,7 @@ module StarkBank
       def initialize(id: nil, purchase: nil, corporate_transaction_id: nil, errors: nil, type: nil, created: nil)
         super(id)
         @purchase = purchase
+        @description = description
         @corporate_transaction_id = corporate_transaction_id
         @errors = errors
         @type = type
@@ -117,6 +119,7 @@ module StarkBank
             Log.new(
               id: json['id'],
               purchase: StarkCore::Utils::API.from_api_json(request_maker, json['purchase']),
+              description: json['description'],
               corporate_transaction_id: json['corporate_transaction_id'],
               errors: json['errors'],
               type: json['type'],
