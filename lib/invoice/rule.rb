@@ -1,7 +1,4 @@
-# frozen_string_literal: true
-
 require_relative('../utils/rest')
-
 
 module StarkBank
   class Invoice
@@ -10,7 +7,7 @@ module StarkBank
     # The Invoice::Rule object modifies the behavior of Invoice objects when passed as an argument upon their creation.
     #
     # ## Parameters (required):
-    # - key [string]: Rule to be customized, describes what Invoice behavior will be altered. ex: "resendingLimit"
+    # - key [string]: Rule to be customized, describes what Invoice behavior will be altered. ex: "allowedTaxIds"
     # - value [list of string]: Value of the rule. ex: ['012.345.678-90', '45.059.493/0001-73']
     class Rule < StarkCore::Utils::SubResource
       attr_reader :key, :value

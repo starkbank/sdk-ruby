@@ -5,8 +5,8 @@ require_relative('../example_generator.rb')
 
 describe(StarkBank::PaymentRequest, '#payment-request#') do
   it 'query' do
-    requests = StarkBank::PaymentRequest.query(center_id: ENV['SANDBOX_CENTER_ID'], limit: 10, status: 'pending', before: DateTime.now).to_a
-    expect(requests.length).must_equal(10)
+    requests = StarkBank::PaymentRequest.query(center_id: '6301151125307392', limit: 1, status: 'pending', before: DateTime.now).to_a
+    expect(requests.length).must_equal(1)
     requests.each do |request|
       expect(request.id).wont_be_nil
       expect(request.status).must_equal('pending')
@@ -18,14 +18,14 @@ describe(StarkBank::PaymentRequest, '#payment-request#') do
     cursor = nil
     payment_requests = nil
     (0..1).step(1) do
-      payment_requests, cursor = StarkBank::PaymentRequest.page(center_id: ENV['SANDBOX_CENTER_ID'], limit: 5, cursor: cursor)
+      payment_requests, cursor = StarkBank::PaymentRequest.page(center_id: '6301151125307392', limit: 1, cursor: cursor)
       payment_requests.each do |payment_request|
         expect(ids).wont_include(payment_request.id)
         ids << payment_request.id
       end
       break if cursor.nil?
     end
-    expect(ids.length).must_equal(2)
+    expect(ids.length).must_equal(10)
   end
 
   it 'create' do
