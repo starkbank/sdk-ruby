@@ -24,7 +24,7 @@ module StarkBank
   # - fine [float, default 0.0]: Invoice fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
   # - discounts [list of hashes, default nil]: list of hashes with 'percentage':float and 'due':DateTime or string pairs
-  # - rules [list of Invoice::Rule, default []]: list of Invoice.Rule objects for modifying invoice behavior. ex: [Invoice.Rule(key="allowedTaxIds", value=[ "012.345.678-90", "45.059.493/0001-73" ])]
+  # - rules [list of Invoice::Rule, default []]: list of Invoice::Rule objects for modifying invoice behavior. ex: [Invoice::Rule(key="allowedTaxIds", value=[ "012.345.678-90", "45.059.493/0001-73" ])]
   # - descriptions [list of hashes, default nil]: list of hashes with 'key':string and 'value':string pairs
   # - tags [list of strings, default nil]: list of strings for tagging
   #
