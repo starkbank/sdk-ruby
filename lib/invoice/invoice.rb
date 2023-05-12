@@ -24,6 +24,7 @@ module StarkBank
   # - fine [float, default 0.0]: Invoice fine for overdue payment in %. ex: 2.5
   # - interest [float, default 0.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
   # - discounts [list of hashes, default nil]: list of hashes with 'percentage':float and 'due':DateTime or string pairs
+  # - rules [list of Invoice::Rule, default []]: list of Invoice::Rule objects for modifying invoice behavior. ex: [Invoice::Rule(key="allowedTaxIds", value=[ "012.345.678-90", "45.059.493/0001-73" ])]
   # - descriptions [list of hashes, default nil]: list of hashes with 'key':string and 'value':string pairs
   # - tags [list of strings, default nil]: list of strings for tagging
   #
@@ -42,9 +43,9 @@ module StarkBank
   # - created [DateTime]: creation datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime]: latest update datetime for the Invoice. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Invoice < StarkCore::Utils::Resource
-    attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :tags, :pdf, :link, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :transaction_ids, :created, :updated
+    attr_reader :amount, :tax_id, :name, :due, :expiration, :fine, :interest, :discounts, :rules, :tags, :pdf, :link, :descriptions, :nominal_amount, :fine_amount, :interest_amount, :discount_amount, :id, :brcode, :fee, :status, :transaction_ids, :created, :updated
     def initialize(
-      amount:, tax_id:, name:, due: nil, expiration: nil, fine: nil, interest: nil, discounts: nil,
+      amount:, tax_id:, name:, due: nil, expiration: nil, fine: nil, interest: nil, discounts: nil, rules: nil,
       tags: nil, pdf: nil, link: nil, descriptions: nil, nominal_amount: nil, fine_amount: nil, interest_amount: nil,
       discount_amount: nil, id: nil, brcode: nil, fee: nil, status: nil, transaction_ids: nil, created: nil, updated: nil
     )
@@ -60,6 +61,7 @@ module StarkBank
       @pdf = pdf
       @link = link
       @descriptions = descriptions
+      @rules = StarkBank::Invoice::Rule.parse_rules(rules)
       @nominal_amount = nominal_amount
       @fine_amount = fine_amount
       @interest_amount = interest_amount
@@ -256,6 +258,7 @@ module StarkBank
             fine: json['fine'],
             interest: json['interest'],
             discounts: json['discounts'],
+            rules: json['rules'],
             tags: json['tags'],
             pdf: json['pdf'],
             link: json['link'],
