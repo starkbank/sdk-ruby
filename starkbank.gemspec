@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'starkbank'
-  s.version = '2.9.0'
+  s.version = '2.10.0'
   s.summary = 'SDK to facilitate Ruby integrations with Stark Bank'
   s.authors = 'starkbank'
   s.homepage = 'https://github.com/starkbank/sdk-ruby'
