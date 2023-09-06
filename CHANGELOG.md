@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Removed
+- accountCreated, created, owned attributes
 
 ## [2.10.0] - 2023-05-12
 ### Added
