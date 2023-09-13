@@ -18,8 +18,8 @@ module StarkBank
   # - owner_type [string]: DICT key owner type. ex 'naturalPerson' or 'legalPerson'
   # - bank_name [string]: bank name associated with the DICT key. ex: 'Stark Bank'
   # - ispb [string]: bank ISPB associated with the DICT key. ex: '20018183'
-  # - branch_code [string]: bank account branch code associated with the DICT key. ex: '9585'
-  # - account_number [string]: bank account number associated with the DICT key. ex: '9828282578010513'
+  # - branch_code [string]: bank account branch code associated with the DICT key. ex: 'ZW5jcnlwdGVkLWJyYW5jaC1jb2Rl'
+  # - account_number [string]: bank account number associated with the DICT key. ex: 'ZW5jcnlwdGVkLWFjY291bnQtbnVtYmVy'
   # - account_type [string]: bank account type associated with the DICT key. ex: 'checking', 'saving', 'salary' or 'payment'
   # - status [string]: current DICT key status. ex: 'created', 'registered', 'canceled' or 'failed'
   class DictKey < StarkCore::Utils::Resource

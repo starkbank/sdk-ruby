@@ -16,6 +16,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Removed
 - accountCreated, created, owned attributes
 
+### Fixed
+- unmasked branchCode, accountNumber attributes  
+
 ## [2.10.0] - 2023-05-12
 ### Added
 - purpose and schedule attributes to CorporateRule resource
