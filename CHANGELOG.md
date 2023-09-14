@@ -16,8 +16,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Removed
 - accountCreated, created, owned attributes
 
-### Fixed
-- unmasked branchCode, accountNumber attributes  
+### Changed
+- accountNumber and branchCode docstring attributes to DictKey resource
 
 ## [2.10.0] - 2023-05-12
 ### Added
