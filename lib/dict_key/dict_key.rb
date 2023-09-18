@@ -18,19 +18,13 @@ module StarkBank
   # - owner_type [string]: DICT key owner type. ex 'naturalPerson' or 'legalPerson'
   # - bank_name [string]: bank name associated with the DICT key. ex: 'Stark Bank'
   # - ispb [string]: bank ISPB associated with the DICT key. ex: '20018183'
-  # - branch_code [string]: bank account branch code associated with the DICT key. ex: '9585'
-  # - account_number [string]: bank account number associated with the DICT key. ex: '9828282578010513'
-  # - account_type [string]: bank account type associated with the DICT key. ex: 'checking', 'saving', 'salary' or 'payment'
+  # - branch_code [string]: encrypted bank account branch code associated with the DICT key. ex: 'ZW5jcnlwdGVkLWJyYW5jaC1jb2Rl'
+  # - account_number [string]: encrypted bank account number associated with the DICT key. ex: 'ZW5jcnlwdGVkLWFjY291bnQtbnVtYmVy'
+  # - account_type [string]: bank account type associated with the DICT key. ex: 'checking', 'savings', 'salary' or 'payment'
   # - status [string]: current DICT key status. ex: 'created', 'registered', 'canceled' or 'failed'
-  # - account_created [DateTime or string]: creation datetime of the bank account associated with the DICT key. ex: '2020-11-05T14:55:08.812665+00:00'
-  # - owned [DateTime or string]: datetime since when the current owner hold this DICT key. ex : '2020-11-05T14:55:08.812665+00:00'
-  # - created [DateTime or string]: creation datetime for the DICT key. ex: '2020-03-10 10:30:00.000'
   class DictKey < StarkCore::Utils::Resource
     attr_reader :id, :type, :name, :tax_id, :owner_type, :bank_name, :ispb, :branch_code, :account_number, :account_type, :status, :account_created, :owned, :created
-    def initialize(
-      id:, type:, name:, tax_id:, owner_type:, bank_name:, ispb:, branch_code:, account_number:, 
-      account_type:, status:, account_created:, owned:, created:
-    )
+    def initialize(id:, type:, name:, tax_id:, owner_type:, bank_name:, ispb:, branch_code:, account_number:, account_type:, status:)
       super(id)
       @type = type
       @name = name
@@ -42,9 +36,6 @@ module StarkBank
       @account_number = account_number
       @account_type = account_type
       @status = status
-      @account_created = StarkCore::Utils::Checks.check_datetime(account_created)
-      @owned = StarkCore::Utils::Checks.check_datetime(owned)
-      @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
     # # Retrieve a specific DictKey
@@ -141,10 +132,7 @@ module StarkBank
             branch_code: json['branch_code'],
             account_number: json['account_number'],
             type: json['type'],
-            status: json['status'],
-            account_created: json['account_created'],
-            owned: json['owned'],
-            created: json['created']
+            status: json['status']
           )
         }
       }
