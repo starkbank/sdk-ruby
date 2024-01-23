@@ -221,6 +221,7 @@ module StarkBank
     # - amount [string, nil]: Nominal amount charged by the invoice. ex: 100 (R$1.00)
     # - due [datetime.date or string, default nil]: Invoice due date in UTC ISO format. ex: DateTime.new(2020, 3, 10, 10, 30, 12, 21)
     # - expiration [number, default nil]: time interval in seconds between the due date and the expiration date. ex 123456789
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
     # - updated Invoice object

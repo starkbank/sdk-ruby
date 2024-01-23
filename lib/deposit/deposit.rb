@@ -131,6 +131,23 @@ module StarkBank
       )
     end
 
+    # # Update Deposit entity
+    #
+    # Update the Deposit by passing its id to be partially or fully reversed.
+    #
+    # ## Parameters (required):
+    # - id [string]: Deposit unique id. ex: '5656565656565656'
+    #
+    # ## Parameters (optional):
+    # - amount [string, nil]: The new amount of the Deposit. If the amount = 0 the Deposit will be fully reversed
+    # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call 
+    #
+    # ## Return:
+    # - target Deposit with updated attributes
+    def self.update(id, amount: nil, user: nil)
+      StarkBank::Utils::Rest.patch_id(id: id, amount: amount, user: user, **resource)
+    end
+
     def self.resource
       {
         resource_name: 'Deposit',

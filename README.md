@@ -849,6 +849,21 @@ deposit = StarkBank::Deposit.get('6365512502083584')
 puts deposit
 ```
 
+## Update a deposit
+
+You can update an deposit's amount by its id. Only the amount can be decreased, which will result in a payment reversal. To fully reverse the deposit, pass amount = 0.
+
+```ruby
+require('starkbank')
+
+deposit = StarkBank::Deposit.update(
+  '5155165527080960',
+  amount: 0,
+)
+
+puts deposit
+```
+
 ## Query deposit logs
 
 Logs are pretty important to understand the life cycle of a deposit.

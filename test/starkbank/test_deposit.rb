@@ -33,4 +33,11 @@ describe(StarkBank::Deposit, '#deposit#') do
     get_deposit = StarkBank::Deposit.get(deposits[0].id)
     expect(deposits[0].id).must_equal(get_deposit.id)
   end
+
+  it 'update' do
+    deposit = StarkBank::Deposit.query(status: 'created', limit: 1).to_a[0]
+    updated_deposit = StarkBank::Deposit.update(deposit.id, amount: 0)
+    expect(deposit.id).must_equal(updated_deposit.id)
+  end
+
 end
