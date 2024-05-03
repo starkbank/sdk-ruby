@@ -429,6 +429,7 @@ transfers = StarkBank::Transfer.create(
         StarkBank::Transfer::Rule.new(
           key: 'resendingLimit',    # Set maximum number of retries if Transfer fails due to systemic issues at the receiver bank
           value: 5                  # Our resending limit is 10 by default
+        )
       ]
     )
   ]
