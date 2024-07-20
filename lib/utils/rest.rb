@@ -126,20 +126,6 @@ module StarkBank
         )
       end
 
-      def self.post_raw(path:, payload:, user:, **query)
-        return StarkCore::Utils::Rest.post_raw(
-          host: StarkBank::HOST,
-          sdk_version: StarkBank::SDK_VERSION,
-          user: user ? user : StarkBank.user,
-          path: path,
-          payload: payload,
-          api_version: StarkBank::API_VERSION,
-          language: StarkBank.language,
-          timeout: StarkBank.timeout,
-          **query,
-        )
-      end
-
       def self.delete_id(resource_name:, resource_maker:, user:, id:)
         return StarkCore::Utils::Rest.delete_id(
           resource_name: resource_name,
@@ -166,6 +152,85 @@ module StarkBank
           timeout: StarkBank.timeout,
           id: id,
           **payload
+        )
+      end
+
+      def self.get_raw(path:, prefix: nil, raiseException: nil, user: nil, query: nil)
+        return StarkCore::Utils::Rest.get_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout, 
+          prefix: prefix,
+          raiseException: raiseException,
+          query: query
+        )
+      end
+
+      def self.post_raw(path:, payload:, query: nil, prefix: nil, raiseException: nil, user:)
+
+        return StarkCore::Utils::Rest.post_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          payload: payload,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          query: query,
+          prefix: prefix,
+          raiseException: raiseException
+        )
+      end
+
+      def self.patch_raw(path:, payload:, query: nil, prefix: nil, raiseException: nil, user: nil)
+        return StarkCore::Utils::Rest.patch_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          payload: payload,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          query: query,
+          prefix: prefix,
+          raiseException: raiseException
+        )
+      end
+
+      def self.put_raw(path:, payload:, query: nil, prefix: nil, raiseException: nil, user: nil)
+        return StarkCore::Utils::Rest.put_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          payload: payload,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          query: query,
+          prefix: prefix,
+          raiseException: raiseException
+        )
+      end
+
+      def self.delete_raw(path:, query: nil, prefix: nil, raiseException: nil, user: nil)
+        return StarkCore::Utils::Rest.delete_raw(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          path: path,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          query: query,
+          prefix: prefix,
+          raiseException: raiseException
         )
       end
     end

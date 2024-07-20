@@ -54,6 +54,7 @@ require_relative('payment_preview/boleto_preview')
 require_relative('payment_preview/tax_preview')
 require_relative('payment_preview/utility_preview')
 require_relative('institution/institution')
+require_relative('request/request')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
