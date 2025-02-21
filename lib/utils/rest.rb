@@ -97,6 +97,22 @@ module StarkBank
         )
       end
 
+      def self.post_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, entity:, user:, id:, **query)
+        return StarkCore::Utils::Rest.post_sub_resource(
+          resource_name: resource_name,
+          sub_resource_maker: sub_resource_maker, 
+          sub_resource_name: sub_resource_name, 
+          sdk_version: StarkBank::SDK_VERSION, 
+          host: StarkBank::HOST, 
+          api_version: StarkBank::API_VERSION, 
+          user: user ? user : StarkBank.user, 
+          language: StarkBank.language, 
+          timeout: StarkBank.timeout,
+          entity: entity, 
+          id: id,
+        )
+      end
+
       def self.post(resource_name:, resource_maker:, user:, entities:, **query)
         return StarkCore::Utils::Rest.post(
           resource_name: resource_name,
