@@ -31,7 +31,7 @@ module StarkBank
   class DynamicBrcode < StarkCore::Utils::Resource
     attr_reader :amount, :expiration, :tags, :id, :uuid, :picture_url, :updated, :created
     def initialize(
-      amount:, expiration: nil, tags: nil, id: nil, uuid: nil, picture_url: nil, updated: nil, created: nil
+      amount:, expiration: nil, tags: nil, id: nil, uuid: nil, picture_url: nil, display_description: nil, rules: nil, updated: nil, created: nil
     )
       super(id)
       @amount = amount
@@ -39,6 +39,8 @@ module StarkBank
       @tags = tags
       @uuid = uuid
       @picture_url = picture_url
+      @display_description = display_description
+      @rules = StarkBank::DynamicBrcode::Rule.parse_rules(rules)
       @created = StarkCore::Utils::Checks.check_datetime(created)
       @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
@@ -145,6 +147,8 @@ module StarkBank
             tags: json['tags'],
             uuid: json['uuid'],
             picture_url: json['picture_url'],
+            display_description: json['display_description'],
+            rules: json['rules'],
             created: json['created'],
             updated: json['updated']
           )
