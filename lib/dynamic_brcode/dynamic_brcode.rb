@@ -21,6 +21,8 @@ module StarkBank
   # ## Parameters (optional):
   # - expiration [integer, default 3600 (1 hour)]: time interval in seconds between due date and expiration date. ex 123456789
   # - tags [list of strings, default []]: list of strings for tagging, these will be passed to the respective DynamicBrcode resource when paid
+  # - display_description [string, default nil]: optional description to be shown in the receiver bank interface. ex: "Payment for service #1234" 
+  # - rules [list of Rules, default nil]: list of dynamic brcode rules to be applied to this brcode. ex: [StarkBank::DynamicBrcode::Rule.new(key: "allowedTaxIds", value: ["012.345.678-90"])]
   #
   # ## Attributes (return-only):
   # - id [string]: id returned on creation, this is the BR code. ex: "00020126360014br.gov.bcb.pix0114+552840092118152040000530398654040.095802BR5915Jamie Lannister6009Sao Paulo620705038566304FC6C"
@@ -31,7 +33,7 @@ module StarkBank
   class DynamicBrcode < StarkCore::Utils::Resource
     attr_reader :amount, :expiration, :tags, :id, :uuid, :picture_url, :updated, :created
     def initialize(
-      amount:, expiration: nil, tags: nil, id: nil, uuid: nil, picture_url: nil, updated: nil, created: nil
+      amount:, expiration: nil, tags: nil, id: nil, uuid: nil, picture_url: nil, display_description: nil, rules: nil, updated: nil, created: nil
     )
       super(id)
       @amount = amount
@@ -39,6 +41,8 @@ module StarkBank
       @tags = tags
       @uuid = uuid
       @picture_url = picture_url
+      @display_description = display_description
+      @rules = StarkBank::DynamicBrcode::Rule.parse_rules(rules)
       @created = StarkCore::Utils::Checks.check_datetime(created)
       @updated = StarkCore::Utils::Checks.check_datetime(updated)
     end
@@ -145,6 +149,8 @@ module StarkBank
             tags: json['tags'],
             uuid: json['uuid'],
             picture_url: json['picture_url'],
+            display_description: json['display_description'],
+            rules: json['rules'],
             created: json['created'],
             updated: json['updated']
           )

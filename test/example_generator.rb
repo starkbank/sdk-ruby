@@ -222,6 +222,12 @@ class ExampleGenerator
       amount: 100_000,
       expiration: 3600 * 2,
       tags: ["test1", "test2"],
+      rules: [
+        StarkBank::DynamicBrcode::Rule.new(
+          key: 'allowedTaxIds',
+          value: ["012.345.678-90"]
+        )
+      ]
     )
   end
 
