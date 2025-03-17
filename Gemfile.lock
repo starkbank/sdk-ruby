@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    starkbank (2.12.0)
+    starkbank (2.13.0)
       starkcore (~> 0.2.2)
 
 GEM
