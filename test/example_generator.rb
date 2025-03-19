@@ -271,4 +271,67 @@ class ExampleGenerator
       private_key: ENV['SANDBOX_ORGANIZATION_PRIVATE_KEY'] # '-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEIBEcEJZLk/DyuXVsEjz0w4vrE7plPXhQxODvcG1Jc0WToAcGBSuBBAAK\noUQDQgAE6t4OGx1XYktOzH/7HV6FBukxq0Xs2As6oeN6re1Ttso2fwrh5BJXDq75\nmSYHeclthCRgU8zl6H1lFQ4BKZ5RCQ==\n-----END EC PRIVATE KEY-----'
     )
   end
+
+  def self.generate_example_merchant_session_json(challenge_mode)
+    {
+      allowed_funding_types: ['debit', 'credit'],
+      allowed_installments: [
+        { total_amount: 0, count: 1 },
+        { total_amount: 120, count: 2 },
+        { total_amount: 180, count: 12 }
+      ],
+      expiration: 3600,
+      challenge_mode: challenge_mode,
+      tags: ['yourTags']
+    }
+  end
+
+  def self.generate_example_merchant_session_purchase_challenge_mode_disabled_json
+    {
+      amount: 180,
+      installment_count: 12,
+      card_expiration: '2035-01',
+      card_number: '5277696455399733',
+      card_security_code: '123',
+      holder_name: 'Holder Name',
+      funding_type: 'credit'
+    }
+  end
+
+  def self.generate_example_merchant_session_purchase_challenge_mode_enabled_json
+    {
+      amount: 180,
+      installment_count: 12,
+      card_expiration: '2035-01',
+      card_number: '5277696455399733',
+      card_security_code: '123',
+      holder_name: 'Holder Name',
+      holder_email: 'holdeName@email.com',
+      holder_phone: '11111111111',
+      funding_type: 'credit',
+      billing_country_code: 'BRA',
+      billing_city: 'São Paulo',
+      billing_state_code: 'SP',
+      billing_street_line_1: 'Rua do Holder Name, 123',
+      billing_street_line_2: '',
+      billing_zip_code: '11111-111',
+      metadata: {
+        user_agent: 'Postman',
+        user_ip: '255.255.255.255',
+        language: 'pt-BR',
+        timezone_offset: 3,
+        extra_data: 'extraData'
+      }
+    }
+  end
+
+  def self.merchant_purchase_example
+    StarkBank::MerchantPurchase.new(
+      amount: 1000,
+      funding_type: 'credit',
+      card_id: '5113758527520768',
+      challenge_mode: 'disabled'
+    )
+  end
 end
+

@@ -49,6 +49,10 @@ is as easy as sending a text message to your client!
     - [CorporateBalance](#get-your-corporatebalance): View your corporate balance
     - [CorporateTransactions](#query-corporatetransactions): View the transactions that have affected your corporate balance
     - [CorporateEnums](#corporate-enums): Query enums related to the corporate purchases, such as merchant categories, countries and card purchase methods
+    - [MerchantSession](#merchant-session): The Merchant Session allows you to create a session prior to a purchase. Sessions are essential for defining the parameters of a purchase, including funding type, expiration, 3DS, and more.
+    - [MerchantCard](#merchant-card): The Merchant Card resource stores information about cards used in approved purchases.
+    - [MerchantInstallment](#merchant-installment): Merchant Installments are created for every installment in a purchase.
+    - [MerchantPurchase](#merchant-purchase): The Merchant Purchase section allows users to retrieve detailed information of the purchases.
     - [Webhooks](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
     - [WebhookEvents](#process-webhook-events): Manage webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -2219,6 +2223,157 @@ methods = StarkBank::CardMethod.query(
 methods.each do |method|
   puts method
 end
+```
+
+## Merchant Session
+
+The Merchant Session allows you to create a session prior to a purchase.
+Sessions are essential for defining the parameters of a purchase, including funding type, expiration, 3DS, and more.
+
+## Create a MerchantSession
+
+```ruby
+require('starkbank')
+
+session = {
+  allowed_funding_types: ['debit', 'credit'],
+  allowed_installments: [
+    { total_amount: 0, count: 1 },
+    { total_amount: 120, count: 2 },
+    { total_amount: 180, count: 12 }
+  ],
+  expiration: 3600,
+  challenge_mode: challenge_mode,
+  tags: ['yourTags']
+}
+
+merchant_session = StarkBank::MerchantSession.create(session)
+
+puts merchant_session
+```
+
+You can create a MerchantPurchase through a MerchantSession by passing its UUID.
+**Note**: This method must be implemented in your front-end to ensure that sensitive card data does not pass through the back-end of the integration.
+
+### Create a MerchantSession Purchase
+
+```ruby
+require('starkbank')
+
+session_purchase = {
+  amount: 180,
+  installment_count: 12,
+  card_expiration: '2035-01',
+  card_number: '5277696455399733',
+  card_security_code: '123',
+  holder_name: 'Holder Name',
+  holder_email: 'holdeName@email.com',
+  holder_phone: '11111111111',
+  funding_type: 'credit',
+  billing_country_code: 'BRA',
+  billing_city: 'São Paulo',
+  billing_state_code: 'SP',
+  billing_street_line_1: 'Rua do Holder Name, 123',
+  billing_street_line_2: '',
+  billing_zip_code: '11111-111',
+  metadata: {
+    user_agent: 'Postman',
+    user_ip: '255.255.255.255',
+    language: 'pt-BR',
+    timezone_offset: 3,
+    extra_data: 'extraData'
+  }
+}
+
+purchase = StarkBank::MerchantSession.purchase(
+  uuid: "c32f9d2385974957a777f8351921afd7",
+  payload: session_purchase
+)
+
+puts purchase
+```
+
+### Query MerchantSessions
+```ruby
+require('starkbank')
+
+merchant_sessions = StarkBank::MerchantSession.query(limit: 3).to_a
+merchant_sessions.each do |merchant_session|
+  puts merchant_session
+end
+```
+
+### Get a MerchantSession
+```ruby
+require('starkbank')
+
+merchant_session = StarkBank::MerchantSession.get("5130086357401600")
+puts merchant_session
+```
+## Merchant Purchase
+The Merchant Purchase section allows users to retrieve detailed information of the purchases.
+
+### Query MerchantPurchases
+```ruby
+require('starkbank')
+
+merchant_purchases = StarkBank::MerchantPurchase.query(limit: 3).to_a
+merchant_purchases.each do |session|
+  puts session
+end
+```
+### Get a MerchantPurchase
+```ruby
+require('starkbank')
+
+merchant_purchase = StarkBank::MerchantPurchase.get("5130086357401600")
+puts merchant_purchase
+```
+
+## Merchant Card
+
+The Merchant Card resource stores information about cards used in approved purchases.
+These cards can be used in new purchases without the need to create a new session.
+
+### Query MerchantCards
+```ruby
+require('starkbank')
+
+merchant_cards = StarkBank::MerchantCard.query(limit: 3).to_a
+merchant_cards.each do |card|
+  puts card
+end
+```
+
+### Get a MerchantCard
+```ruby
+require('starkbank')
+
+merchant_card = StarkBank::MerchantCard.get("5130086357401600")
+puts merchant_card
+```
+
+## Merchant Installment
+
+Merchant Installments are created for every installment in a purchase.
+These resources will track its own due payment date and settlement lifecycle.
+
+### Query MerchantInstallments
+```ruby
+require('starkbank')
+
+merchant_installments = StarkBank::MerchantInstallment.query(limit: 3).to_a
+merchant_installments.each do |installment|
+  puts installment
+end
+```
+
+### Get a MerchantInstallment
+```ruby
+require('starkbank')
+
+merchant_installment = StarkBank::MerchantCard.get("5130086357401600")
+puts merchant_installment
 ```
 
 ## Create a webhook subscription

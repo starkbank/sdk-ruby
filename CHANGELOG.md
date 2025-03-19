@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- merchantSession, merchantPurchase, merchantCard, merchantInstallment
 
 ## [2.13.0] - 2025-03-17
 ### Added
