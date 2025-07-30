@@ -90,7 +90,7 @@ gem install starkbank
 1.2 Or just add this to your Gemfile:
 
 ```sh
-gem('starkbank', '~> 2.13.0')
+gem('starkbank', '~> 2.14.0')
 ```
 
 ## 2. Create your Private and Public Keys
