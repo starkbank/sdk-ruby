@@ -104,7 +104,7 @@ class ExampleGenerator
     StarkBank::BoletoPayment.new(
       line: '34191.09008 61713.957308 71444.640008 2 934300' + rand(1e8 - 1).to_s.rjust(8, '0'),
       scheduled: schedule ? Date.today + 2 : nil,
-      description: 'loading a random account',
+      description: 'Boleto payment description',
       tax_id: '20.018.183/0001-80'
     )
   end
@@ -132,18 +132,19 @@ class ExampleGenerator
       amount: 50,
       receiver_id: '5768064935133184',
       external_id: SecureRandom.base64,
-      description: 'Transferência para Workspace aleatório'
+      description: 'Transfer description'
     )
   end
 
   def self.transfer_example(schedule: false)
     StarkBank::Transfer.new(
       amount: rand(1000),
-      name: 'João',
+      name: 'Anthony Edward Stark',
       tax_id: '01234567890',
       bank_code: '01',
       branch_code: '0001',
       account_number: '10000-0',
+      display_description: 'Transfer to Anthony Edward Stark',
       account_type: 'checking',
       external_id: 'ruby-' + rand(1e10).to_s,
       scheduled: schedule ? Time.now + 24 * 3600 : nil,
@@ -160,7 +161,7 @@ class ExampleGenerator
     StarkBank::UtilityPayment.new(
       bar_code: '8366000' + rand(1e5).to_s.rjust(8, '0') + '01380074119002551100010601813',
       scheduled: schedule ? Date.today + 2 : nil,
-      description: 'pagando a conta'
+      description: 'Utility payment description',
     )
   end
 
@@ -176,7 +177,7 @@ class ExampleGenerator
       due: Date.today + 10,
       scheduled: schedule ? Date.today + 2 : nil,
       tags: ["test1", "test2"],
-      description: "Darf Payment test"
+      description: "Darf payment description"
     )
   end
 
@@ -184,7 +185,7 @@ class ExampleGenerator
     StarkBank::TaxPayment.new(
       bar_code: '8566000' + rand(1e5).to_s.rjust(8, '0') + '00640074119002551100010601813',
       scheduled: schedule ? Date.today + 2 : nil,
-      description: 'paying taxes',
+      description: 'Tax payment description',
       tags: ['test1', 'test2', 'test3']
     )
   end

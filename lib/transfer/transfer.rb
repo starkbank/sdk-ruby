@@ -24,6 +24,7 @@ module StarkBank
   # - external_id [string, default nil]: url safe string that must be unique among all your transfers. Duplicated external_ids will cause failures. By default, this parameter will block any transfer that repeats amount and receiver information on the same date. ex: 'my-internal-id-123456'
   # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 13, 12, 11)
   # - description [string, default nil]: optional description to override default description to be shown in the bank statement. ex: 'Payment for service #1234'
+  # - display_description [string, default nil]: optional description to be shown in the receiver bank interface. ex: 'Payment for service #1234'
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
   # - rules [list of Transfer::Rules, default []]: list of Transfer::Rule objects for modifying transfer behavior. ex: [Transfer::Rule(key: "resendingLimit", value: 5)]
   #
@@ -36,8 +37,8 @@ module StarkBank
   # - created [DateTime]: creation datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   # - updated [DateTime]: latest update datetime for the transfer. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
   class Transfer < StarkCore::Utils::Resource
-    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :transaction_ids, :metadata, :fee, :tags, :rules, :status, :id, :created, :updated
-    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, transaction_ids: nil, metadata: nil, fee: nil, tags: nil, rules: nil, status: nil, id: nil, created: nil, updated: nil)
+    attr_reader :amount, :name, :tax_id, :bank_code, :branch_code, :account_number, :account_type, :external_id, :scheduled, :description, :display_description, :transaction_ids, :metadata, :fee, :tags, :rules, :status, :id, :created, :updated
+    def initialize(amount:, name:, tax_id:, bank_code:, branch_code:, account_number:, account_type: nil, external_id: nil, scheduled: nil, description: nil, display_description: nil, transaction_ids: nil, metadata: nil, fee: nil, tags: nil, rules: nil, status: nil, id: nil, created: nil, updated: nil)
       super(id)
       @amount = amount
       @name = name
@@ -49,6 +50,7 @@ module StarkBank
       @external_id = external_id
       @scheduled = StarkCore::Utils::Checks.check_date_or_datetime(scheduled)
       @description = description
+      @display_description = display_description
       @tags = tags
       @rules = StarkBank::Transfer::Rule.parse_rules(rules)
       @fee = fee
@@ -210,6 +212,7 @@ module StarkBank
             external_id: json['external_id'],
             scheduled: json['scheduled'],
             description: json['description'],
+            display_description: json['display_description'],
             tags: json['tags'],
             rules: json['rules'],
             id: json['id'],
