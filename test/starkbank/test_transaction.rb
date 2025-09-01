@@ -5,13 +5,16 @@ require_relative('../example_generator')
 require('date')
 
 describe(StarkBank::Transaction, '#transaction#') do
-  it 'query' do
+  it 'query and get' do
     after = Date.today - 30
     transactions = StarkBank::Transaction.query(limit: 10, after: after).to_a
     expect(transactions.length).must_equal(10)
     transactions.each do |transaction|
       expect(transaction.id).wont_be_nil
       expect(transaction.created).must_be(:>=, after)
+      get_transaction = StarkBank::Transaction.get(transaction.id)
+      expect(transaction.id).must_equal(get_transaction.id)
+      expect(transaction.amount).must_equal(get_transaction.amount)
     end
   end
 
@@ -48,13 +51,10 @@ describe(StarkBank::Transaction, '#transaction#') do
     expect(ids.length).must_equal(10)
   end
 
-  it 'create and get' do
+  it 'create' do
     transaction = ExampleGenerator.transaction_example
-    create_transaction = StarkBank::Transaction.create([transaction])[0]
-    expect(-transaction.amount).must_equal(create_transaction.amount)
-    get_transaction = StarkBank::Transaction.get(create_transaction.id)
-    expect(create_transaction.id).must_equal(get_transaction.id)
-    expect(create_transaction.amount).must_equal(get_transaction.amount)
+    error = expect { StarkBank::Transaction.create([transaction])[0] }.must_raise(RuntimeError)
+    expect(error.message).must_equal("Function deprecated since 2.15.0")
   end
 
 end
