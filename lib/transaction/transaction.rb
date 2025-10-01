@@ -47,6 +47,7 @@ module StarkBank
       @created = StarkCore::Utils::Checks.check_datetime(created)
     end
 
+    # # DEPRECATED: Function deprecated since v2.15.0
     # # Create Transactions
     #
     # Send a list of Transaction objects for creation in the Stark Bank API
@@ -60,7 +61,7 @@ module StarkBank
     # ## Return:
     # - list of Transaction objects with updated attributes
     def self.create(transactions, user: nil)
-      StarkBank::Utils::Rest.post(entities: transactions, user: user, **resource)
+      raise "Function deprecated since v2.15.0"
     end
 
     # # Retrieve a specific Transaction
