@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*.rb']
   s.license = 'MIT'
   s.required_ruby_version = '>= 2.3'
-  s.add_dependency('starkcore', '~> 0.2.2')
+  s.add_dependency('starkcore', '~> 0.3.0')
   s.add_development_dependency('minitest', '~> 5.14.1')
   s.add_development_dependency('rake', '~> 13.0')
   s.add_development_dependency('rubocop', '~> 0.81')

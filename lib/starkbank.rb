@@ -56,6 +56,16 @@ require_relative('payment_preview/tax_preview')
 require_relative('payment_preview/utility_preview')
 require_relative('institution/institution')
 require_relative('request/request')
+require_relative('merchant_session/merchant_session')
+require_relative('merchant_session/log')
+require_relative('merchant_session/purchase')
+require_relative('merchant_session/allowed_installments')
+require_relative('merchant_purchase/merchant_purchase')
+require_relative('merchant_purchase/log')
+require_relative('merchant_installment/merchant_installment')
+require_relative('merchant_installment/log')
+require_relative('merchant_card/merchant_card')
+require_relative('merchant_card/log')
 
 # SDK to facilitate Ruby integrations with Stark Bank
 module StarkBank
