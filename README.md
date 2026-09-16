@@ -42,6 +42,7 @@ is as easy as sending a text message to your client!
     - [DarfPayments](#create-darf-payment): Pay DARFs
     - [PaymentPreviews](#preview-payment-information-before-executing-the-payment): Preview all sorts of payments
     - [PaymentRequest](#create-payment-requests-to-be-approved-by-authorized-people-in-a-cost-center): Request a payment approval to a cost center
+    - [MerchantSession](#create-a-merchantsession): Create checkout sessions to charge cards
     - [CorporateHolders](#create-corporateholders): Manage cardholders
     - [CorporateCards](#create-corporatecard): Create virtual and/or physical cards
     - [CorporateInvoices](#create-corporateinvoices): Add money to your corporate balance
@@ -1757,6 +1758,106 @@ requests = StarkBank::PaymentRequest.query(
 requests.each do |request|
   puts request
 end
+```
+
+## Create a MerchantSession
+
+You can create a MerchantSession to define which funding types, installment plans and IPs are allowed to be used
+in a card purchase, then use its uuid to create a MerchantSession::Purchase.
+
+```ruby
+require('starkbank')
+
+session = StarkBank::MerchantSession.create(
+  StarkBank::MerchantSession.new(
+    allowed_funding_types: ['credit', 'debit'],
+    allowed_installments: [
+      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 100, count: 1),
+      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 120, count: 2)
+    ],
+    expiration: 3600,
+    challenge_mode: 'enabled',
+    tags: ['iron', 'suit']
+  )
+)
+
+puts session
+```
+
+**Note**: Instead of using MerchantSession objects, you can also pass each element in dictionary format
+
+## Query MerchantSessions
+
+To search for MerchantSessions, run:
+
+```ruby
+require('starkbank')
+
+sessions = StarkBank::MerchantSession.query(limit: 10)
+
+sessions.each do |session|
+  puts session
+end
+```
+
+## Get a MerchantSession
+
+To get a single MerchantSession by its id, run:
+
+```ruby
+require('starkbank')
+
+session = StarkBank::MerchantSession.get('5155165527080960')
+
+puts session
+```
+
+## Create a MerchantSession Purchase
+
+Once you have a MerchantSession's uuid, you can create a MerchantSession::Purchase to charge a card against it:
+
+```ruby
+require('starkbank')
+
+purchase = StarkBank::MerchantSession.purchase(
+  '901e71f2447c43c886f58366a5432c4b',
+  StarkBank::MerchantSession::Purchase.new(
+    amount: 100,
+    card_expiration: '2032-01',
+    card_number: '5579718869788870',
+    card_security_code: '123',
+    holder_name: 'Tony Stark',
+    funding_type: 'credit'
+  )
+)
+
+puts purchase
+```
+
+## Query MerchantSession logs
+
+You can query MerchantSession logs to better understand MerchantSession life cycles.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::MerchantSession::Log.query(limit: 50)
+
+logs.each do |log|
+  puts log
+end
+```
+
+## Get a MerchantSession log
+
+You can also get a specific log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::MerchantSession::Log.get('5155165527080960')
+
+puts log
 ```
 
 ## Corporate

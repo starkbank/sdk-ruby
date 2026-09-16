@@ -126,6 +126,22 @@ module StarkBank
         )
       end
 
+      def self.post_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, user:, id:, entity:)
+        return StarkCore::Utils::Rest.post_sub_resource(
+          resource_name: resource_name,
+          sub_resource_maker: sub_resource_maker,
+          sub_resource_name: sub_resource_name,
+          sdk_version: StarkBank::SDK_VERSION,
+          host: StarkBank::HOST,
+          api_version: StarkBank::API_VERSION,
+          user: user ? user : StarkBank.user,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout,
+          id: id,
+          entity: entity
+        )
+      end
+
       def self.delete_id(resource_name:, resource_maker:, user:, id:)
         return StarkCore::Utils::Rest.delete_id(
           resource_name: resource_name,

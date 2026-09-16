@@ -13,6 +13,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- MerchantSession resource
+- MerchantSession::Log sub-resource
+- MerchantSession::Purchase sub-resource
+- MerchantSession::AllowedInstallment sub-resource
+
 ### Fixed
 - Docstrings across Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DarfPayment, Deposit, DictKey,
   DynamicBrcode, Invoice, PaymentRequest, TaxPayment, Transfer, UtilityPayment, Webhook and Workspace
