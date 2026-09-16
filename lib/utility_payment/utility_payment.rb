@@ -84,7 +84,7 @@ module StarkBank
     # # Retrieve a specific UtilityPayment pdf file
     #
     # Receive a single UtilityPayment pdf file generated in the Stark Bank API by passing its id.
-    # Only valid for utility payments with 'success' status.
+    # Only valid for utility payments with 'success', 'processing' or 'created' status.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -163,7 +163,8 @@ module StarkBank
 
     # # Delete a UtilityPayment entity
     #
-    # Delete a UtilityPayment entity previously created in the Stark Bank API
+    # Cancel a scheduled UtilityPayment entity previously created in the Stark Bank API. You can only cancel it
+    # before it starts being processed; a payment already processed can still be deleted, but not canceled.
     #
     # ## Parameters (required):
     # - id [string]: UtilityPayment unique id. ex:'5656565656565656'

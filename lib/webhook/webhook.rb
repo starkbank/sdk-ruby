@@ -8,8 +8,8 @@ module StarkBank
   # # Webhook subscription object
   #
   # A Webhook is used to subscribe to notification events on a user-selected endpoint.
-  # Currently available services for subscription are transfer, invoice, deposit, brcode-payment,
-  # boleto, boleto-payment and utility-payment
+  # Currently available services for subscription are boleto, boleto-holmes, boleto-payment, brcode-payment,
+  # darf-payment, deposit, invoice, payment-request, tax-payment, transfer and utility-payment.
   #
   # ## Parameters (required):
   # - url [string]: Url that will be notified when an event occurs.

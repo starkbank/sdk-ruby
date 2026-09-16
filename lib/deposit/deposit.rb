@@ -66,7 +66,8 @@ module StarkBank
 
     # # Retrieve Deposits
     #
-    # Receive a generator of Deposit objects previously created in the Stark Bank API
+    # Receive a generator of Deposit objects previously created in the Stark Bank API. Results are paged
+    # internally by the generator; use #page instead if you need to control pagination manually.
     #
     # ## Parameters (optional):
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35

@@ -107,7 +107,8 @@ module StarkBank
 
       # # Retrieve a specific Invoice::Log pdf file
       #
-      # Receive a single Invoice::Log pdf file generated in the Stark Bank API by passing its id.
+      # Receive a single Invoice::Log pdf file generated in the Stark Bank API by passing its id. This is meant
+      # to retrieve the reversal receipt whenever a paid Invoice is successfully reversed.
       #
       # ## Parameters (required):
       # - id [string]: object unique id. ex: '5656565656565656'

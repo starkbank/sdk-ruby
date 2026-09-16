@@ -82,7 +82,7 @@ module StarkBank
     # # Retrieve a specific BoletoPayment pdf file
     #
     # Receive a single BoletoPayment pdf file generated in the Stark Bank API by passing its id.
-    # Only valid for boleto payments with 'success' status.
+    # Only valid for boleto payments with 'success', 'processing' or 'created' status.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -161,7 +161,8 @@ module StarkBank
 
     # # Delete a BoletoPayment entity
     #
-    # Delete a BoletoPayment entity previously created in the Stark Bank API
+    # Cancel a scheduled BoletoPayment entity. You can only cancel a payment before it starts being processed;
+    # a payment that has already been processed can still be deleted, but not canceled.
     #
     # Parameters (required):
     # - id [string]: BoletoPayment unique id. ex: '5656565656565656'

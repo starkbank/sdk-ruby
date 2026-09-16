@@ -96,7 +96,7 @@ module StarkBank
     # # Retrieve a specific DarfPayment pdf file
     #
     # Receive a single DarfPayment pdf file generated in the Stark Bank API by passing its id.
-    # Only valid for darf payments with 'success' status.
+    # Only valid for darf payments with 'success', 'processing' or 'created' status.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -175,16 +175,17 @@ module StarkBank
 
     # # Delete a DarfPayment entity
     #
-    # Delete a DarfPayment entity previously created in the Stark Bank API
+    # Delete a DarfPayment entity previously created in the Stark Bank API. Only payments with status "created"
+    # can be deleted; once processing has started, deletion is rejected.
     #
     # ## Parameters (required):
-    # - id [string]: UtilityPayment unique id. ex:'5656565656565656'
+    # - id [string]: DarfPayment unique id. ex:'5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Organization/Project object, default nil]: Organization or Project object. Not necessary if StarkBank.user was set before function call
     #
     # ## Return:
-    # - deleted TaxPayment object
+    # - deleted DarfPayment object
     def self.delete(id, user: nil)
       StarkBank::Utils::Rest.delete_id(id: id, user: user, **resource)
     end

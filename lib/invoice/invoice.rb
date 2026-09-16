@@ -21,11 +21,11 @@ module StarkBank
   # ## Parameters (optional):
   # - due [DateTime or string, default now + 2 days]: Invoice due date in UTC ISO format. ex: '2020-10-28T17:59:26.249976+00:00'
   # - expiration [integer, default 5097600 (59 days)]: time interval in seconds between due date and expiration date. ex 123456789
-  # - fine [float, default 0.0]: Invoice fine for overdue payment in %. ex: 2.5
-  # - interest [float, default 0.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
-  # - discounts [list of hashes, default nil]: list of hashes with 'percentage':float and 'due':DateTime or string pairs
+  # - fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5
+  # - interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
+  # - discounts [list of hashes, default nil]: list of up to 5 hashes with 'percentage':float and 'due':DateTime or string pairs
   # - rules [list of Invoice::Rule, default []]: list of Invoice::Rule objects for modifying invoice behavior. ex: [Invoice::Rule(key="allowedTaxIds", value=[ "012.345.678-90", "45.059.493/0001-73" ])]
-  # - descriptions [list of hashes, default nil]: list of hashes with 'key':string and 'value':string pairs
+  # - descriptions [list of hashes, default nil]: list of up to 15 hashes with 'key':string (title) and 'value':string pairs
   # - tags [list of strings, default nil]: list of strings for tagging
   #
   # ## Attributes (return-only):
@@ -84,7 +84,9 @@ module StarkBank
 
     # # Create Invoices
     #
-    # Send a list of Invoice objects for creation in the Stark Bank API
+    # Send a list of up to 100 Invoice objects for creation in the Stark Bank API. If an Invoice is created with
+    # amount zero, any amount paid by the customer will be accepted; otherwise only the exact amount specified
+    # will be accepted.
     #
     # ## Parameters (required):
     # - invoices [list of Invoice objects]: list of Invoice objects to be created in the API
@@ -211,14 +213,16 @@ module StarkBank
 
     # # Update an Invoice entity
     #
-    # Update an Invoice entity previously created in the Stark Bank API
+    # Update an Invoice entity previously created in the Stark Bank API. If the invoice hasn't been paid yet,
+    # amount, due and expiration may all be adjusted. If it has already been paid, only amount may be changed,
+    # and only to a lower value, which triggers a payment reversal for the difference.
     #
     # ## Parameters (required):
     # - id [string]: Invoice unique id. ex: '5656565656565656'
     #
     # ## Parameters (optional):
     # - status [string, nil]: You may cancel the invoice by passing 'canceled' in the status
-    # - amount [string, nil]: Nominal amount charged by the invoice. ex: 100 (R$1.00)
+    # - amount [integer, nil]: new amount to be charged. If the invoice has already been paid, this is the final amount after the reversal it triggers.
     # - due [datetime.date or string, default nil]: Invoice due date in UTC ISO format. ex: DateTime.new(2020, 3, 10, 10, 30, 12, 21)
     # - expiration [number, default nil]: time interval in seconds between the due date and the expiration date. ex 123456789
     # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call

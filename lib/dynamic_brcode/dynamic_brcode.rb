@@ -49,7 +49,7 @@ module StarkBank
 
     # # Create DynamicBrcode
     #
-    # Send a list of DynamicBrcode objects for creation in the Stark Bank API
+    # Send a list of up to 100 DynamicBrcode objects for creation in the Stark Bank API
     #
     # ## Parameters (required):
     # - brcodes [list of DynamicBrcode objects]: list of DynamicBrcode objects to be created in the API

@@ -17,7 +17,7 @@ module StarkBank
   # - name [string]: Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Ex: 'Stark Bank Workspace'
   #
   # ## Parameters (optional):
-  # - allowed_tax_ids [list of strings]: list of tax IDs that will be allowed to send Deposits to this Workspace. ex: ['012.345.678-90', '20.018.183/0001-80']
+  # - allowed_tax_ids [list of strings, default nil]: list of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. ex: ['012.345.678-90', '20.018.183/0001-80']
   #
   # ## Attributes (return-only):
   # - id [string]: unique id returned when the workspace is created. ex: '5656565656565656'
@@ -40,7 +40,8 @@ module StarkBank
 
     # # Create Workspace
     #
-    # Send a Workspace for creation in the Stark Bank API
+    # Send a Workspace for creation in the Stark Bank API. Only Organization credentials (not Project
+    # credentials) are allowed to call this method.
     #
     # ## Parameters (required):
     # - username [string]: Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Ex: 'starkbankworkspace'

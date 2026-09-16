@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- Docstrings across Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DarfPayment, Deposit, DictKey,
+  DynamicBrcode, Invoice, PaymentRequest, TaxPayment, Transfer, UtilityPayment, Webhook and Workspace
+  resources to match the business rules stated in the API reference
 
 ## [2.15.0] - 2025-10-07
 ### Changed
