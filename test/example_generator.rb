@@ -157,6 +157,42 @@ class ExampleGenerator
     )
   end
 
+  def self.verified_account_bank_info_example
+    StarkBank::VerifiedAccount.new(
+      tax_id: '911.544.440-66',
+      number: '76543-8',
+      bank_code: '341',
+      branch_code: '2201',
+      type: 'checking',
+      name: 'Daenerys Targaryen Stormborn',
+      tags: ['verified-account-test']
+    )
+  end
+
+  def self.verified_account_pix_key_example
+    StarkBank::VerifiedAccount.new(
+      tax_id: '039.946.040-36',
+      key_id: 'arya.stark@starkbank.com',
+      tags: ['verified-account-test']
+    )
+  end
+
+  def self.verified_transfer_example(account_id)
+    StarkBank::VerifiedTransfer.new(
+      amount: 1000,
+      account_id: account_id,
+      tags: ['verified-transfer-test'],
+      description: 'Test description',
+      display_description: 'Test displayDescription',
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
+    )
+  end
+
   def self.utility_payment_example(schedule: true)
     StarkBank::UtilityPayment.new(
       bar_code: '8366000' + rand(1e5).to_s.rjust(8, '0') + '01380074119002551100010601813',

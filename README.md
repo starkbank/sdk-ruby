@@ -30,6 +30,8 @@ is as easy as sending a text message to your client!
     - [Transfers](#create-transfers): Wire transfers (TED and manual Pix)
     - [DictKeys](#get-dict-key): Pix Key queries to use with Transfers
     - [Institutions](#query-bacen-institutions): Instutitions recognized by the Central Bank
+    - [VerifiedAccounts](#create-verified-accounts): Verify receiver bank accounts and Pix keys
+    - [VerifiedTransfers](#create-verified-transfers): Wire transfers to previously verified accounts
     - [Invoices](#create-invoices): Reconciled receivables (dynamic Pix QR Codes)
     - [DynamicBrcode](#create-dynamicbrcodes): Simplified reconciled receivables (dynamic Pix QR Codes)
     - [Deposits](#query-deposits): Other cash-ins (static Pix QR Codes, DynamicBrcodes, manual Pix, etc)
@@ -573,6 +575,130 @@ institutions = StarkBank::Institution.query(search: 'stark').to_a
 
 institutions.each do |institution|
   puts institution
+end
+```
+
+## Create verified accounts
+
+You can verify a receiver's bank account details (bank info or a Pix key) before sending money to it, by creating a VerifiedAccount.
+
+```ruby
+require('starkbank')
+
+verified_accounts = StarkBank::VerifiedAccount.create(
+  [
+    StarkBank::VerifiedAccount.new(
+      tax_id: '012.345.678-90',
+      bank_code: '20018183',
+      branch_code: '0001',
+      number: '10000-0',
+      name: 'Tony Stark',
+      type: 'checking',
+      tags: %w[iron suit]
+    ),
+    StarkBank::VerifiedAccount.new(
+      tax_id: '012.345.678-90',
+      key_id: 'tony@starkbank.com',
+      tags: %w[iron suit]
+    )
+  ]
+)
+
+verified_accounts.each do |verified_account|
+  puts verified_account
+end
+```
+
+## Get a verified account
+
+To get a single VerifiedAccount by its id, run:
+
+```ruby
+require('starkbank')
+
+verified_account = StarkBank::VerifiedAccount.get('5155165527080960')
+
+puts verified_account
+```
+
+## Cancel a verified account
+
+To cancel a single VerifiedAccount by its id, run:
+
+```ruby
+require('starkbank')
+
+verified_account = StarkBank::VerifiedAccount.cancel('5155165527080960')
+
+puts verified_account
+```
+
+## Query verified accounts
+
+You can query multiple VerifiedAccounts according to filters.
+
+```ruby
+require('starkbank')
+
+verified_accounts = StarkBank::VerifiedAccount.query(limit: 10)
+
+verified_accounts.each do |verified_account|
+  puts verified_account
+end
+```
+
+## Query verified account logs
+
+You can query VerifiedAccount logs to better understand VerifiedAccount life cycles.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::VerifiedAccount::Log.query(limit: 50)
+
+logs.each do |log|
+  puts log
+end
+```
+
+## Get a verified account log
+
+You can also get a specific log by its id.
+
+```ruby
+require('starkbank')
+
+log = StarkBank::VerifiedAccount::Log.get('5155165527080960')
+
+puts log
+```
+
+## Create verified transfers
+
+Once a receiver's account is verified through a VerifiedAccount, you can send money to it with a VerifiedTransfer.
+This reuses the same Transfer::Rule objects used to modify Transfer behavior.
+
+```ruby
+require('starkbank')
+
+verified_transfers = StarkBank::VerifiedTransfer.create(
+  [
+    StarkBank::VerifiedTransfer.new(
+      amount: 100,
+      account_id: '5155165527080960',
+      tags: %w[iron suit],
+      rules: [
+        StarkBank::Transfer::Rule.new(
+          key: 'resendingLimit',
+          value: 5
+        )
+      ]
+    )
+  ]
+)
+
+verified_transfers.each do |verified_transfer|
+  puts verified_transfer
 end
 ```
 
