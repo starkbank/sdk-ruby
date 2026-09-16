@@ -87,7 +87,7 @@ module StarkBank
     # # Retrieve a specific TaxPayment pdf file
     #
     # Receive a single TaxPayment pdf file generated in the Stark Bank API by passing its id.
-    # Only valid for tax payments with 'success' status.
+    # Only valid for tax payments with 'success', 'processing' or 'created' status.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -166,10 +166,12 @@ module StarkBank
 
     # # Delete a TaxPayment entity
     #
-    # Delete a TaxPayment entity previously created in the Stark Bank API
+    # Delete a TaxPayment entity previously created in the Stark Bank API. This is only allowed while the
+    # payment's status is "created"; once processing has begun, or it has already been canceled, the request
+    # is rejected.
     #
     # ## Parameters (required):
-    # - id [string]: UtilityPayment unique id. ex:'5656565656565656'
+    # - id [string]: TaxPayment unique id. ex:'5656565656565656'
     #
     # ## Parameters (optional):
     # - user [Organization/Project object, default nil]: Organization or Project object. Not necessary if StarkBank.user was set before function call

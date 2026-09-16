@@ -15,13 +15,13 @@ module StarkBank
   #
   # ## Parameters (required):
   # - center_id [String]: target cost center ID. ex: '5656565656565656'
-  # - payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, Transaction or dictionary]: payment entity that should be approved and executed.
+  # - payment [Transfer, BrcodePayment, BoletoPayment, UtilityPayment, TaxPayment, DarfPayment, Transaction or dictionary]: payment entity that should be approved and executed. Do not set 'scheduled' on this payment; use the PaymentRequest's own 'due' parameter instead.
   #
   # ## Parameters (conditionally required):
   # - type [String]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
   #
   # ## Parameters (optional):
-  # - due [Date, DateTime, Time or string]: Payment target date in ISO format. ex: 2020-12-31
+  # - due [Date, DateTime, Time or string, default today]: suggested payment target date in ISO format; cost center controllers may alter this date during approval. ex: 2020-12-31
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
@@ -77,9 +77,9 @@ module StarkBank
     # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
     # - after [Date, DateTime, Time or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
     # - before [Date, DateTime, Time or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
-    # - status [string, default '-created']: sort order considered in response. Valid options are '-created' or '-due'.
+    # - status [list of strings, default nil]: filter for status of retrieved objects. ex: ['success']
     # - type [string, default nil]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer', 'brcode-payment'
-    # - sort [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
+    # - sort [string, default '-created']: sort order considered in response. Valid options are '-created' or '-due'.
     # - tags [list of strings, default nil]: tags to filter retrieved objects. ex: ['tony', 'stark']
     # - ids [list of strings, default nil]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
     # - user [Organization/Project object]: Organization or Project object. Not necessary if StarkBank.user was set before function call

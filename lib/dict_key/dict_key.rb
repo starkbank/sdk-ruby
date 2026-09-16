@@ -40,7 +40,11 @@ module StarkBank
 
     # # Retrieve a specific DictKey
     #
-    # Receive a single DictKey object by passing its id
+    # Receive a single DictKey object by passing its id. This includes keys you do not own, and is meant to be
+    # used to check a key before creating a Transfer. Avoid looking up keys without following up with a
+    # transfer: Bacen blocks accounts that make too many standalone lookups in a short period, and invalid
+    # searches also count toward that block. The returned encrypted fields (branch_code, account_number) can
+    # be passed straight into a Transfer without decrypting them.
     #
     # ## Parameters (required):
     # - id [string]: DictKey object unique id and Pix key itself. ex: 'tony@starkbank.com', '722.461.430-04', '20.018.183/0001-80', '+5511988887777', 'b6295ee1-f054-47d1-9e90-ee57b74f60d9'

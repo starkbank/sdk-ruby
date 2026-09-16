@@ -10,6 +10,9 @@ module StarkBank
   # When you initialize a BoletoHolmes, the entity will not be automatically
   # created in the Stark Bank API. The 'create' function sends the objects
   # to the Stark Bank API and returns the list of created objects.
+  # BoletoHolmes investigates the updated status of a Boleto according to CIP, typically resolving in under an
+  # hour. Since results are asynchronous, register a webhook subscription for 'boleto-holmes' to receive the
+  # result instead of polling.
   #
   # ## Parameters (required):
   # - boleto_id [string]: investigated boleto entity ID. ex: '5656565656565656'

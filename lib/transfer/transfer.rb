@@ -22,7 +22,7 @@ module StarkBank
   # ## Parameters (optional):
   # - account_type [string, default 'checking']: receiver bank account type. This parameter only has effect on Pix Transfers. ex: 'checking', 'savings', 'salary' or 'payment'
   # - external_id [string, default nil]: url safe string that must be unique among all your transfers. Duplicated external_ids will cause failures. By default, this parameter will block any transfer that repeats amount and receiver information on the same date. ex: 'my-internal-id-123456'
-  # - scheduled [string, default now]: datetime when the transfer will be processed. May be pushed to next business day if necessary. ex: DateTime.new(2020, 3, 11, 8, 13, 12, 11)
+  # - scheduled [string, default now]: datetime when the transfer will be processed. TED transfers scheduled for today are accepted until 16:00 (BRT) and pushed to the next business day afterward; Pix transfers are available 24/7 and can be scheduled for any date and time.
   # - description [string, default nil]: optional description to override default description to be shown in the bank statement. ex: 'Payment for service #1234'
   # - display_description [string, default nil]: optional description to be shown in the receiver bank interface. ex: 'Payment for service #1234'
   # - tags [list of strings]: list of strings for reference when searching for transfers. ex: ['employees', 'monthly']
@@ -63,7 +63,7 @@ module StarkBank
 
     # # Create Transfers
     #
-    # Send a list of Transfer objects for creation in the Stark Bank API
+    # Send a list of up to 100 Transfer objects for creation in the Stark Bank API
     #
     # ## Parameters (required):
     # - transfers [list of Transfer objects]: list of Transfer objects to be created in the API
@@ -95,7 +95,8 @@ module StarkBank
 
     # # Delete a Transfer entity
     #
-    # Delete a Transfer entity previously created in the Stark Bank API
+    # Cancel a scheduled Transfer entity previously created in the Stark Bank API. You can only cancel it before
+    # it starts being processed; canceled transfers still appear in later queries.
     #
     # ## Parameters (required):
     # - id [string]: Transfer unique id. ex: '5656565656565656'

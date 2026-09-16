@@ -17,12 +17,12 @@ module StarkBank
   # - description [string]: Text to be displayed in your statement (min. 10 characters). ex: 'payment ABC'
   #
   # ## Parameters (conditionally required):
-  # - amount [int, default nil]: If the BRCode does not provide an amount, this parameter is mandatory, else it is optional. ex: 23456 (= R$ 234.56)
+  # - amount [int, default nil]: If the BRCode does not provide an amount, this parameter is mandatory, else it is optional. ex: 23456 (= R$ 234.56). Note: because BrcodePayments are processed asynchronously, a freshly created object's 'amount' attribute will initially read 0 until processing completes.
   #
   # ## Parameters (optional):
   # - scheduled [datetime.date, datetime.datetime or string, default now]: payment scheduled date or datetime. ex: datetime.datetime(2020, 3, 10, 15, 17, 3)
   # - tags [list of strings, default nil]: list of strings for tagging
-  # - rules [list of BrcodePayment::Rules, default []]: list of BrcodePayment::Rule objects for modifying transfer behavior. ex: [BrcodePayment::Rule(key: "resendingLimit", value: 5)]
+  # - rules [list of BrcodePayment::Rule, default []]: list of BrcodePayment::Rule objects for modifying brcode payment behavior. ex: [BrcodePayment::Rule(key: "resendingLimit", value: 5)]
   #
   # ## Attributes (return-only):
   # - id [string]: unique id returned when payment is created. ex: '5656565656565656'
@@ -87,7 +87,8 @@ module StarkBank
 
     # # Retrieve a specific BrcodePayment pdf file
     #
-    # Receive a single BrcodePayment pdf file generated in the Stark Bank API by passing its id.
+    # Receive a single BrcodePayment pdf file generated in the Stark Bank API by passing its id. Only valid for
+    # brcode payments with 'success', 'processing' or 'created' status.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -103,7 +104,7 @@ module StarkBank
 
     # # Update a BrcodePayment entity
     #
-    # Update a BrcodePayment entity previously created in the Stark Bank API
+    # Update a BrcodePayment entity previously created in the Stark Bank API, if it hasn't been paid yet.
     #
     # ## Parameters (required):
     # - id [string]: BrcodePayment unique id. ex: '5656565656565656'

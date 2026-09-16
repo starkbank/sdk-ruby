@@ -24,13 +24,13 @@ module StarkBank
   #
   # ## Parameters (optional):
   # - due [Date, DateTime, Time or string, default today + 2 days]: Boleto due date in ISO format. ex: '2020-04-30'
-  # - fine [float, default 0.0]: Boleto fine for overdue payment in %. ex: 2.5
-  # - interest [float, default 0.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
+  # - fine [float, default 2.0]: Boleto fine for overdue payment in %. ex: 2.5
+  # - interest [float, default 1.0]: Boleto monthly interest for overdue payment in %. ex: 5.2
   # - overdue_limit [integer, default 59]: limit in days for payment after due date. ex: 7 (max: 59)
-  # - receiver_name [string]: receiver (Sacador Avalista) full name. ex: 'Anthony Edward Stark'
-  # - receiver_tax_id [string]: receiver (Sacador Avalista) tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
-  # - descriptions [list of dictionaries, default nil]: list of dictionaries with 'text':string and (optional) 'amount':int pairs
-  # - discounts [list of dictionaries, default nil]: list of dictionaries with 'percentage':float and 'date':Date or string pairs
+  # - receiver_name [string, default workspace owner name]: receiver (Sacador Avalista) full name. If informed, receiver_tax_id must also be informed.
+  # - receiver_tax_id [string, default workspace owner tax ID]: receiver (Sacador Avalista) tax ID (CPF or CNPJ) with or without formatting. If informed, receiver_name must also be informed.
+  # - descriptions [list of dictionaries, default nil]: list of up to 15 dictionaries with 'text':string and (optional) 'amount':int pairs. When generating PDFs with the 'booklet' layout, only the first description's text is used to fill the installment cell.
+  # - discounts [list of dictionaries, default nil]: list of up to 2 dictionaries with 'percentage':float and 'date':Date or string pairs
   # - tags [list of strings]: list of strings for tagging
   #
   # ## Attributes (return-only):
@@ -82,7 +82,9 @@ module StarkBank
 
     # # Create Boletos
     #
-    # Send a list of Boleto objects for creation in the Stark Bank API
+    # Send a list of up to 100 Boleto objects for creation in the Stark Bank API. If a Boleto is paid after its
+    # due date and a fine or interest is set, its final amount will be updated with the amount actually paid;
+    # the same applies when it is paid with a discount.
     #
     # ## Parameters (required):
     # - boletos [list of Boleto objects]: list of Boleto objects to be created in the API
@@ -114,7 +116,9 @@ module StarkBank
 
     # # Retrieve a specific Boleto pdf file
     #
-    # Receive a single Boleto pdf file generated in the Stark Bank API by passing its id.
+    # Receive a single Boleto pdf file generated in the Stark Bank API by passing its id. This route is public
+    # and does not require authentication headers, but repeated requests for an invalid id will get your IP
+    # blocked for this route.
     #
     # ## Parameters (required):
     # - id [string]: object unique id. ex: '5656565656565656'
@@ -195,7 +199,8 @@ module StarkBank
 
     # # Delete a Boleto entity
     #
-    # Delete a Boleto entity previously created in the Stark Bank API
+    # Delete a Boleto entity previously created in the Stark Bank API. This sends a request to CIP to cancel
+    # the boleto registration; once canceled, it can no longer be paid. This action cannot be undone.
     #
     # ## Parameters (required):
     # - id [string]: Boleto unique id. ex: '5656565656565656'

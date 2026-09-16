@@ -1769,7 +1769,7 @@ They support spending rules that will apply to all underlying cards.
 ```ruby
 require('starkbank')
 
-holders = StarkBank::CorporateHolder.create([
+holders = StarkBank::CorporateHolder.create(holders: [
   StarkBank::CorporateHolder.new(
     name: "Iron Bank S.A.",
     tax_id: '0000',
@@ -1867,11 +1867,9 @@ You can issue cards with specific spending rules.
 ```ruby
 require('starkbank')
 
-cards = StarkBank::CorporateCard.create([
-  StarkBank::CorporateCard.new(
-    holder_name: "Developers",
-    holder_tax_id: "012.345.678-90",
-    holder_external_id: "1234",
+card = StarkBank::CorporateCard.create(
+  card: StarkBank::CorporateCard.new(
+    holder_id: "5155165527080960",
     rules: [
       StarkBank::CorporateRule.new(
         name: "General USD",
@@ -1881,11 +1879,9 @@ cards = StarkBank::CorporateCard.create([
       )
     ]
   )
-])
+)
 
-cards.each do |card|
-    puts card
-end
+puts card
 ```
 
 ## Query CorporateCards
@@ -2083,8 +2079,7 @@ require('starkbank')
 withdrawal = StarkBank::CorporateWithdrawal.create(
   StarkBank::CorporateWithdrawal.new(
     amount: 10_000,
-    external_id: '123',
-    description: 'Sending back'
+    external_id: '123'
   )
 )
 
