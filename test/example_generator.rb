@@ -265,6 +265,28 @@ class ExampleGenerator
     )
   end
 
+  def self.merchant_session_example
+    StarkBank::MerchantSession.new(
+      allowed_funding_types: ['credit', 'debit'],
+      allowed_installments: [
+        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 100, count: 1),
+        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 120, count: 2)
+      ],
+      expiration: 3600
+    )
+  end
+
+  def self.merchant_session_purchase_example
+    StarkBank::MerchantSession::Purchase.new(
+      amount: 100,
+      card_expiration: '2035-01',
+      card_number: '5579718869788870',
+      card_security_code: '123',
+      holder_name: 'Tony Stark',
+      funding_type: 'credit'
+    )
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',
