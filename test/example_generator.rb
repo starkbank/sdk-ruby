@@ -287,6 +287,33 @@ class ExampleGenerator
     )
   end
 
+  def self.merchant_purchase_example(card_id)
+    StarkBank::MerchantPurchase.new(
+      amount: 10_000,
+      card_id: card_id,
+      funding_type: 'credit',
+      installment_count: 5,
+      billing_city: 'Sao Paulo',
+      billing_country_code: 'BRA',
+      billing_state_code: 'SP',
+      billing_street_line_1: 'Rua do Holder Name, 123',
+      billing_street_line_2: '1 andar',
+      billing_zip_code: '11111-111',
+      holder_email: 'holdeName@email.com',
+      holder_phone: '11111111111',
+      holder_id: '565656555656',
+      soft_descriptor: 'Soft Descriptor',
+      metadata: {
+        userAgent: 'userAgent',
+        userIp: '255.255.255.255',
+        language: 'pt-BR',
+        timezoneOffset: 3,
+        extraData: 'extraData'
+      },
+      tags: ['teste']
+    )
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',

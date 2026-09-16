@@ -18,6 +18,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - MerchantSession::Log sub-resource
 - MerchantSession::Purchase sub-resource
 - MerchantSession::AllowedInstallment sub-resource
+- MerchantCard resource
+- MerchantCard::Log sub-resource
+- MerchantInstallment resource
+- MerchantInstallment::Log sub-resource
+- MerchantPurchase resource
+- MerchantPurchase::Log sub-resource
 
 ### Fixed
 - Docstrings across Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DarfPayment, Deposit, DictKey,
