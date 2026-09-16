@@ -126,6 +126,28 @@ module StarkBank
         )
       end
 
+      # StarkCore::Utils::Rest has no put_multi yet, so the PUT is assembled
+      # here the way its post is; SplitProfile.put then needs no gem bump.
+      def self.put_multi(resource_name:, resource_maker:, user:, entities:, **query)
+        jsons = entities.map { |entity| StarkCore::Utils::API.api_json(entity) }
+        payload = { StarkCore::Utils::API.last_name_plural(resource_name) => jsons }
+        json = StarkCore::Utils::Request.fetch(
+          host: StarkBank::HOST,
+          sdk_version: StarkBank::SDK_VERSION,
+          user: user ? user : StarkBank.user,
+          method: 'PUT',
+          path: StarkCore::Utils::API.endpoint(resource_name),
+          query: query,
+          payload: payload,
+          api_version: StarkBank::API_VERSION,
+          language: StarkBank.language,
+          timeout: StarkBank.timeout
+        ).json
+        json[StarkCore::Utils::API.last_name_plural(resource_name)].map do |returned_json|
+          StarkCore::Utils::API.from_api_json(resource_maker, returned_json)
+        end
+      end
+
       def self.post_sub_resource(resource_name:, sub_resource_maker:, sub_resource_name:, user:, id:, entity:)
         return StarkCore::Utils::Rest.post_sub_resource(
           resource_name: resource_name,

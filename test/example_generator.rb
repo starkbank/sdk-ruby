@@ -314,6 +314,25 @@ class ExampleGenerator
     )
   end
 
+  def self.split_receiver_example
+    StarkBank::SplitReceiver.new(
+      name: 'Jamie Lannister - ' + rand(1e10).to_s,
+      tax_id: '594.739.480-42',
+      bank_code: '20018183',
+      branch_code: '0001',
+      account_number: rand(1e8).to_i.to_s + '-0',
+      account_type: 'checking',
+      tags: ['test']
+    )
+  end
+
+  def self.split_profile_example
+    {
+      interval: 'day',
+      delay: 0
+    }
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',
