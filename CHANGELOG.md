@@ -14,6 +14,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
+- VerifiedAccount resource with create, get, cancel, query and page methods, plus VerifiedAccount::Log
+- VerifiedTransfer resource with create method, reusing Transfer::Rule
 - MerchantSession resource
 - MerchantSession::Log sub-resource
 - MerchantSession::Purchase sub-resource
