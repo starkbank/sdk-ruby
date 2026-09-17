@@ -32,6 +32,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - SplitProfile::Log sub-resource
 - Split resource
 - Split::Log sub-resource
+- InvoicePullRequest resource
+- InvoicePullSubscription resource
 
 ### Fixed
 - Docstrings across Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DarfPayment, Deposit, DictKey,

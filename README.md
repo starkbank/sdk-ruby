@@ -33,6 +33,8 @@ is as easy as sending a text message to your client!
     - [VerifiedAccounts](#create-verified-accounts): Verify receiver bank accounts and Pix keys
     - [VerifiedTransfers](#create-verified-transfers): Wire transfers to previously verified accounts
     - [Invoices](#create-invoices): Reconciled receivables (dynamic Pix QR Codes)
+    - [InvoicePullRequests](#create-invoicepullrequests): Request an automatic Pix pull payment for an Invoice
+    - [InvoicePullSubscriptions](#create-invoicepullsubscriptions): Manage recurring automatic Pix pull payment agreements
     - [DynamicBrcode](#create-dynamicbrcodes): Simplified reconciled receivables (dynamic Pix QR Codes)
     - [Deposits](#query-deposits): Other cash-ins (static Pix QR Codes, DynamicBrcodes, manual Pix, etc)
     - [Boletos](#create-boletos): Boleto receivables
@@ -882,6 +884,164 @@ require('starkbank')
 payment = StarkBank::Invoice.payment('5155165527080960');
 
 puts payment
+```
+
+## Create InvoicePullSubscriptions
+
+Send a list of InvoicePullSubscription objects for creation in the Stark Bank API. An InvoicePullSubscription is
+an agreement that allows you to automatically pull payments from a payer's account, through recurring
+InvoicePullRequests, without requiring a new approval for every charge.
+
+```ruby
+require('starkbank')
+
+subscriptions = StarkBank::InvoicePullSubscription.create(
+    [
+        StarkBank::InvoicePullSubscription.new(
+            start: Date.today + 1,
+            interval: 'month',
+            pull_mode: 'automatic',
+            pull_retry_limit: 3,
+            type: 'push',
+            amount: 100_00,
+            name: 'Iron Bank S.A.',
+            tax_id: '012.345.678-90',
+            tags: ['test1', 'test2']
+        )
+    ]
+)
+
+subscriptions.each do |subscription|
+    puts subscription
+end
+```
+
+## Get an InvoicePullSubscription
+
+Retrieve detailed information about a specific InvoicePullSubscription by its id.
+
+```ruby
+require('starkbank')
+
+subscription = StarkBank::InvoicePullSubscription.get('5155165527080960')
+
+puts subscription
+```
+
+## Query InvoicePullSubscriptions
+
+Get a generator of InvoicePullSubscription objects previously created in the Stark Bank API.
+
+```ruby
+require('starkbank')
+
+subscriptions = StarkBank::InvoicePullSubscription.query(limit: 10)
+
+subscriptions.each do |subscription|
+    puts subscription
+end
+```
+
+## Query InvoicePullSubscription logs
+
+You can query InvoicePullSubscription logs to better understand each subscription's life cycle.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::InvoicePullSubscription::Log.query(limit: 10)
+
+logs.each do |log|
+    puts log
+end
+```
+
+## Cancel an InvoicePullSubscription
+
+You can cancel an InvoicePullSubscription if it is still active.
+
+```ruby
+require('starkbank')
+
+subscription = StarkBank::InvoicePullSubscription.cancel('5155165527080960')
+
+puts subscription
+```
+
+## Create InvoicePullRequests
+
+Send a list of InvoicePullRequest objects for creation in the Stark Bank API. Each request schedules a single
+automatic Pix pull payment for an existing Invoice, tied to a previously created InvoicePullSubscription.
+
+```ruby
+require('starkbank')
+
+requests = StarkBank::InvoicePullRequest.create(
+    [
+        StarkBank::InvoicePullRequest.new(
+            subscription_id: '5155165527080960',
+            invoice_id: '5155165527080961',
+            due: Time.now + 24 * 3600,
+            tags: ['test1', 'test2']
+        )
+    ]
+)
+
+requests.each do |request|
+    puts request
+end
+```
+
+## Get an InvoicePullRequest
+
+Retrieve detailed information about a specific InvoicePullRequest by its id.
+
+```ruby
+require('starkbank')
+
+request = StarkBank::InvoicePullRequest.get('5155165527080960')
+
+puts request
+```
+
+## Query InvoicePullRequests
+
+Get a generator of InvoicePullRequest objects previously created in the Stark Bank API.
+
+```ruby
+require('starkbank')
+
+requests = StarkBank::InvoicePullRequest.query(limit: 10)
+
+requests.each do |request|
+    puts request
+end
+```
+
+## Query InvoicePullRequest logs
+
+You can query InvoicePullRequest logs to better understand each request's life cycle.
+
+```ruby
+require('starkbank')
+
+logs = StarkBank::InvoicePullRequest::Log.query(limit: 10)
+
+logs.each do |log|
+    puts log
+end
+```
+
+## Cancel an InvoicePullRequest
+
+You can cancel an InvoicePullRequest if it was not yet paid.
+
+```ruby
+require('starkbank')
+
+request = StarkBank::InvoicePullRequest.cancel('5155165527080960')
+
+puts request
 ```
 
 ## Create DynamicBrcodes
