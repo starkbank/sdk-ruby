@@ -369,6 +369,36 @@ class ExampleGenerator
     }
   end
 
+  def self.invoice_pull_subscription_example
+    StarkBank::InvoicePullSubscription.new(
+      start: Date.today + 1,
+      interval: 'month',
+      pull_mode: 'automatic',
+      pull_retry_limit: 3,
+      type: 'push',
+      amount: 100,
+      name: 'Iron Bank S.A.',
+      tax_id: '012.345.678-90',
+      end_: Date.today + 30,
+      data: {
+        'accountNumber' => '9123900000',
+        'bankCode' => '05097757',
+        'branchCode' => '1126',
+        'taxId' => '20.018.183/0001-80'
+      },
+      tags: ['test1', 'test2']
+    )
+  end
+
+  def self.invoice_pull_request_example(subscription_id:, invoice_id:)
+    StarkBank::InvoicePullRequest.new(
+      subscription_id: subscription_id,
+      invoice_id: invoice_id,
+      due: Time.now + 24 * 3600,
+      tags: ['test1', 'test2']
+    )
+  end
+
   def self.organization_example
     StarkBank::Organization.new(
       environment: 'sandbox',
