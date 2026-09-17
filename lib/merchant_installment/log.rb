@@ -14,7 +14,7 @@ module StarkBank
     # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - installment [MerchantInstallment]: MerchantInstallment entity to which the log refers to.
-    # - errors [list of strings]: list of errors linked to this MerchantInstallment event
+    # - errors [list of hashes]: list of errors linked to this MerchantInstallment event, each with 'code' and 'message' keys
     # - type [string]: type of the MerchantInstallment event which triggered the log creation. ex: 'created', 'updated'
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     # - updated [DateTime]: latest update datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
