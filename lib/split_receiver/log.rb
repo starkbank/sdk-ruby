@@ -16,7 +16,7 @@ module StarkBank
     # ## Attributes (return-only):
     # - id [string]: unique id returned when the log is created. ex: '5656565656565656'
     # - receiver [SplitReceiver]: SplitReceiver entity to which the log refers to.
-    # - errors [list of strings]: list of errors linked to this SplitReceiver event.
+    # - errors [list of strings]: list of errors linked to this SplitReceiver event. The API does not currently return errors for SplitReceiver events, so this is always nil.
     # - type [string]: type of the SplitReceiver event which triggered the log creation. ex: 'success' or 'failed'
     # - created [DateTime]: creation datetime for the log. ex: DateTime.new(2020, 3, 10, 10, 30, 0, 0)
     class Log < StarkCore::Utils::Resource
