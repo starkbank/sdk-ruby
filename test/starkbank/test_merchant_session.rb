@@ -31,10 +31,8 @@ describe(StarkBank::MerchantSession, '#merchant-session#') do
   end
 
   it 'purchase' do
-    session = StarkBank::MerchantSession.create(ExampleGenerator.merchant_session_example)
-
-    purchase = StarkBank::MerchantSession.purchase(session.uuid, ExampleGenerator.merchant_session_purchase_example)
-    expect(purchase.id).wont_be_nil
-    expect(purchase.status).wont_be_nil
+    purchase = ExampleGenerator.merchant_session_purchase_example
+    error = expect { StarkBank::MerchantSession.purchase('0bb894a2697d41d99fe02cad2c00c9bc', purchase) }.must_raise(RuntimeError)
+    expect(error.message).must_equal('Function deprecated since v2.16.0')
   end
 end

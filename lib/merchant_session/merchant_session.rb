@@ -22,7 +22,7 @@ module StarkBank
   #
   # ## Attributes (return-only):
   # - id [string]: unique id returned when MerchantSession is created. ex: '5656565656565656'
-  # - uuid [string]: unique uuid returned when MerchantSession is created, used to create a MerchantSession::Purchase. ex: '901e71f2447c43c886f58366a5432c4b'
+  # - uuid [string]: unique uuid returned when MerchantSession is created. ex: '901e71f2447c43c886f58366a5432c4b'
   # - holder_id [string]: unique id of the card holder associated with this session, when applicable.
   # - soft_descriptor [string]: text that will be shown in the holder's bank statement, when applicable.
   # - status [string]: current MerchantSession status. ex: 'created', 'expired'
@@ -150,6 +150,7 @@ module StarkBank
       )
     end
 
+    # # DEPRECATED: Function deprecated since v2.16.0
     # # Create a MerchantSession::Purchase
     #
     # Send a MerchantSession::Purchase object linked to a previously created MerchantSession, identified by its uuid, for creation in the Stark Bank API.
@@ -167,14 +168,7 @@ module StarkBank
     # ## Return:
     # - MerchantSession::Purchase object with updated attributes
     def self.purchase(uuid, purchase, user: nil)
-      StarkBank::Utils::Rest.post_sub_resource(
-        id: uuid,
-        entity: purchase,
-        user: user,
-        resource_name: resource[:resource_name],
-        sub_resource_maker: StarkBank::MerchantSession::Purchase.resource[:resource_maker],
-        sub_resource_name: StarkBank::MerchantSession::Purchase.resource[:resource_name]
-      )
+      raise 'Function deprecated since v2.16.0'
     end
 
     def self.resource
