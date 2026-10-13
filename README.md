@@ -2055,7 +2055,7 @@ end
 ## Create a MerchantSession
 
 You can create a MerchantSession to define which funding types, installment plans and IPs are allowed to be used
-in a card purchase, then use its uuid to create a MerchantSession::Purchase.
+in a card purchase.
 
 ```ruby
 require('starkbank')
@@ -2104,27 +2104,9 @@ session = StarkBank::MerchantSession.get('5155165527080960')
 puts session
 ```
 
-## Create a MerchantSession Purchase
+With the MerchantSession's UUID, your front-end must send the card data directly to the Stark Bank API through the `POST /v2/merchant-session/:uuid/purchase` route, so that sensitive card data never passes through the back-end of your integration.
 
-Once you have a MerchantSession's uuid, you can create a MerchantSession::Purchase to charge a card against it:
-
-```ruby
-require('starkbank')
-
-purchase = StarkBank::MerchantSession.purchase(
-  '901e71f2447c43c886f58366a5432c4b',
-  StarkBank::MerchantSession::Purchase.new(
-    amount: 100,
-    card_expiration: '2032-01',
-    card_number: '5579718869788870',
-    card_security_code: '123',
-    holder_name: 'Tony Stark',
-    funding_type: 'credit'
-  )
-)
-
-puts purchase
-```
+**Note**: `StarkBank::MerchantSession.purchase` is deprecated since v2.16.0 and raises an error when called.
 
 ## Query MerchantSession logs
 

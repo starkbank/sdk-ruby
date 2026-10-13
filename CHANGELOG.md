@@ -35,6 +35,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - InvoicePullRequest resource
 - InvoicePullSubscription resource
 
+### Deprecated
+- MerchantSession.purchase function, since card data must be sent directly from the front-end to the Stark Bank API
+
 ### Fixed
 - Docstrings across Boleto, BoletoPayment, BoletoHolmes, BrcodePayment, DarfPayment, Deposit, DictKey,
   DynamicBrcode, Invoice, PaymentRequest, TaxPayment, Transfer, UtilityPayment, Webhook and Workspace
