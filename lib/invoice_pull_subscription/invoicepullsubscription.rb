@@ -25,7 +25,7 @@ module StarkBank
   # - due [Date, DateTime or string, default now + 2 days]: date by which the payer must approve or deny the subscription, after which it auto-expires if unanswered. Applies to all subscription types (not push-only). ex: '2022-04-08'
   # - external_id [string, default nil]: string that must be unique among all your subscriptions. Duplicated external_ids will cause failures. ex: 'my-external-id'
   # - reference_code [string, default nil]: reference code for reconciliation. ex: 'REF123456'
-  # - end_ [Date, DateTime or string, default nil]: subscription end date. ex: '2023-04-01'
+  # - end [Date, DateTime or string, default nil]: subscription end date. ex: '2023-04-01'
   # - data [dictionary, default nil]: additional data required by type: payer account details for 'push', immediate-payment parameters for 'qrcodeAndPayment'/'paymentAndOrQrcode'; not required for 'qrcode'
   # - name [string, default nil]: subscription debtor name. ex: 'Iron Bank S.A.'
   # - tax_id [string, default nil]: subscription debtor tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'

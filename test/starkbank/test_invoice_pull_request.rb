@@ -43,12 +43,4 @@ describe(StarkBank::InvoicePullRequest, '#invoice-pull-request#') do
     canceled_request = StarkBank::InvoicePullRequest.cancel(request.id)
     expect(canceled_request.id).must_equal(request.id)
   end
-
-  it 'defaults attempt_type to default and keeps the informed value' do
-    example = ExampleGenerator.invoice_pull_request_example(subscription_id: '1', invoice_id: '2')
-    expect(example.attempt_type).must_equal('default')
-
-    retry_request = StarkBank::InvoicePullRequest.new(subscription_id: '1', invoice_id: '2', due: Time.now + 3600, attempt_type: 'retry')
-    expect(retry_request.attempt_type).must_equal('retry')
-  end
 end

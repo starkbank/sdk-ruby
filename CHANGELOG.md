@@ -43,7 +43,6 @@ Given a version number MAJOR.MINOR.PATCH, increment:
   DynamicBrcode, Invoice, PaymentRequest, TaxPayment, Transfer, UtilityPayment, Webhook and Workspace
   resources to match the business rules stated in the API reference
 - CorporateCard.create now sends the expand parameter as a query string and parses the response correctly
-- InvoicePullRequest attempt_type now defaults to 'default' when not informed
 - README examples for MerchantSession (allowed installment amounts) and CorporateHolder (removed tax_id)
 - InvoicePullSubscription docstrings: end_ parameter name and the accepted Log types
 

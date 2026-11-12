@@ -37,7 +37,7 @@ module StarkBank
       @subscription_id = subscription_id
       @invoice_id = invoice_id
       @due = StarkCore::Utils::Checks.check_datetime(due)
-      @attempt_type = attempt_type || 'default'
+      @attempt_type = attempt_type
       @tags = tags
       @external_id = external_id
       @display_description = display_description
