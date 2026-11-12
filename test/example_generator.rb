@@ -305,8 +305,8 @@ class ExampleGenerator
     StarkBank::MerchantSession.new(
       allowed_funding_types: ['credit', 'debit'],
       allowed_installments: [
-        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 100, count: 1),
-        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 120, count: 2)
+        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 5000, count: 1),
+        StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 5500, count: 2)
       ],
       expiration: 3600
     )

@@ -81,7 +81,7 @@ module StarkBank
     def self.create(card:, expand: nil, user: nil)
       path =  StarkCore::Utils::API.endpoint(resource[:resource_name]) + '/token'
       payload = StarkCore::Utils::API.api_json(card)
-      json = StarkBank::Utils::Rest.post_raw(path: path, payload: payload, expand: expand, user: user)
+      json = StarkBank::Utils::Rest.post_raw(path: path, payload: payload, query: { expand: expand }, user: user).json
       entity_json = json[StarkCore::Utils::API.last_name(resource[:resource_name])]
       StarkCore::Utils::API.from_api_json(resource[:resource_maker], entity_json)
     end
