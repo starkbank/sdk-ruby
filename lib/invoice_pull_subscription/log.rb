@@ -52,7 +52,7 @@ module StarkBank
       # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
       # - after [Date or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
       # - before [Date or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
-      # - types [list of strings, default nil]: filter for log event types. ex: ['created', 'paid', 'canceled', 'overdue']
+      # - types [list of strings, default nil]: filter for log event types. ex: ['created', 'approved', 'confirmed', 'canceling', 'canceled', 'expired']
       # - subscription_ids [list of strings, default nil]: list of InvoicePullSubscription ids to filter logs. ex: ['5656565656565656', '4545454545454545']
       # - user [Organization/Project object, default nil]: Organization or Project object. Not necessary if starkbank.user was set before function call
       #
@@ -82,7 +82,7 @@ module StarkBank
       # - limit [integer, default nil]: maximum number of objects to be retrieved. Unlimited if nil. ex: 35
       # - after [Date or string, default nil]: date filter for objects created only after specified date. ex: Date.new(2020, 3, 10)
       # - before [Date or string, default nil]: date filter for objects created only before specified date. ex: Date.new(2020, 3, 10)
-      # - types [list of strings, default nil]: filter for log event types. ex: ['created', 'paid', 'canceled', 'overdue']
+      # - types [list of strings, default nil]: filter for log event types. ex: ['created', 'approved', 'confirmed', 'canceling', 'canceled', 'expired']
       # - subscription_ids [list of strings, default nil]: list of InvoicePullSubscription ids to filter logs. ex: ['5656565656565656', '4545454545454545']
       # - user [Organization/Project object, default nil]: Organization or Project object. Not necessary if starkbank.user was set before function call
       #

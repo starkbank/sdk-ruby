@@ -37,6 +37,7 @@ describe(StarkBank::CorporateCard, '#corporate-card#') do
 
   it 'create, update and delete' do
     card = StarkBank::CorporateCard.create(card: ExampleGenerator.corporatecard_example, expand: ['securityCode'])
+    expect(card.security_code).wont_include('*')
 
     card = StarkBank::CorporateCard.update(card.id, display_name: 'Updated name')
     expect(card.display_name).must_equal('Updated name')

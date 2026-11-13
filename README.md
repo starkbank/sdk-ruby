@@ -2064,8 +2064,8 @@ session = StarkBank::MerchantSession.create(
   StarkBank::MerchantSession.new(
     allowed_funding_types: ['credit', 'debit'],
     allowed_installments: [
-      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 100, count: 1),
-      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 120, count: 2)
+      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 5000, count: 1),
+      StarkBank::MerchantSession::AllowedInstallment.new(total_amount: 5500, count: 2)
     ],
     expiration: 3600,
     challenge_mode: 'enabled',
@@ -2550,8 +2550,7 @@ require('starkbank')
 holders = StarkBank::CorporateHolder.create(holders: [
   StarkBank::CorporateHolder.new(
     name: "Iron Bank S.A.",
-    tax_id: '0000',
-    tags: ['012.345.678-90'],
+    tags: ['Traveler Employee'],
     rules: [
       StarkBank::CorporateRule.new(
         name: "General USD",
