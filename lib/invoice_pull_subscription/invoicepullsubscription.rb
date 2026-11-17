@@ -45,7 +45,7 @@ module StarkBank
                 :brcode, :installment_id, :created, :updated
     def initialize(
       start:, interval:, pull_mode:, pull_retry_limit:, type:, amount: nil, amount_min_limit: nil, display_description: nil,
-      due: nil, external_id: nil, reference_code: nil, end_: nil, data: nil, name: nil, tax_id: nil, tags: nil,
+      due: nil, external_id: nil, reference_code: nil, end: nil, data: nil, name: nil, tax_id: nil, tags: nil,
       id: nil, status: nil, bacen_id: nil, brcode: nil, installment_id: nil, created: nil, updated: nil
     )
       super(id)
@@ -60,7 +60,10 @@ module StarkBank
       @due = StarkCore::Utils::Checks.check_date_or_datetime(due)
       @external_id = external_id
       @reference_code = reference_code
-      @end = StarkCore::Utils::Checks.check_date_or_datetime(end_)
+      # `end` is a reserved word: it works as a keyword argument but cannot be read as a variable.
+      # The API returns an empty string when the subscription has no end date.
+      end_date = binding.local_variable_get(:end)
+      @end = end_date == '' ? nil : StarkCore::Utils::Checks.check_date_or_datetime(end_date)
       @data = data
       @name = name
       @tax_id = tax_id
@@ -214,7 +217,7 @@ module StarkBank
             due: json['due'],
             external_id: json['external_id'],
             reference_code: json['reference_code'],
-            end_: json['end'],
+            end: json['end'],
             data: json['data'],
             name: json['name'],
             tax_id: json['tax_id'],

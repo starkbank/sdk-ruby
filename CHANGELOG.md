@@ -44,7 +44,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
   resources to match the business rules stated in the API reference
 - CorporateCard.create now sends the expand parameter as a query string and parses the response correctly
 - README examples for MerchantSession (allowed installment amounts) and CorporateHolder (removed tax_id)
-- InvoicePullSubscription docstrings: end_ parameter name and the accepted Log types
+- InvoicePullSubscription docstrings: the accepted Log types
 
 ## [2.15.0] - 2025-10-07
 ### Changed
