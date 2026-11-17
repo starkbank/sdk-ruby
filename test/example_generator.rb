@@ -379,7 +379,7 @@ class ExampleGenerator
       amount: 100,
       name: 'Iron Bank S.A.',
       tax_id: '012.345.678-90',
-      end_: Date.today + 30,
+      end: Date.today + 30,
       data: {
         'accountNumber' => '9123900000',
         'bankCode' => '05097757',
